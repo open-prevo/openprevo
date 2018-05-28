@@ -1,5 +1,4 @@
-# openprevo
-OpenPrevo
+# OpenPrevo
 
 ## Naming
 
