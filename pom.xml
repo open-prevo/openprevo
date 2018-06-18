@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ch.open.prevo</groupId>
+  <groupId>ch.prevo.open</groupId>
   <artifactId>root-pom</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
 
   <name>pom-root</name>
   <url>https://github.com/open-prevo/openprevo</url>
