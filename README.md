@@ -9,4 +9,4 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 ## Introduction [Slides](https://gitpitch.com/open-prevo/slides/intro)
 
-## [Glossar](glossar.md)
+## [Glossar](doc/glossar.md)
