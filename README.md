@@ -11,4 +11,4 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 ## [Glossar](doc/glossar.md)
 
-## [Architecture](doc/arc42/content.adoc)
+## [Architecture](doc/arc42/src/03_system_scope_and_context.adoc)
