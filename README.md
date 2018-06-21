@@ -10,3 +10,5 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 ## Introduction [Slides](https://gitpitch.com/open-prevo/slides/intro)
 
 ## [Glossar](doc/glossar.md)
+
+## [Architecture](doc/arc42/arc42.md)
