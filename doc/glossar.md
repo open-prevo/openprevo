@@ -1,7 +1,7 @@
 # Glossar
 
-| Akronym / acronym / acronyme / acronimo |            Deutsch          | English | Française | Italiano |
-|:---------------------------------------:|:---------------------------:|---------|-----------|----------|
-|                    VE                   | **V**orsorge**e**inrichtung |         |           |          |
-|                    DA                   |    **D**ienst**a**ustritt   |         |           |          |
-|                    DE                   |    **D**ienst**e**intritt   |         |           |          |
+|     | Deutsch                     | English                   | Française | Italiano |
+|:---:|:---------------------------:|:-------------------------:|-----------|----------|
+| VE  | **V**orsorge**e**inrichtung | occupational pension fund |           |          |
+| DA  | **D**ienst**a**ustritt      | job end                   |           |          |
+| DE  | **D**ienst**e**intritt      | job start                 |           |          |
