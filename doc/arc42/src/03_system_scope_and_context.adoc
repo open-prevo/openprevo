@@ -24,6 +24,8 @@ Various options:
 
 === Business Context
 
+===== General Overview
+
 The following graphic depicts 4 different examples how different VEs could potentially interact with our platform (OpenPrevo HUB).
 
 image::open_prevo_business_context.png["Business Context", title="OpenPrevo Business Context"]
@@ -46,6 +48,22 @@ the VE if there is a match and provide the payment information. The goal of this
 |===
 
 To limit the information that will be exchanged between the different VEs and the platform, every VE needs to provide a unique identifier (UID) for each person. In the case of a match the platform would then only inform the VE that we found a match for a certain UID and how the money needs to be transferred to the new VE.
+
+===== MVP Business Context
+
+To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/VE1), but we'll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we'll provide a simple implementation which could potentially be used by a small VE.
+
+image::open_prevo_mvp_business_context.png["MVP Business Context", title="OpenPrevo MVP Business Context"]
+
+[options="header", cols="1,4"]
+.OpenPrevo Business Context
+|===
+| System | Description
+| OpenPrevo HUB | The HUB fetches the data of the different VEs and is responsible for the matching.
+| PAKT | "Personen Applikation Kollektiv" which is used by different VEs to manage their customers. The DA / DE will be extracted from the system and stored in a database that can be consumed by the OpenPrevo Client.
+| OpenPrevo Client | An implementation of the API that can be consumed by the OpenPrevo HUB. The client should be able to consume different data storages like e.g. a database or an Excel file.
+|Excel File| Could be a simple data exchange format for a small VE, if they're not able to provide an integration into their system.
+|===
 
 === Technical Context
 
