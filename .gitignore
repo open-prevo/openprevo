@@ -29,8 +29,10 @@
 **/.idea
 **/.gradle
 
-# gradle output
+# gradle
 build/
+!gradle/wrapper/*.jar
+
 
 # Ignore Mac DS_Store files
 **/.DS_Store

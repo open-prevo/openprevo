@@ -1,1 +1,5 @@
-defaultTasks 'publish'
+task assemble {
+    dependsOn ':doc:publish'
+}
+
+defaultTasks 'assemble'
