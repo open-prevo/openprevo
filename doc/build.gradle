@@ -1,0 +1,95 @@
+// gradle build script for the aim42 documentation
+//
+// free software - without guarantee, use at your own risk
+// ========================================================
+
+
+buildscript {
+    // these are the BUILDSCRIPT deps - required to execute
+    // build targets and -operations
+    repositories {
+        maven {
+            name 'Bintray Asciidoctor repo'
+            url  'http://dl.bintray.com/content/aalmiray/asciidoctor'
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        jcenter()
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath ( group: 'org.asciidoctor', name: 'asciidoctor-gradle-plugin', version: '1.5.6')
+        classpath 'org.ajoberstar:gradle-git-publish:0.3.0'
+
+    }
+}
+
+
+ext {
+    srcDir  = "$projectDir/arc42"
+    targetDir = "$buildDir/docs"
+    currentDate = new Date().format("MMM d. yyyy")
+}
+
+
+// =========== asciidoctor stuff ===============
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+    outputDir = file( targetDir )
+    sourceDir = file( srcDir )
+    sources  { include "index.adoc" }
+    attributes = [
+            separateOutputDirs: false,
+            imagesdir   : 'images',
+            doctype: 'book',
+            icons: 'font',
+            toc: 'left',
+            sectlink: true,
+            sectanchors: true,
+            numbered: true,
+            'source-highlighter': 'coderay',
+            'coderay-css': 'class',
+            stylesheet: 'style.css',
+            stylesdir: "$srcDir/css/",
+//            version: project.project_version,
+            version: "1",
+            'currentDate': "$currentDate"
+    ]
+
+    resources {
+        from("${srcDir}/") {
+            include 'images/**'
+        }
+    }
+}
+
+
+apply plugin: 'org.ajoberstar.git-publish'
+
+gitPublish {
+    System.setProperty('org.ajoberstar.grgit.auth.username', System.getenv('GH_TOKEN'))
+    repoUri = 'https://github.com/open-prevo/openprevo.git'
+    branch = 'gh-pages'
+
+    contents {
+       from('build/docs/html5')
+    }
+}
+
+gitPublishPush.dependsOn asciidoctor
+
+
+task publish(type: GradleBuild) {
+    String travisPr = System.getenv('TRAVIS_PULL_REQUEST')
+    if ("false".equals(travisPr)) {
+        tasks = ['gitPublishPush']
+    } else {
+        println 'env var TRAVIS_PULL_REQUEST says we build for PR #' + travisPr + ', won\'t publish docs!'
+    }
+}
+
+
