@@ -1,12 +1,4 @@
-// gradle build script for the aim42 documentation
-//
-// free software - without guarantee, use at your own risk
-// ========================================================
-
-
 buildscript {
-    // these are the BUILDSCRIPT deps - required to execute
-    // build targets and -operations
     repositories {
         maven {
             name 'Bintray Asciidoctor repo'
@@ -23,7 +15,6 @@ buildscript {
     dependencies {
         classpath(group: 'org.asciidoctor', name: 'asciidoctor-gradle-plugin', version: '1.5.6')
         classpath 'org.ajoberstar:gradle-git-publish:0.3.0'
-
     }
 }
 
@@ -34,7 +25,7 @@ ext {
     currentDate = new Date().format("MMM d. yyyy")
 }
 
-// =========== asciidoctor stuff ===============
+// =========== asciidoctor ===============
 apply plugin: 'org.asciidoctor.convert'
 
 asciidoctor {
@@ -54,8 +45,7 @@ asciidoctor {
             'coderay-css'       : 'class',
             stylesheet          : 'style.css',
             stylesdir           : "$srcDir/css/",
-//            version: project.project_version,
-            version             : "1",
+            version             : project.version,
             'currentDate'       : "$currentDate"
     ]
 
@@ -66,7 +56,7 @@ asciidoctor {
     }
 }
 
-
+// =========== publishing ===============
 apply plugin: 'org.ajoberstar.git-publish'
 
 gitPublish {
@@ -81,9 +71,8 @@ gitPublish {
 
 gitPublishPush.dependsOn asciidoctor
 
-
-task publish(type: GradleBuild) {
-    if (System.getenv('TRAVIS_BRANCH') == "feature/asciidoc-build") {
+task publishDocumentation(type: GradleBuild) {
+    if (System.getenv('TRAVIS_BRANCH') == "master") {
         tasks = ['gitPublishPush']
     } else {
         println 'will not publish on gh-pages'
