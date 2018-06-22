@@ -28,7 +28,7 @@ Various options:
 
 The following graphic depicts 4 different examples how different VEs could potentially interact with our platform (OpenPrevo HUB).
 
-image::open_prevo_business_context.png["Business Context", title="OpenPrevo Business Context"]
+image::../images/open_prevo_business_context.png["Business Context", title="OpenPrevo Business Context"]
 
 The following table explains the graphic above in more detail. All the different interfaces used for the communication between the different systems, would be
 pre-defined REST interfaces. Therefore a VE can implement their system independent of any programming language / framework. Every time the platform informs a VE about a match, it would send the payment information to the VE so that they have all information needed to transfer the money.
@@ -53,7 +53,7 @@ To limit the information that will be exchanged between the different VEs and th
 
 To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/VE1), but we'll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we'll provide a simple implementation which could potentially be used by a small VE.
 
-image::open_prevo_mvp_business_context.png["MVP Business Context", title="OpenPrevo MVP Business Context"]
+image::../images/open_prevo_mvp_business_context.png["MVP Business Context", title="OpenPrevo MVP Business Context"]
 
 [options="header", cols="1,4"]
 .OpenPrevo Business Context
