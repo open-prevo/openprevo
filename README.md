@@ -8,6 +8,7 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 ## Introduction [Slides](https://gitpitch.com/open-prevo/slides/intro)
 
 ### Switching Jobs
+
 #### The problem
 
 <img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old VE)->(contact person),|a|->(notify new employer)->(notify new VE)->(contact person)->(notify old VE)-><c>[is valid]->(send money and document)->(end),<c>[invalid]->(notify old VE).svg"/>
