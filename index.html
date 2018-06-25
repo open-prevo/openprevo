@@ -2012,7 +2012,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_technical_context">3.2. Technical Context</a></li>
 </ul>
 </li>
-<li><a href="#section-solution-strategy">4. Solution Strategy</a></li>
+<li><a href="#_solution_strategy">4. Solution Strategy</a>
+<ul class="sectlevel2">
+<li><a href="#_security">4.1. Security</a></li>
+</ul>
+</li>
 <li><a href="#section-building-block-view">5. Building Block View</a>
 <ul class="sectlevel2">
 <li><a href="#_whitebox_overall_system">5.1. Whitebox Overall System</a></li>
@@ -2307,8 +2311,8 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 </div>
 <div class="sect2">
 <h3 id="_business_context"><a class="anchor" href="#_business_context"></a>3.1. Business Context</h3>
-<div class="sect4">
-<h5 id="_general_overview"><a class="anchor" href="#_general_overview"></a>General Overview</h5>
+<div class="sect3">
+<h4 id="_general_overview"><a class="anchor" href="#_general_overview"></a>3.1.1. General Overview</h4>
 <div class="paragraph">
 <p>The following graphic depicts 4 different examples how different VEs could potentially interact with our platform (OpenPrevo HUB).</p>
 </div>
@@ -2364,8 +2368,8 @@ the VE if there is a match and provide the payment information. The goal of this
 <p>To limit the information that will be exchanged between the different VEs and the platform, every VE needs to provide a unique identifier (UID) for each person. In the case of a match the platform would then only inform the VE that we found a match for a certain UID and how the money needs to be transferred to the new VE.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_mvp_business_context"><a class="anchor" href="#_mvp_business_context"></a>MVP Business Context</h5>
+<div class="sect3">
+<h4 id="_mvp_business_context"><a class="anchor" href="#_mvp_business_context"></a>3.1.2. MVP Business Context</h4>
 <div class="paragraph">
 <p>To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/VE1), but we&#8217;ll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we&#8217;ll provide a simple implementation which could potentially be used by a small VE.</p>
 </div>
@@ -2437,13 +2441,7 @@ together with a mapping table showing the relationships between channels and inp
 <p><strong>&lt;Mapping Input/Output to Channels&gt;</strong></p>
 </div>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-solution-strategy"><a class="anchor" href="#section-solution-strategy"></a>4. Solution Strategy</h2>
-<div class="sectionbody">
-<div class="sidebarblock arc42help">
+<div id="section-solution-strategy" class="sidebarblock arc42help">
 <div class="content">
 <div class="paragraph">
 <div class="title">Contents</div>
@@ -2480,7 +2478,61 @@ Refer to details in the following sections.</p>
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution_strategy"><a class="anchor" href="#_solution_strategy"></a>4. Solution Strategy</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_security"><a class="anchor" href="#_security"></a>4.1. Security</h3>
+<div class="paragraph">
+<p>Since we&#8217;re operating on very sensitive information, security is an important aspect of this project.</p>
+</div>
+<div class="sect3">
+<h4 id="_authentication"><a class="anchor" href="#_authentication"></a>4.1.1. Authentication</h4>
+<div class="paragraph">
+<p>In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one VE (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won&#8217;t implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_asymmetric_encryption"><a class="anchor" href="#_asymmetric_encryption"></a>4.1.2. Asymmetric Encryption</h4>
+<div class="paragraph">
+<p>To encrypt the data asymmetrically, we&#8217;re using the <strong>RSA</strong> algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair.</p>
+</div>
+<div class="paragraph">
+<p>The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a VEs environment.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Depending on the amount of data we need to encrypt, we might have to use symmetrical encryption for the data and exchange the symmetric key via RSA. This will be decided depending on the attributes to use for the matching.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_public_key_registry"><a class="anchor" href="#_public_key_registry"></a>4.1.3. Public Key Registry</h4>
+<div class="paragraph">
+<p>Every VE needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every VE.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_hashing"><a class="anchor" href="#_hashing"></a>4.1.4. Hashing</h4>
+<div class="paragraph">
+<p>According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a VE is responsible for sending us only a <em>hash</em> of their data.</p>
+</div>
+<div class="paragraph">
+<p>The hash function we&#8217;re going to use will be proposed by the data protection officer of the baloise insurance.</p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3384,7 +3436,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-25 11:30:43 UTC
+Last updated 2018-06-25 11:44:49 UTC
 </div>
 </div>
 </body>
