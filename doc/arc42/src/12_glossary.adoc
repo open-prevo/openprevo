@@ -29,6 +29,6 @@ Potentially more columns in case you need translations.
 | VE  | **V**orsorge**e**inrichtung | occupational pension fund |           |          |
 | DA  | **D**ienst**a**ustritt      | job end                   |           |          |
 | DE  | **D**ienst**e**intritt      | job start                 |           |          |
-// https://www.ahv-iv.ch/en/Social-insurances/Old-age-and-survivorss-insurance-OASI
-| https://www.ahv-iv.ch/de/Sozialversicherungen/Alters-und-Hinterlassenenversicherung-AHV/Allgemeines#qa-729[AHV] | **A**lters- und **H**interlassenen**v**ersicherung      | Old-age and survivor's insurance (OASI)   | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
+| https://www.ahv-iv.ch/de/Sozialversicherungen/Alters-und-Hinterlassenenversicherung-AHV/Allgemeines#qa-729[AHV] | **A**lters- und **H**interlassenen**v**ersicherung | Old-age and survivor's insurance (OASI) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
+| https://www.ahv-iv.ch/de/Sozialversicherungen/Berufliche-Vorsorge-BV[BV] | **B**erufliche **V**orsorge | Occupational benefit plan (OP)   | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
 |===
