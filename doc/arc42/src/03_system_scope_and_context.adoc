@@ -24,7 +24,7 @@ Various options:
 
 === Business Context
 
-===== General Overview
+==== General Overview
 
 The following graphic depicts 4 different examples how different VEs could potentially interact with our platform (OpenPrevo HUB).
 
@@ -49,7 +49,7 @@ the VE if there is a match and provide the payment information. The goal of this
 
 To limit the information that will be exchanged between the different VEs and the platform, every VE needs to provide a unique identifier (UID) for each person. In the case of a match the platform would then only inform the VE that we found a match for a certain UID and how the money needs to be transferred to the new VE.
 
-===== MVP Business Context
+==== MVP Business Context
 
 To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/VE1), but we'll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we'll provide a simple implementation which could potentially be used by a small VE.
 
