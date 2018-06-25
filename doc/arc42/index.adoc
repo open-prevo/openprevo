@@ -3,7 +3,7 @@
 //
 // ====================================
 
-= image:arc42-logo.png[arc42] OpenPrevo
+= image:arc42-logo.png[arc42] OpenPrevo Architecture
 // toc-title definition MUST follow document title without blank line!
 :toc-title: Table of Contents
 
