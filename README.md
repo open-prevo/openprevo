@@ -16,7 +16,7 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 <img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old VE)->(use OpenPrevo),|a|->(notify new employer)->(notify new VE)->(use OpenPrevo)-><c>[new VE found]->(notify VEs, send money and document)->(end),<c>[no result]->(notify old VE).svg"/>
 
-## [Architecture](doc/arc42/src/03_system_scope_and_context.adoc)
+## [Architecture](https://open-prevo.github.io/openprevo/)
 
 ## [Glossary](doc/glossary.md)
 
