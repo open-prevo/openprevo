@@ -1,1 +1,4 @@
+rootProject.name = 'OpenPrevo'
+
 include 'doc'
+include 'node'
