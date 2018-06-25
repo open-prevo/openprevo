@@ -18,6 +18,6 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 ## [Architecture](https://open-prevo.github.io/openprevo/)
 
-## [Glossary](doc/glossary.md)
+## [Glossary](https://open-prevo.github.io/openprevo/#section-glossary)
 
 ## [About](doc/about.md)
