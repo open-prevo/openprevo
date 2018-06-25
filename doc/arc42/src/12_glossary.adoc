@@ -30,5 +30,6 @@ Potentially more columns in case you need translations.
 | https://www.ahv-iv.ch/de/Sozialversicherungen/Berufliche-Vorsorge-BV[BV] | **B**erufliche **V**orsorge | Occupational benefit plan (OP)   | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
 | DA  | **D**ienst**a**ustritt      | job end                   |           |          |
 | DE  | **D**ienst**e**intritt      | job start                 |           |          |
+| https://www.prevo.ch/images/prevo/pdf/PAKT_Kurzbeschreibung_D.pdf[PAKT]| **P**ersonen **A**pplikation **K**ollek**t**iv |  |  |  |
 | VE  | **V**orsorge**e**inrichtung | occupational pension fund |           |          |
 |===
