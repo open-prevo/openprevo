@@ -40,6 +40,8 @@ Potentially more columns in case you need translations.
 |  | Pensionskasse | Pension funds | Caisse de pensions |  |
 | https://www.prevo.ch/images/prevo/pdf/PAKT_Kurzbeschreibung_D.pdf[PAKT]| **P**ersonen **A**pplikation **K**ollek**t**iv |  |  |  |
 | VE  | **V**orsorge**e**inrichtung | Retirement fund | Institution de prévoyance |          |
+|  | Stellenwechsel | Employer change |  |  |
+|  | Stiftung | Foundation |  |  |
 | SAK | Schweizerische Ausgleichskasse | Swiss Compensation Office (SCO) | Caisse suisse de compensation (CSC) |  |
 |  |  |  |  |  |
 |===
