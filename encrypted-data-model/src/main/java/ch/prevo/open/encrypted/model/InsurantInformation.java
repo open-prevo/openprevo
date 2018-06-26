@@ -8,6 +8,11 @@ public class InsurantInformation {
     private String encryptedOasiNumber;
     private String retirementFundUid;
 
+    public InsurantInformation(String encryptedOasiNumber, String retirementFundUid) {
+        this.encryptedOasiNumber = encryptedOasiNumber;
+        this.retirementFundUid = retirementFundUid;
+    }
+
     public String getEncryptedOasiNumber() {
         return encryptedOasiNumber;
     }

@@ -22,6 +22,9 @@ repositories {
 dependencies {
     compile(project(":data-model"))
     compile(project(':encrypted-data-model'))
+
+    compile('javax.inject:javax.inject:1')
+
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
