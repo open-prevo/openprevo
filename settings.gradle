@@ -1,5 +1,6 @@
 rootProject.name = 'OpenPrevo'
 
 include 'doc'
+include 've-data-api'
 include 'node'
 include 'hub'
