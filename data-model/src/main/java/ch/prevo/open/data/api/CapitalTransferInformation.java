@@ -1,6 +1,6 @@
 package ch.prevo.open.data.api;
 
-public class PaymentInformation {
+public class CapitalTransferInformation {
 	private String name;
 	private String iban;
 	private Address address;

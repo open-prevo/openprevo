@@ -2,7 +2,7 @@ package ch.prevo.open.data.api;
 
 public class JobInfo {
 	
-	private String foundationUid;
+	private String retirementFundUid;
 	
 	private String internalReferenz;
 	
@@ -10,14 +10,14 @@ public class JobInfo {
 	
 	private String internalPersonId;
 	
-	public String getFoundationUid() {
-		return foundationUid;
+	public String getRetirementFundUid() {
+		return retirementFundUid;
 	}
 
-	public void setFoundationUid(String foundationUid) {
-		this.foundationUid = foundationUid;
+	public void setRetirementFundUid(String retirementFundUid) {
+		this.retirementFundUid = retirementFundUid;
 	}
-
+	
 	public String getInternalReferenz() {
 		return internalReferenz;
 	}
