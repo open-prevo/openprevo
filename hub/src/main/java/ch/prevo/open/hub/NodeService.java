@@ -6,39 +6,59 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 @Service
 public class NodeService {
 
-    public static final String JOB_END_ENDPOINT_NAME = "job-end";
-    public static final String JOB_START_ENDPOINT_NAME = "job-start";
-    public static final String MATCH_NOTIFY_ENDPOINT_NAME = "match-notify";
+    @Inject
+    private NodeRegistry nodeRegistry;
 
     private final RestTemplate restTemplate;
-
-    // Open
-    // - registry of known node instances
 
     public NodeService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
     public Set<InsurantInformation> currentExits() {
-        InsurantInformation[] result = restTemplate.getForObject("/" + JOB_END_ENDPOINT_NAME, InsurantInformation[].class);
-        return new HashSet<>(asList(result));
+        Set<InsurantInformation> exits = new HashSet<>();
+        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+            exits.addAll(lookupInsurantInformationList(nodeConfig.getJobExitsUrl()));
+        }
+        return exits;
     }
 
     public Set<InsurantInformation> currentEntries() {
-        InsurantInformation[] result = restTemplate.getForObject("/" + JOB_START_ENDPOINT_NAME, InsurantInformation[].class);
-        return new HashSet<>(asList(result));
+        Set<InsurantInformation> exits = new HashSet<>();
+        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+            exits.addAll(lookupInsurantInformationList(nodeConfig.getJobEntriesUrl()));
+        }
+        return exits;
+    }
+
+    private List<InsurantInformation> lookupInsurantInformationList(String url) {
+        InsurantInformation[] nodeExits = restTemplate.getForObject(url, InsurantInformation[].class);
+        return nodeExits == null ? emptyList() : asList(nodeExits);
     }
 
     public void notifyMatches(List<Match> matches) {
-        restTemplate.postForEntity("/" + MATCH_NOTIFY_ENDPOINT_NAME, matches, null);
+        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+            notifyMatches(nodeConfig, matches);
+        }
+    }
+
+    private void notifyMatches(NodeConfiguration nodeConfig, List<Match> matches) {
+        for (Match match : matches) {
+            if (match.getExit().getRetirementFundUid().equals(nodeConfig.getUid())
+                    || match.getEntry().getRetirementFundUid().equals(nodeConfig.getUid())) {
+                restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), match, null);
+            }
+        }
     }
 }
