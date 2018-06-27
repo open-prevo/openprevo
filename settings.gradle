@@ -4,3 +4,5 @@ include 'doc'
 include 've-data-api'
 include 'node'
 include 'hub'
+include 'encrypted-data-model'
+
