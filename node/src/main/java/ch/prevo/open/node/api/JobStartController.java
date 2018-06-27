@@ -15,7 +15,7 @@ import ch.prevo.open.node.services.JobStartService;
 @RestController
 class JobStartController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(JobEndController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(JobStartController.class);
 
     private JobStartService jobStartService;
 

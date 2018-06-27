@@ -27,21 +27,7 @@ import ch.prevo.open.node.NodeApplication;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = NodeApplication.class)
 @WebAppConfiguration
-public class JobStartControllerTest {
-
-    private MockMvc mockMvc;
-
-    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
-
-    @Inject
-    private WebApplicationContext webApplicationContext;
-
-    @Before
-    public final void setUp(){
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    }
+public class JobStartControllerTest extends RestBaseTest {
 
     @Test
     public void getAllJobStartData() throws Exception {

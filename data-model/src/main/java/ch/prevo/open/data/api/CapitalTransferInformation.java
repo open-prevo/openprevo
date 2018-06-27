@@ -4,7 +4,12 @@ public class CapitalTransferInformation {
 	private String name;
 	private String iban;
 	private Address address;
-	
+
+	public CapitalTransferInformation(String name, String iban) {
+		this.name = name;
+		this.iban = iban;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
@@ -22,5 +27,14 @@ public class CapitalTransferInformation {
 	}
 	public void setIban(String iban) {
 		this.iban = iban;
+	}
+
+	@Override
+	public String toString() {
+		return "CapitalTransferInformation{" +
+				"name='" + name + '\'' +
+				", iban='" + iban + '\'' +
+				", address=" + address +
+				'}';
 	}
 }
