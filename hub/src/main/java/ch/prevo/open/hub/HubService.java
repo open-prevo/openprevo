@@ -3,6 +3,7 @@ package ch.prevo.open.hub;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.Matcher;
+import ch.prevo.open.hub.nodes.NodeService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class HubService {
+class HubService {
 
     @Inject
     private Matcher matcher;
@@ -18,7 +19,7 @@ public class HubService {
     private NodeService nodeService;
 
 
-    public void matchAndNotify() {
+    void matchAndNotify() {
         Set<InsurantInformation> entries = nodeService.currentEntries();
         Set<InsurantInformation> exits = nodeService.currentExits();
 

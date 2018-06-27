@@ -2,6 +2,7 @@ package ch.prevo.open.hub;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.nodes.NodeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

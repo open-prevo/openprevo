@@ -1,4 +1,4 @@
-package ch.prevo.open.hub;
+package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
@@ -13,8 +13,8 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import javax.inject.Inject;
 import java.util.Set;
 
-import static ch.prevo.open.hub.NodeRegistry.NODE_1;
-import static ch.prevo.open.hub.NodeRegistry.NODE_2;
+import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_1;
+import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_2;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;

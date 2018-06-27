@@ -1,32 +1,32 @@
-package ch.prevo.open.hub;
+package ch.prevo.open.hub.nodes;
 
-public class NodeConfiguration {
+class NodeConfiguration {
 
     private String uid;
     private String jobExitsUrl;
     private String jobEntriesUrl;
     private String matchNotifyUrl;
 
-    public NodeConfiguration(String uid, String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl) {
+    NodeConfiguration(String uid, String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl) {
         this.jobExitsUrl = jobExitsUrl;
         this.jobEntriesUrl = jobEntriesUrl;
         this.uid = uid;
         this.matchNotifyUrl = matchNotifyUrl;
     }
 
-    public String getJobExitsUrl() {
+    String getJobExitsUrl() {
         return jobExitsUrl;
     }
 
-    public String getJobEntriesUrl() {
+    String getJobEntriesUrl() {
         return jobEntriesUrl;
     }
 
-    public String getUid() {
+    String getUid() {
         return uid;
     }
 
-    public String getMatchNotifyUrl() {
+    String getMatchNotifyUrl() {
         return matchNotifyUrl;
     }
 }
