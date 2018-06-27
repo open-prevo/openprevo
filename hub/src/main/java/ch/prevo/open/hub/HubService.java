@@ -24,7 +24,7 @@ public class HubService {
 
         List<Match> matches = matcher.findMatches(exits, entries);
 
-        nodeService.notify(matches);
+        nodeService.notifyMatches(matches);
     }
 
 }

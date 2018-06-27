@@ -38,7 +38,7 @@ public class HubServiceTest {
 
         hubService.matchAndNotify();
 
-        verify(nodeService).notify(nodeServiceArgumentCaptor.capture());
+        verify(nodeService).notifyMatches(nodeServiceArgumentCaptor.capture());
         List<Match> notifiedMatches = nodeServiceArgumentCaptor.getValue();
         assertEquals(1, notifiedMatches.size());
         assertSame(exit, notifiedMatches.get(0).getExit());
