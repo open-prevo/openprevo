@@ -1,6 +1,7 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchNotification;
 import ch.prevo.open.hub.match.Match;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -55,9 +56,12 @@ public class NodeService {
 
     private void notifyMatches(NodeConfiguration nodeConfig, List<Match> matches) {
         for (Match match : matches) {
-            if (match.getExit().getRetirementFundUid().equals(nodeConfig.getUid())
-                    || match.getEntry().getRetirementFundUid().equals(nodeConfig.getUid())) {
-                restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), match, null);
+            if (nodeConfig.getUid().equals(match.getExit().getRetirementFundUid())
+                    || nodeConfig.getUid().equals(match.getEntry().getRetirementFundUid())) {
+                MatchNotification matchNotification = new MatchNotification();
+                matchNotification.setEncryptedOasiNumber(match.getEntry().getEncryptedOasiNumber());
+                matchNotification.setNewRetirementFundUid(match.getEntry().getRetirementFundUid());
+                restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), matchNotification, null);
             }
         }
     }

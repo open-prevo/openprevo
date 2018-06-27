@@ -17,8 +17,10 @@ import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_1;
 import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_2;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
@@ -70,7 +72,11 @@ public class NodeServiceTest {
     public void notifyMatch() throws Exception {
         when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
         server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess());
-        server.expect(requestTo(NODE_2.getMatchNotifyUrl())).andRespond(withSuccess());
+        server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(AHV1)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getUid())))
+                .andRespond(withSuccess());
+
 
         nodeService.notifyMatches(singletonList(new Match(new InsurantInformation(AHV1, UID1), new InsurantInformation(AHV1, UID2))));
 
