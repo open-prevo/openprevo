@@ -1,4 +1,4 @@
-package ch.prevo.open.hub;
+package ch.prevo.open.hub.match;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 
