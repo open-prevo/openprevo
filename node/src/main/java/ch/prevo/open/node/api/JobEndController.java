@@ -1,7 +1,8 @@
 package ch.prevo.open.node.api;
 
-import java.util.List;
-
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -26,10 +27,10 @@ public class JobEndController {
     }
 
     @RequestMapping("/job-end")
-    public ResponseEntity<List<InsurantInformation>> getAllJobEndData() {
+    public ResponseEntity<SortedSet<InsurantInformation>> getAllJobEndData() {
         try {
-            List<InsurantInformation> allJobEndData = this.jobEndService.getAllJobEndData();
-            return ResponseEntity.ok(allJobEndData);
+            Set<InsurantInformation> allJobEndData = this.jobEndService.getAllJobEndData();
+            return ResponseEntity.ok(new TreeSet<>(allJobEndData));
         } catch (Exception e) {
             LOGGER.error("Could not load job end data", e);
             return ResponseEntity.notFound().build();

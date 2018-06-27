@@ -1,6 +1,8 @@
 package ch.prevo.open.node.api;
 
-import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -25,10 +27,10 @@ class JobStartController {
     }
 
     @RequestMapping("/job-start")
-    public ResponseEntity<List<InsurantInformation>> getAllJobStartData() {
+    public ResponseEntity<SortedSet<InsurantInformation>> getAllJobStartData() {
         try {
-            List<InsurantInformation> jobStartData = this.jobStartService.getAllJobStartData();
-            return ResponseEntity.ok(jobStartData);
+            Set<InsurantInformation> jobStartData = this.jobStartService.getAllJobStartData();
+            return ResponseEntity.ok(new TreeSet<>(jobStartData));
         } catch (Exception e) {
             LOGGER.error("Could not load job start data", e);
             return ResponseEntity.notFound().build();
