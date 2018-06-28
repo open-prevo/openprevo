@@ -48,7 +48,7 @@ public class NodeServiceTest {
         server.expect(requestTo(NODE_1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
-        Set<InsurantInformation> insurantInformations = nodeService.currentExits();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
 
         server.verify();
         assertEquals(1, insurantInformations.size());
@@ -61,7 +61,7 @@ public class NodeServiceTest {
         server.expect(requestTo(NODE_2.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
-        Set<InsurantInformation> insurantInformations = nodeService.currentEntries();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
 
         server.verify();
         assertEquals(1, insurantInformations.size());

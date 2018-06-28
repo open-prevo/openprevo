@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class Matcher {
+public class MatcherService {
 
     public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
         List<Match> matches = new ArrayList<>();

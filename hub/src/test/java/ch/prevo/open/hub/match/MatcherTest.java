@@ -20,7 +20,7 @@ public class MatcherTest {
         entries.add(new InsurantInformation("ahv1", "uid2"));
         entries.add(new InsurantInformation("ahv2", "uid3"));
 
-        List<Match> matches = new Matcher().findMatches(exits, entries);
+        List<Match> matches = new MatcherService().findMatches(exits, entries);
 
         assertEquals(1, matches.size());
         Match match = matches.get(0);
@@ -30,7 +30,7 @@ public class MatcherTest {
 
     @Test
     public void findMatchesEmptyInput() throws Exception {
-        assertTrue(new Matcher().findMatches(emptySet(), emptySet()).isEmpty());
+        assertTrue(new MatcherService().findMatches(emptySet(), emptySet()).isEmpty());
     }
 
     @Test(expected = RuntimeException.class)
@@ -41,6 +41,6 @@ public class MatcherTest {
         entries.add(new InsurantInformation("ahv1", "uid2"));
         entries.add(new InsurantInformation("ahv1", "uid3"));
 
-        new Matcher().findMatches(exits, entries);
+        new MatcherService().findMatches(exits, entries);
     }
 }

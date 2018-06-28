@@ -27,7 +27,7 @@ public class NodeService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public Set<InsurantInformation> currentExits() {
+    public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
             exits.addAll(lookupInsurantInformationList(nodeConfig.getJobExitsUrl()));
@@ -35,7 +35,7 @@ public class NodeService {
         return exits;
     }
 
-    public Set<InsurantInformation> currentEntries() {
+    public Set<InsurantInformation> getCurrentEntries() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
             exits.addAll(lookupInsurantInformationList(nodeConfig.getJobEntriesUrl()));

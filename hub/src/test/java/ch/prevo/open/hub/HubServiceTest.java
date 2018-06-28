@@ -33,8 +33,8 @@ public class HubServiceTest {
     public void matchAndNotify() throws Exception {
         InsurantInformation entry = new InsurantInformation("123", "1");
         InsurantInformation exit = new InsurantInformation("123", "2");
-        when(nodeService.currentEntries()).thenReturn(singleton(entry));
-        when(nodeService.currentExits()).thenReturn(singleton(exit));
+        when(nodeService.getCurrentEntries()).thenReturn(singleton(entry));
+        when(nodeService.getCurrentExits()).thenReturn(singleton(exit));
         ArgumentCaptor<List<Match>> nodeServiceArgumentCaptor = ArgumentCaptor.forClass(List.class);
 
         hubService.matchAndNotify();
