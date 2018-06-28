@@ -32,7 +32,7 @@ Potentially more columns in case you need translations.
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
 |  | Compenstation offices | Ausgleichskasse | Caisses de compensation |  |
 |  | Termination benefit | Austrittsleistung | Prestation de sortie |  |
-| OP | **O**ccupational benefit **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
+| https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
 | JE  | **j**ob **e**nd | Dienstaustritt |  |  |
 | JS  | **j**ob **s**tart | Diensteintritt |  |  |
 |  | Vested benefits account | Freizügigkeitskonto | Compte de libre passage |  |
