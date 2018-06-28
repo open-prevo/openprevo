@@ -25,8 +25,23 @@ Potentially more columns in case you need translations.
 
 [options="header"]
 |===
-|     | Deutsch                     | English                   | Française | Italiano |
-| VE  | **V**orsorge**e**inrichtung | occupational pension fund |           |          |
-| DA  | **D**ienst**a**ustritt      | job end                   |           |          |
-| DE  | **D**ienst**e**intritt      | job start                 |           |          |
+| acronym | English | Deutsch| Française | Italiano |
+| OASI | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (AHV) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
+|  | Auxiliary fund | Auffangeinrichtung | Institution supplétive |  |
+|  | Compenstation offices | Ausgleichskasse | Caisses de compensation |  |
+|  | Termination benefit | Austrittsleistung | Prestation de sortie |  |
+| OP | **O**ccupational benefit **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
+| JE  | **j**ob **e**nd | Dienstaustritt |  |  |
+| JS  | **j**ob **s**tart | Diensteintritt |  |  |
+|  | Vested benefits account | Freizügigkeitskonto | Compte de libre passage |  |
+|  | Vested benefits policy | Freizügigkeitspolice | Police de libre passage |  |
+|  | Benefits | Leistungen | Prestations |  |
+|  | Retirement | Pensionierung | Age de retraite |  |
+|  | Pension funds | Pensionskasse| Caisse de pensions |  |
+| https://www.prevo.ch/images/prevo/pdf/PAKT_Kurzbeschreibung_D.pdf[PAKT]|  | **P**ersonen **A**pplikation **K**ollek**t**iv |  |  |
+| RF  | **R**etirement **f**und | Vorsorgeeinrichtung | Institution de prévoyance |          |
+|  | Employer change | Stellenwechsel |  |  |
+|  | Foundation | Stiftung |  |  |
+| SCO | **S**wiss **C**ompensation **O**ffice | Schweizerische Ausgleichskasse (SAK) | Caisse suisse de compensation (CSC) |  |
+|  |  |  |  |  |
 |===
