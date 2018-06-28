@@ -61,7 +61,7 @@ public class NodeService {
                 MatchNotification matchNotification = new MatchNotification();
                 matchNotification.setEncryptedOasiNumber(match.getEntry().getEncryptedOasiNumber());
                 matchNotification.setNewRetirementFundUid(match.getEntry().getRetirementFundUid());
-                restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), matchNotification, null);
+                restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), matchNotification, String.class);
             }
         }
     }

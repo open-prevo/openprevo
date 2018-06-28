@@ -71,11 +71,12 @@ public class NodeServiceTest {
     @Test
     public void notifyMatch() throws Exception {
         when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
-        server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess());
+        String notification_response = "notification response";
+        server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(AHV1)))
                 .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getUid())))
-                .andRespond(withSuccess());
+                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
 
         nodeService.notifyMatches(singletonList(new Match(new InsurantInformation(AHV1, UID1), new InsurantInformation(AHV1, UID2))));
