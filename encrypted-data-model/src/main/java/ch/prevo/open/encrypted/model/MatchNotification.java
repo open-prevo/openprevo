@@ -8,6 +8,13 @@ public class MatchNotification {
     private String encryptedOasiNumber;
     private String newRetirementFundUid;
 
+    public MatchNotification() {}
+
+    public MatchNotification(String encryptedOasiNumber, String newRetirementFundUid) {
+        this.encryptedOasiNumber = encryptedOasiNumber;
+        this.newRetirementFundUid = newRetirementFundUid;
+    }
+
     public String getEncryptedOasiNumber() {
         return encryptedOasiNumber;
     }
