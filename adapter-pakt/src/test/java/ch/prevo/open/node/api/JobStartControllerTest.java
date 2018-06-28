@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import javax.inject.Inject;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +44,7 @@ public class JobStartControllerTest {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
+    @Test @Ignore
     public void getAllJobStartData() throws Exception {
         mockMvc.perform(get("/job-start"))
                 .andExpect(status().isOk())
