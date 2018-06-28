@@ -56,8 +56,8 @@ public class NodeService {
 
     private void notifyMatches(NodeConfiguration nodeConfig, List<Match> matches) {
         for (Match match : matches) {
-            if (nodeConfig.getUid().equals(match.getPreviousRetirementFundUid())
-                    || nodeConfig.getUid().equals(match.getNewRetirementFundUid())) {
+            if (nodeConfig.containsRetirementFundUid(match.getPreviousRetirementFundUid())
+                    || nodeConfig.containsRetirementFundUid(match.getNewRetirementFundUid())) {
                 MatchNotification matchNotification = new MatchNotification();
                 matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
                 matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());

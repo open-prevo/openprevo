@@ -12,9 +12,15 @@ import java.util.List;
 class NodeRegistry {
 
     static final NodeConfiguration NODE_1 =
-            new NodeConfiguration("CHE-223.471.073", "https://host1/job-exits", "https://host1/job-entries", "https://host1/match-notify");
+            new NodeConfiguration("https://host1/job-exits",
+                    "https://host1/job-entries",
+                    "https://host1/match-notify",
+                    "CHE-223.471.073", "CHE-109.713.957");
     static final NodeConfiguration NODE_2 =
-            new NodeConfiguration("CHE-109.723.097", "https://host2/job-exits", "https://host2/job-entries", "https://host2/match-notify");
+            new NodeConfiguration("https://host2/job-exits",
+                    "https://host2/job-entries",
+                    "https://host2/match-notify",
+                    "CHE-109.723.097");
 
     List<NodeConfiguration> currentNodes() {
         return Arrays.asList(NODE_1, NODE_2);

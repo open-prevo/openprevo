@@ -2,15 +2,15 @@ package ch.prevo.open.hub.nodes;
 
 class NodeConfiguration {
 
-    private String uid;
+    private String[] retirementFundUids;
     private String jobExitsUrl;
     private String jobEntriesUrl;
     private String matchNotifyUrl;
 
-    NodeConfiguration(String uid, String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl) {
+    NodeConfiguration(String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl, String... retirementFundUids) {
         this.jobExitsUrl = jobExitsUrl;
         this.jobEntriesUrl = jobEntriesUrl;
-        this.uid = uid;
+        this.retirementFundUids = retirementFundUids;
         this.matchNotifyUrl = matchNotifyUrl;
     }
 
@@ -22,11 +22,20 @@ class NodeConfiguration {
         return jobEntriesUrl;
     }
 
-    String getUid() {
-        return uid;
+    String[] getRetirementFundUids() {
+        return retirementFundUids;
     }
 
     String getMatchNotifyUrl() {
         return matchNotifyUrl;
+    }
+
+    public boolean containsRetirementFundUid(String retirementFundUid) {
+        for (String fundUid : retirementFundUids) {
+            if (fundUid.equals(retirementFundUid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
