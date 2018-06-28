@@ -13,20 +13,23 @@ public class CapitalTransferInformation {
 	public Address getAddress() {
 		return address;
 	}
-	public void setAddress(Address address) {
+	public CapitalTransferInformation setAddress(Address address) {
 		this.address = address;
+		return this;
 	}
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public CapitalTransferInformation setName(String name) {
 		this.name = name;
+		return this;
 	}
 	public String getIban() {
 		return iban;
 	}
-	public void setIban(String iban) {
+	public CapitalTransferInformation setIban(String iban) {
 		this.iban = iban;
+		return this;
 	}
 
 	@Override
