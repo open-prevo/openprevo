@@ -29,4 +29,3 @@ dependencies {
 	runtime('ch.prevo.ibm:db2jcc4:9.7')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
-
