@@ -43,7 +43,7 @@ Potentially more columns in case you need translations.
 | RF  | **R**etirement **f**und | Vorsorgeeinrichtung (VE) | Institution de prévoyance |          |
 |  | Employer change | Stellenwechsel |  |  |
 |  | Foundation | Stiftung |  |  |
-| SCO | **S**wiss **C**ompensation **O**ffice | Schweizerische Ausgleichskasse (SAK) | Caisse suisse de compensation (CSC) |  |
+| https://www.zas.admin.ch/zas/en/home/la-cdc/organisation/caisse-suisse-de-compensation.html[SCO] | **S**wiss **C**ompensation **O**ffice | Schweizerische Ausgleichskasse (SAK) | Caisse suisse de compensation (CSC) | Cassa svizzera di compensazione (CSC) |
 | https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/enterprise-identification.html[UID] | Enterprise Identification Number | **U**nternehmens-**Id**entifikationsnummer | Numéro d’identification des entreprises (IDE) | Numero d’identificazione delle imprese (IDI) |
 |  |  |  |  |  |
 |===
