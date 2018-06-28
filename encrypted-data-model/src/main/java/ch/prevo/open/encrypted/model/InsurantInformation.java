@@ -10,7 +10,6 @@ public class InsurantInformation implements Comparable<InsurantInformation> {
     private String encryptedOasiNumber;
     private String retirementFundUid;
 
-
     public InsurantInformation() {
     }
 

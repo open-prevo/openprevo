@@ -1,0 +1,19 @@
+version: '3'
+services:
+  ve_node:
+    build: ../node/
+    ports:
+    - "8881:8080"
+  pakt_node:
+    build: ../node/
+    ports:
+    - "8882:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{"open.prevo.json.adapter.files":{
+                                    "jobstart":"classpath:pakt-sample-job-start-data.json",
+                                    "jobend":"classpath:pakt-sample-job-end-data.json"}
+                                }'
+  hub:
+    build: ../hub/
+    ports:
+    - "8888:8080"
