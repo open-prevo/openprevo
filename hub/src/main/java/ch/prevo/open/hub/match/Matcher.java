@@ -14,16 +14,15 @@ public class Matcher {
     public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
         List<Match> matches = new ArrayList<>();
         for (InsurantInformation exit : retirementFundExits) {
-            Match match = findMatchingEntry(retirementFundEntries, exit);
-            if (match != null) {
-                matches.add(match);
+            InsurantInformation matchingEntry = findMatchingEntry(retirementFundEntries, exit);
+            if (matchingEntry != null) {
+                matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid()));
             }
-
         }
         return matches;
     }
 
-    private Match findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation exit) {
+    private InsurantInformation findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation exit) {
         Set<InsurantInformation> matchingEntries = retirementFundEntries.stream()
                 .filter(entry -> entry.getEncryptedOasiNumber().equals(exit.getEncryptedOasiNumber()))
                 .collect(Collectors.toSet());
@@ -34,7 +33,7 @@ public class Matcher {
         if (matchingEntries.size() > 1) {
             throw new RuntimeException("Cannot handle multiple entries for a single exit");
         }
-        return new Match(exit, matchingEntries.iterator().next());
+        return matchingEntries.iterator().next();
     }
 
 }

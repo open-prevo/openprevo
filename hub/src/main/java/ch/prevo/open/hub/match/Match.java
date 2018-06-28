@@ -1,21 +1,28 @@
 package ch.prevo.open.hub.match;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
-
 public class Match {
-    private final InsurantInformation exit;
-    private final InsurantInformation entry;
 
-    public Match(InsurantInformation exit, InsurantInformation entry) {
-        this.exit = exit;
-        this.entry = entry;
+    private final String encryptedOasiNumber;
+    private final String previousRetirementFundUid;
+    private final String newRetirementFundUid;
+
+    public Match(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid) {
+
+        this.encryptedOasiNumber = encryptedOasiNumber;
+        this.previousRetirementFundUid = previousRetirementFundUid;
+        this.newRetirementFundUid = newRetirementFundUid;
     }
 
-    public InsurantInformation getExit() {
-        return exit;
+    public String getEncryptedOasiNumber() {
+        return encryptedOasiNumber;
     }
 
-    public InsurantInformation getEntry() {
-        return entry;
+    public String getPreviousRetirementFundUid() {
+        return previousRetirementFundUid;
     }
+
+    public String getNewRetirementFundUid() {
+        return newRetirementFundUid;
+    }
+
 }

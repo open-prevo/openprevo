@@ -79,7 +79,7 @@ public class NodeServiceTest {
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
 
-        nodeService.notifyMatches(singletonList(new Match(new InsurantInformation(AHV1, UID1), new InsurantInformation(AHV1, UID2))));
+        nodeService.notifyMatches(singletonList(new Match(AHV1, UID1, UID2)));
 
         server.verify();
     }

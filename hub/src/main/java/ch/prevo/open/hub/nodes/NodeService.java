@@ -56,11 +56,11 @@ public class NodeService {
 
     private void notifyMatches(NodeConfiguration nodeConfig, List<Match> matches) {
         for (Match match : matches) {
-            if (nodeConfig.getUid().equals(match.getExit().getRetirementFundUid())
-                    || nodeConfig.getUid().equals(match.getEntry().getRetirementFundUid())) {
+            if (nodeConfig.getUid().equals(match.getPreviousRetirementFundUid())
+                    || nodeConfig.getUid().equals(match.getNewRetirementFundUid())) {
                 MatchNotification matchNotification = new MatchNotification();
-                matchNotification.setEncryptedOasiNumber(match.getEntry().getEncryptedOasiNumber());
-                matchNotification.setNewRetirementFundUid(match.getEntry().getRetirementFundUid());
+                matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
+                matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());
                 restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), matchNotification, String.class);
             }
         }

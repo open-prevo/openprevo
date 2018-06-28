@@ -42,8 +42,8 @@ public class HubServiceTest {
         verify(nodeService).notifyMatches(nodeServiceArgumentCaptor.capture());
         List<Match> notifiedMatches = nodeServiceArgumentCaptor.getValue();
         assertEquals(1, notifiedMatches.size());
-        assertSame(exit, notifiedMatches.get(0).getExit());
-        assertSame(entry, notifiedMatches.get(0).getEntry());
+        assertEquals(exit.getRetirementFundUid(), notifiedMatches.get(0).getPreviousRetirementFundUid());
+        assertEquals(entry.getRetirementFundUid(), notifiedMatches.get(0).getNewRetirementFundUid());
     }
 
 }

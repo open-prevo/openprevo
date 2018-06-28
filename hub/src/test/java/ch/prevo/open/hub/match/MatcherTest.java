@@ -24,9 +24,8 @@ public class MatcherTest {
 
         assertEquals(1, matches.size());
         Match match = matches.get(0);
-        assertEquals("ahv1", match.getEntry().getEncryptedOasiNumber());
-        assertEquals("ahv1", match.getExit().getEncryptedOasiNumber());
-        assertNotSame(match.getEntry(), match.getExit());
+        assertEquals("ahv1", match.getEncryptedOasiNumber());
+        assertNotEquals(match.getPreviousRetirementFundUid(), match.getNewRetirementFundUid());
     }
 
     @Test
