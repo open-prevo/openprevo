@@ -2,10 +2,12 @@ version: '3'
 services:
   ve_node:
     build: ../node/
+    hostname: baloise
     ports:
     - "8881:8080"
   pakt_node:
     build: ../node/
+    hostname: helvetia
     ports:
     - "8882:8080"
     environment:
@@ -17,3 +19,11 @@ services:
     build: ../hub/
     ports:
     - "8888:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    depends_on:
+      - ve_node
+      - pakt_node
+    links:
+      - ve_node
+      - pakt_node

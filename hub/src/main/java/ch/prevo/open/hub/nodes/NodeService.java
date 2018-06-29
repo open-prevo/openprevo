@@ -29,7 +29,7 @@ public class NodeService {
 
     public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             exits.addAll(lookupInsurantInformationList(nodeConfig.getJobExitsUrl()));
         }
         return exits;
@@ -37,7 +37,7 @@ public class NodeService {
 
     public Set<InsurantInformation> getCurrentEntries() {
         Set<InsurantInformation> exits = new HashSet<>();
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             exits.addAll(lookupInsurantInformationList(nodeConfig.getJobEntriesUrl()));
         }
         return exits;
@@ -49,7 +49,7 @@ public class NodeService {
     }
 
     public void notifyMatches(List<Match> matches) {
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             notifyMatches(nodeConfig, matches);
         }
     }
