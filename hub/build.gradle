@@ -19,12 +19,17 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile('org.springframework.boot:spring-boot-starter-jetty')
 
     compile('javax.inject:javax.inject:1')
 
     compile(project(':encrypted-data-model'))
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+
+
