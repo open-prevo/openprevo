@@ -13,8 +13,8 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import javax.inject.Inject;
 import java.util.Set;
 
-import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_1;
-import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_2;
+import static ch.prevo.open.hub.nodes.MockNodeRegistry.NODE_1;
+import static ch.prevo.open.hub.nodes.MockNodeRegistry.NODE_2;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, NodeRegistry.class})
+@RestClientTest({NodeService.class, MockNodeRegistry.class})
 public class NodeServiceTest {
 
     private static final String AHV1 = "756.1234.5678.97";
@@ -40,11 +40,11 @@ public class NodeServiceTest {
     @Inject
     private MockRestServiceServer server;
     @MockBean
-    private NodeRegistry nodeRegistry;
+    private MockNodeRegistry nodeRegistry;
 
     @Test
     public void currentExits() throws Exception {
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_1));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(NODE_1));
         server.expect(requestTo(NODE_1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -57,7 +57,7 @@ public class NodeServiceTest {
 
     @Test
     public void currentEntries() throws Exception {
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(NODE_2));
         server.expect(requestTo(NODE_2.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -70,7 +70,7 @@ public class NodeServiceTest {
 
     @Test
     public void notifyMatch() throws Exception {
-        when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(NODE_1, NODE_2));
         String notification_response = "notification response";
         server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
