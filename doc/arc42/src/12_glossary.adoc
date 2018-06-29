@@ -30,7 +30,7 @@ Potentially more columns in case you need translations.
 |  | Auxiliary fund | Auffangeinrichtung | Institution supplétive |  |
 | BVG |  | **B**erufliche **V**orsorge **G**esetz |  |  |
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
-|  | Compenstation offices | Ausgleichskasse | Caisses de compensation |  |
+|  | Compensation office | Ausgleichskasse | Caisse de compensation |  |
 |  | Termination benefit | Austrittsleistung | Prestation de sortie |  |
 | https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
 | JE  | **j**ob **e**nd | Dienstaustritt |  |  |
