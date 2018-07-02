@@ -4,15 +4,21 @@
 
 ## Language
 
+### technical: Code and documentation is supposed to be primarily in english. Please refere to our [glossary for common terms](https://open-prevo.github.io/openprevo/#section-glossary)
+
+### functional requirements: Issues and tasks will be primarily written in German. Feedback / reports in English are ok as well.
+
 ## Acknowledgments
 
 The initial release of this repository was authored by [...]
 
+## [Code of Conduct](../CODE_OF_CONDUCT.md)
+
 ## Licenses
 
-Content is copyright © OpenPrevo authors, released under [...].
+Content is copyright © OpenPrevo authors.
 
-Code, including source files and code samples if any in the content, is released under [...], with the following exceptions:
+Code, including source files and code samples if any in the content, is released under [EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0](https://www.eclipse.org/legal/epl-2.0/faq.php), with the following exceptions:
 
 - arc42 (template)
 - gradle(w) integration
