@@ -29,10 +29,11 @@ Potentially more columns in case you need translations.
 | https://www.ch.ch/en/ahv/[OASI] | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (AHV) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
 | AF | **A**uxiliary **f**und | Auffangeinrichtung | Institution supplétive |  |
 |  | Benefits | Leistungen | Prestations |  |
-| BVG |  | **B**erufliche **V**orsorge **G**esetz |  |  |
+| https://www.admin.ch/opc/de/classified-compilation/19820152/index.html[BVG] |  | **B**erufliche **V**orsorge **G**esetz | Loi fédérale sur la prévoyance professionnelle vieillesse, survivants et invalidité  (LPP) | Legge federale sulla previdenza professionale per la vecchiaia, i superstiti e l'invalidità (LPP) |
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
 | CO | **C**ompensation **o**ffice | Ausgleichskasse | Caisse de compensation |  |
 | EC | **E**mployer **c**hange | Stellenwechsel |  |  |
+| https://www.admin.ch/opc/de/classified-compilation/19930375/index.html[FZG] |  | **F**rei**z**ügigkeits**g**esetz | Loi sur le libre passage (LFLP) | Legge sul libero passaggio (LFLP) |
 | JE  | **j**ob **e**nd | Dienstaustritt |  |  |
 | JS  | **j**ob **s**tart | Diensteintritt |  |  |
 | https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
