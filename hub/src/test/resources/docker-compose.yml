@@ -1,0 +1,11 @@
+version: '2'
+services:
+  node_baloise:
+    build: ../node/
+  node_helvetia:
+    build: ../node/
+    environment:
+      SPRING_APPLICATION_JSON: '{"open.prevo.json.adapter.files":{
+                                    "jobstart":"classpath:pakt-sample-job-start-data.json",
+                                    "jobend":"classpath:pakt-sample-job-end-data.json"}
+                                }'

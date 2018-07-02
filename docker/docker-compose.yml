@@ -1,12 +1,14 @@
-version: '3'
+version: '2'
 services:
-  ve_node:
-    build: ../node/
+  node_baloise:
+    build:
+      context: ../node
     hostname: baloise
     ports:
     - "8881:8080"
-  pakt_node:
-    build: ../node/
+  node_helvetia:
+    build:
+      context: ../node
     hostname: helvetia
     ports:
     - "8882:8080"
@@ -22,8 +24,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     depends_on:
-      - ve_node
-      - pakt_node
+      - node_baloise
+      - node_helvetia
     links:
-      - ve_node
-      - pakt_node
+      - node_baloise
+      - node_helvetia

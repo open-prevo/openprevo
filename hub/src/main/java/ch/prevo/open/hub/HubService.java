@@ -25,7 +25,7 @@ public class HubService {
     @Inject
     private NodeService nodeService;
 
-    void matchAndNotify() {
+    public void matchAndNotify() {
         Set<InsurantInformation> entries = nodeService.getCurrentEntries();
         Set<InsurantInformation> exits = nodeService.getCurrentExits();
 
