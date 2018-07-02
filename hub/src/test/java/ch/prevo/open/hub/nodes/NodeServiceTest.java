@@ -28,12 +28,12 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RestClientTest({NodeService.class, NodeRegistry.class})
 public class NodeServiceTest {
 
-    private static final String AHV1 = "756.1234.5678.97";
+    private static final String OASI1 = "756.1234.5678.97";
     private static final String UID1 = "CHE-223.471.073";
     private static final String UID2 = "CHE-109.723.097";
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
-            = "[{\"encryptedOasiNumber\" : \"" + AHV1 + "\", \"retirementFundUid\" : \"" + UID1 + "\"}]";
+            = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\"}]";
 
     @Inject
     private NodeService nodeService;
@@ -74,19 +74,19 @@ public class NodeServiceTest {
         String notification_response = "notification response";
         server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
-                .andExpect(jsonPath("$.encryptedOasiNumber", is(AHV1)))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
                 .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getRetirementFundUids()[0])))
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
 
-        nodeService.notifyMatches(singletonList(new Match(AHV1, UID1, UID2)));
+        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
 
         server.verify();
     }
 
     private void assertEqualsToTestdata(Set<InsurantInformation> insurantInformations) {
         InsurantInformation insurantInformation = insurantInformations.iterator().next();
-        assertEquals(AHV1, insurantInformation.getEncryptedOasiNumber());
+        assertEquals(OASI1, insurantInformation.getEncryptedOasiNumber());
         assertEquals(UID1, insurantInformation.getRetirementFundUid());
     }
 
