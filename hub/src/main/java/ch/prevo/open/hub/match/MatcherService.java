@@ -24,7 +24,7 @@ public class MatcherService {
 
     private InsurantInformation findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation exit) {
         Set<InsurantInformation> matchingEntries = retirementFundEntries.stream()
-                .filter(entry -> entry.getEncryptedOasiNumber().equals(exit.getEncryptedOasiNumber()))
+                .filter(entry -> isMatching(entry, exit))
                 .collect(Collectors.toSet());
 
         if (matchingEntries.isEmpty()) {
@@ -34,6 +34,16 @@ public class MatcherService {
             throw new RuntimeException("Cannot handle multiple entries for a single exit");
         }
         return matchingEntries.iterator().next();
+    }
+
+    private boolean isMatching(InsurantInformation entry, InsurantInformation exit) {
+        return entry.getEncryptedOasiNumber().equals(exit.getEncryptedOasiNumber())
+                && !isSameFundWithEntryBeforeExit(entry, exit);
+    }
+
+    private boolean isSameFundWithEntryBeforeExit(InsurantInformation entry, InsurantInformation exit) {
+        return entry.getRetirementFundUid().equals(exit.getRetirementFundUid())
+                && entry.getDate().isBefore(exit.getDate());
     }
 
 }

@@ -3,11 +3,13 @@ package ch.prevo.open.hub.match;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.time.LocalDate.of;
 import static java.util.Collections.emptySet;
 import static org.junit.Assert.*;
 
@@ -29,7 +31,28 @@ public class MatcherTest {
         assertEquals(1, matches.size());
         Match match = matches.get(0);
         assertEquals(OASI_1, match.getEncryptedOasiNumber());
-        assertNotEquals(match.getPreviousRetirementFundUid(), match.getNewRetirementFundUid());
+        assertEquals(UID_1, match.getPreviousRetirementFundUid());
+        assertEquals(UID_2, match.getNewRetirementFundUid());
+    }
+
+    @Test
+    public void findMatchesWithinSameRetirementFund() throws Exception {
+        Set<InsurantInformation> exits = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 6, 1)));
+        Set<InsurantInformation> entries = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 8, 1)));
+
+        List<Match> matches = new MatcherService().findMatches(exits, entries);
+
+        assertEquals(1, matches.size());
+    }
+
+    @Test
+    public void findMatchesWithinSameRetirementFund_entryBeforeExit() throws Exception {
+        Set<InsurantInformation> exits = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 6, 1)));
+        Set<InsurantInformation> entries = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 1, 1)));
+
+        List<Match> matches = new MatcherService().findMatches(exits, entries);
+
+        assertEquals(0, matches.size());
     }
 
     @Test
