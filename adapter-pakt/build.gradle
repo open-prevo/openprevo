@@ -30,6 +30,16 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+test {
+	enabled=false
+}
+
 bootJar {
 	enabled=false
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
 }
