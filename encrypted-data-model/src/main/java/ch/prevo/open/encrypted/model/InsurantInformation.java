@@ -53,7 +53,10 @@ public class InsurantInformation implements Comparable<InsurantInformation> {
         if (oasiComparisonResult != 0) {
             return oasiComparisonResult;
         }
-        // TODO: date
-        return ObjectUtils.compare(retirementFundUid, o.retirementFundUid);
+        int uidComparisonResult = ObjectUtils.compare(retirementFundUid, o.retirementFundUid);
+        if (uidComparisonResult != 0) {
+            return uidComparisonResult;
+        }
+        return ObjectUtils.compare(date, o.date);
     }
 }
