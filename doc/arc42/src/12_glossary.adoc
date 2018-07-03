@@ -35,6 +35,7 @@ Potentially more columns in case you need translations.
 | CO | **C**ompensation **O**ffice | Ausgleichskasse | Caisse de compensation |  |
 | COE | **C**ommencement **o**f **E**mployment | Dienstaustritt |  |  |
 | EC | **E**mployer **C**hange | Stellenwechsel |  |  |
+| https://de.wikipedia.org/wiki/Einzahlungsschein_mit_Referenznummer[ESR] |  | Einzahlungsschein mit Referenznummer |  |  |
 | https://www.admin.ch/opc/de/classified-compilation/19930375/index.html[FZG] | Federal law on vested benefits | **F**rei**z**ügigkeits**g**esetz | Loi sur le libre passage (LFLP) | Legge sul libero passaggio (LFLP) |
 | https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
 | PF | **P**ension **F**und | https://www.bsv.admin.ch/bsv/de/home/glossar/pensionskasse.html[Pensionskasse] | Caisse de pensions |  |
