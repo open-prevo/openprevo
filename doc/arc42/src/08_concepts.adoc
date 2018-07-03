@@ -84,19 +84,19 @@ The old / previous retirement fund is legally obligated to transfer the FZL to t
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a3[Artikel 3 Absatz 1]']     
 Treten Versicherte in eine neue Vorsorgeeinrichtung ein, so hat die frühere Vorsorgeeinrichtung die Austrittsleistung an die neue zu überweisen.
 
-The insured person has no choice: only if no new retirement fund is available he can get a new one.
+The insured person has no choice: only if no new retirement fund is available he has a choice.
 
 .Erhaltung des Vorsorgeschutzes in anderer Form
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a4[Artikel 4 Absatz 1]']     
 Versicherte, die nicht in eine neue Vorsorgeeinrichtung eintreten, haben ihrer Vorsorgeeinrichtung mitzuteilen, in welcher zulässigen Form sie den Vorsorgeschutz erhalten wollen.
 
-The new retirement fund is allowed to claim the FZL at the previous retirment fund.
+The new retirement fund is allowed to claim the FZL from the previous retirment fund.
 
 .Recht auf Einsicht und Einforderung
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a11[Artikel 11 Absatz 2]']     
 Die Vorsorgeeinrichtung kann die Austrittsleistung aus dem früheren Vorsorgeverhältnis sowie das Vorsorgekapital aus einer Form der Vorsorgeschutzerhaltung für Rechnung der Versicherten einfordern.
 
-When entering a new retirement fund the FZE may also be contacted to transfer the ATL.
+When entering a new retirement fund the FZE may also be contacted to transfer the FZL.
 
 .Nicht eingebrachte Eintrittsleistung und Erhöhungsbeiträge 
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a6[Artikel 6 Absatz 2]']     
