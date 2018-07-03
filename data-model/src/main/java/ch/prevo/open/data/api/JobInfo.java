@@ -1,5 +1,7 @@
 package ch.prevo.open.data.api;
 
+import java.time.LocalDate;
+
 public class JobInfo {
 	
 	private String retirementFundUid;
@@ -9,7 +11,9 @@ public class JobInfo {
 	private String oasiNumber;
 	
 	private String internalPersonId;
-	
+
+	private LocalDate date;
+
 	public String getRetirementFundUid() {
 		return retirementFundUid;
 	}
@@ -41,5 +45,12 @@ public class JobInfo {
 	public void setInternalPersonId(String internalPersonId) {
 		this.internalPersonId = internalPersonId;
 	}
-	
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 }
