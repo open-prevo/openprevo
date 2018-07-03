@@ -13,13 +13,13 @@ public class InsurantInformationTest {
 
     @Test
     public void compareTo() throws Exception {
-        InsurantInformation i0 = new InsurantInformation("1", "1", of(2000, 1, 1));
-        InsurantInformation i1 = new InsurantInformation("1", "1");
+        InsurantInformation i0 = new InsurantInformation("1", "1");
+        InsurantInformation i1 = new InsurantInformation("1", "1", of(2000, 1, 1));
         InsurantInformation i2 = new InsurantInformation("2", "1", of(2000, 1, 1));
         InsurantInformation i3 = new InsurantInformation("2", "2", of(2000, 1, 1));
         InsurantInformation i4 = new InsurantInformation("2", "2", of(2000, 2, 1));
 
-        List<InsurantInformation> list = Arrays.asList(i4, i2, i3, i1);
+        List<InsurantInformation> list = Arrays.asList(i4, i2, i3, i0, i1);
         Collections.sort(list);
 
         assertSame(i0, list.get(0));
