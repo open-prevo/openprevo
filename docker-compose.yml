@@ -1,14 +1,14 @@
-version: '3'
+version: '2'
 services:
   node_baloise:
     build:
-      context: ../node
+      context: node
     hostname: baloise
     ports:
     - "8881:8080"
   node_helvetia:
     build:
-      context: ../node
+      context: node
     hostname: helvetia
     ports:
     - "8882:8080"
@@ -18,7 +18,7 @@ services:
                                     "jobend":"classpath:pakt-sample-job-end-data.json"}
                                 }'
   hub:
-    build: ../hub/
+    build: hub/
     ports:
     - "8888:8080"
     environment:
