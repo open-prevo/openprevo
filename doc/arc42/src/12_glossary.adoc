@@ -28,6 +28,7 @@ Potentially more columns in case you need translations.
 | acronym | English | Deutsch| Française | Italiano |
 | https://www.ch.ch/en/ahv/[OASI] | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (AHV) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
 | https://www.bsv.admin.ch/bsv/de/home/glossar/auffangeinrichtung.html[AF] | **A**uxiliary **f**und | Auffangeinrichtung | Institution supplétive |  |
+| ATL |  | **A**us**t**ritts**l**eistung |  |  |
 |  | Benefits | Leistungen | Prestations |  |
 | https://www.admin.ch/opc/de/classified-compilation/19820152/index.html[BVG] |  | **B**erufliche **V**orsorge **G**esetz | Loi fédérale sur la prévoyance professionnelle vieillesse, survivants et invalidité  (LPP) | Legge federale sulla previdenza professionale per la vecchiaia, i superstiti e l'invalidità (LPP) |
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
