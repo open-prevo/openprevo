@@ -1,13 +1,26 @@
 package ch.prevo.open.hub.nodes;
 
-class NodeConfiguration {
+import java.util.List;
 
-    private String[] retirementFundUids;
+public class NodeConfiguration {
+
+    public static final String JOB_START_ENDPOINT = "/job-start";
+    public static final String JOB_END_ENDPOINT = "/job-end";
+    public static final String MATCH_NOTIFICATION_ENDPOINT = "/match-notification";
+
+    private List<String> retirementFundUids;
     private String jobExitsUrl;
     private String jobEntriesUrl;
     private String matchNotifyUrl;
 
-    NodeConfiguration(String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl, String... retirementFundUids) {
+    public NodeConfiguration(String baseUrl, List<String> retirementFundUids) {
+        this.jobEntriesUrl = baseUrl + JOB_START_ENDPOINT;
+        this.jobExitsUrl = baseUrl + JOB_END_ENDPOINT;
+        this.matchNotifyUrl = baseUrl + MATCH_NOTIFICATION_ENDPOINT;
+        this.retirementFundUids = retirementFundUids;
+    }
+
+    NodeConfiguration(String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl, List<String> retirementFundUids) {
         this.jobExitsUrl = jobExitsUrl;
         this.jobEntriesUrl = jobEntriesUrl;
         this.retirementFundUids = retirementFundUids;
@@ -22,7 +35,7 @@ class NodeConfiguration {
         return jobEntriesUrl;
     }
 
-    String[] getRetirementFundUids() {
+    List<String> getRetirementFundUids() {
         return retirementFundUids;
     }
 

@@ -75,7 +75,7 @@ public class NodeServiceTest {
         server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(AHV1)))
-                .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getRetirementFundUids()[0])))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getRetirementFundUids().get(0))))
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
 

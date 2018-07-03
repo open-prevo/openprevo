@@ -17,7 +17,7 @@ public class HubScheduler {
     @Inject
     private HubService hubService;
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 50000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 120000)
     public void run() {
         LOGGER.debug("Start matching task");
         this.hubService.matchAndNotify();

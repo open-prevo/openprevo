@@ -19,13 +19,10 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    // exclude tomcat
-    compile.exclude module: 'spring-boot-starter-tomcat'
-}
-
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
     compile('org.springframework.boot:spring-boot-starter-jetty')
 
     compile(project(":data-model"))
@@ -33,6 +30,6 @@ dependencies {
 
     compile('javax.inject:javax.inject:1')
     compile('commons-io:commons-io:2.6')
-    
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
