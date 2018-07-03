@@ -11,11 +11,11 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 #### The problem
 
-<img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old VE)->(contact person),|a|->(notify new employer)->(notify new VE)->(contact person)->(notify old VE)-><c>[is valid]->(send money and document)->(end),<c>[invalid]->(notify old VE).svg"/>
+<img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old RF)->(contact person),|a|->(notify new employer)->(notify new RF)->(contact person)->(notify old RF)-><c>[is valid]->(send money and document)->(end),<c>[invalid]->(notify old RF).svg"/>
 
 #### The idea
 
-<img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old VE)->(use OpenPrevo),|a|->(notify new employer)->(notify new VE)->(use OpenPrevo)-><c>[new VE found]->(notify VEs, send money and document)->(end),<c>[no result]->(notify old VE).svg"/>
+<img src="http://yuml.me/diagram/plain/activity/(start)->(new job),(new job)->|a|,|a|->(notify old employer)->(notify old RF)->(use OpenPrevo),|a|->(notify new employer)->(notify new RF)->(use OpenPrevo)-><c>[new RF found]->(notify RFs, send money and document)->(end),<c>[no result]->(notify old RF).svg"/>
 
 ## [Architecture](https://open-prevo.github.io/openprevo/)
 
