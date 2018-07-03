@@ -17,7 +17,7 @@ import ch.prevo.open.node.pakt.TozsPtverm;
 import ch.prevo.pakt.zd.utils.CdMeld;
 
 @Service
-public class PAKTJobEndProviderImpl implements JobEndProvider, JobStartProvider {
+public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {
 
 	@Inject
 	private PartnerVermittlungRepository repository;
