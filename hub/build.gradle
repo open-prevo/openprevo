@@ -35,7 +35,16 @@ dependencies {
 test {
     // exclude integration tests by default
     exclude 'ch/prevo/open/hub/integration/**'
+    finalizedBy 'ciIntegrationTesting'
 }
 
+task ciIntegrationTesting(type: GradleBuild) {
+    tasks = ['integrationTest']
+    onlyIf {
+        System.getenv("TRAVIS") == "true"
+    }
+}
 
-
+task integrationTest(dependsOn: project(':node').assemble, type: Test) {
+    include 'ch/prevo/open/hub/integration/**'
+}

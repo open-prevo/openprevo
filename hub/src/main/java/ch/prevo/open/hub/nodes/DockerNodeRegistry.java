@@ -3,7 +3,6 @@ package ch.prevo.open.hub.nodes;
 import static java.util.Collections.singletonList;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
@@ -17,14 +16,10 @@ import org.springframework.stereotype.Service;
 class DockerNodeRegistry implements NodeRegistry {
 
     static final NodeConfiguration BALOISE_NODE =
-            new NodeConfiguration("http://ve_node:8080/job-end",
-                    "http://ve_node:8080/job-start",
-                    "http://ve_node:8080/match-notification",
+            new NodeConfiguration("http://node_baloise:8080/job-end",
                     singletonList("CHE-109.740.084-Baloise-Sammelstiftung"));
     static final NodeConfiguration HELVETIA_NODE =
-            new NodeConfiguration("http://pakt_node:8080/job-end",
-                    "http://pakt_node:8080/job-start",
-                    "http://pakt_node:8080/match-notification",
+            new NodeConfiguration("http://node_helvetia:8080/job-end",
                     singletonList("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung"));
 
     @Override
