@@ -104,9 +104,11 @@ Haben Versicherte infolge einer Leistungsverbesserung Erhöhungsbeiträge zu ent
 
 ==== BVG background
 
+Neutral institutions assigned with tasks (performing, controlling, supervision) related to the federal BVG law are allowed to process the necessary data.
+
 .Datenbekanntgabe 
-[quote, Berufliche Vorsorge Gesetz, 'https://www.admin.ch/opc/de/classified-compilation/19820152/index.html#a86a[Artikel 86a]']     
-Sofern kein überwiegendes Privatinteresse entgegensteht, dürfen Daten im Einzelfall und auf schriftliches und begründetes Gesuch hin bekannt gegeben werden an [...]
+[quote, Berufliche Vorsorge Gesetz, 'https://www.admin.ch/opc/de/classified-compilation/19820152/index.html#a86a[Artikel 86a Abschnitt g/a]']     
+Sofern kein überwiegendes Privatinteresse entgegensteht, dürfen Daten bekannt gegeben werden an a. andere mit der Durchführung sowie der Kontrolle oder der Beaufsichtigung der Durchführung dieses Gesetzes betrauten Organe, wenn sie für die Erfüllung der ihnen nach diesem Gesetz übertragenen Aufgaben erforderlich sind;
 
 === _<Concept n>_
 
