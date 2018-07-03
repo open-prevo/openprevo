@@ -33,7 +33,7 @@ Potentially more columns in case you need translations.
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
 | CF | **C**ollective **F**oundation | Sammelstiftung |  |  |
 | CO | **C**ompensation **O**ffice | Ausgleichskasse | Caisse de compensation |  |
-| COE | **C**ommencement **o**f **E**mployment | Dienstaustritt |  |  |
+| COE | **C**ommencement **o**f **E**mployment | Diensteintritt |  |  |
 | EC | **E**mployer **C**hange | Stellenwechsel |  |  |
 | https://de.wikipedia.org/wiki/Einzahlungsschein_mit_Referenznummer[ESR] |  | Einzahlungsschein mit Referenznummer |  |  |
 | https://www.admin.ch/opc/de/classified-compilation/19930375/index.html[FZG] | Federal law on vested benefits | **F**rei**z**ügigkeits**g**esetz | Loi sur le libre passage (LFLP) | Legge sul libero passaggio (LFLP) |
@@ -45,7 +45,7 @@ Potentially more columns in case you need translations.
 |  | Foundation | Stiftung |  |  |
 | https://www.zas.admin.ch/zas/en/home/la-cdc/organisation/caisse-suisse-de-compensation.html[SCO] | **S**wiss **C**ompensation **O**ffice | Schweizerische Ausgleichskasse (SAK) | Caisse suisse de compensation (CSC) | Cassa svizzera di compensazione (CSC) |
 | TB | **T**ermination **b**enefit | Austrittsleistung | Prestation de sortie |  |
-| TOE | **T**ermination **o**f **E**mployment | Diensteintritt |  |  |
+| TOE | **T**ermination **o**f **E**mployment | Dienstaustritt |  |  |
 | https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/enterprise-identification.html[UID] | Enterprise Identification Number | **U**nternehmens-**Id**entifikationsnummer | Numéro d’identification des entreprises (IDE) | Numero d’identificazione delle imprese (IDI) |
 | VB  | **V**ested **B**enefits | Freizügigkeitsleistung (https://www.bsv.admin.ch/bsv/de/home/glossar/freizuegigkeitsleistung.html[FZL]) | prestation de libre passage | prestazione di libero passaggio |
 | VBI | **V**ested **B**enefits **I**nstitution | Freizügigkeitseinrichtung (https://www.bsv.admin.ch/bsv/de/home/glossar/freizuegigkeitseinrichtung.html[FZE]) | institution de libre passage | istituto di libero passaggio |
