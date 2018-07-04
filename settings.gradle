@@ -5,4 +5,5 @@ include 'data-model'
 include 'node'
 include 'hub'
 include 'encrypted-data-model'
+include 'adapter-pakt'
 

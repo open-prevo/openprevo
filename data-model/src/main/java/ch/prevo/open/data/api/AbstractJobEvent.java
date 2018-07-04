@@ -4,21 +4,19 @@ public abstract class AbstractJobEvent {
 	
 	private String techId;
 	
-	public String getTechId() {
-		return techId;
+	public AbstractJobEvent(String techId, JobInfo jobInfo) {
+		super();
+		this.techId = techId;
+		this.jobInfo = jobInfo;
 	}
 
-	public void setTechId(String techId) {
-		this.techId = techId;
+	public String getTechId() {
+		return techId;
 	}
 
 	private JobInfo jobInfo;
 
 	public JobInfo getJobInfo() {
 		return jobInfo;
-	}
-
-	public void setJobInfo(JobInfo jobInfo) {
-		this.jobInfo = jobInfo;
 	}
 }
