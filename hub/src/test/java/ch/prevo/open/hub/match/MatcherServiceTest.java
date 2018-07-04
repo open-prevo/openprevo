@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class MatcherTest {
+public class MatcherServiceTest {
 
     private static final String OASI_1 = "oasi1";
     private static final String UID_1 = "uid1";
