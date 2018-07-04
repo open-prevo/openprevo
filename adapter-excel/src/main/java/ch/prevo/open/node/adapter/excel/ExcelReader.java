@@ -1,8 +1,6 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
@@ -21,6 +19,14 @@ public class ExcelReader {
     private static final int OASI_COLUMN_INDEX = 0;
     private static final int DATE_COLUMN_INDEX = 1;
     private static final int RETIREMENT_FUND_UID_COLUMN_INDEX = 2;
+    private static final int NAME_COLUMN_INDEX = 3;
+    private static final int ADDITIONAL_NAME_COLUMN_INDEX = 4;
+    private static final int STREET_COLUMN_INDEX = 5;
+    private static final int POSTAL_CODE_COLUMN_INDEX = 6;
+    private static final int CITY_COLUMN_INDEX = 7;
+    private static final int REFERENCE_COLUMN_INDEX = 8;
+    private static final int IBAN_COLUMN_INDEX = 9;
+    private static final int ISR_REFERENCE_COLUMN_INDEX = 10;
 
     private static final int FIRST_DATA_ROW = 2;
 
@@ -31,8 +37,8 @@ public class ExcelReader {
     public ExcelReader(String filename) throws IOException, InvalidFormatException {
         try (InputStream inp = getClass().getResourceAsStream(filename)) {
             Workbook wb = WorkbookFactory.create(inp);
-            jobEnds = mapRows(wb.getSheetAt(1), this::mapJobEnd);
-            jobStarts = mapRows(wb.getSheetAt(0), this::mapJobStart);
+            jobEnds = mapRows(wb.getSheetAt(0), this::mapJobEnd);
+            jobStarts = mapRows(wb.getSheetAt(1), this::mapJobStart);
         }
     }
 
@@ -61,6 +67,21 @@ public class ExcelReader {
         }
         JobStart jobStart = new JobStart();
         jobStart.setJobInfo(jobInfo);
+
+        Address address = new Address();
+        address.setStreet(getString(row, STREET_COLUMN_INDEX));
+        address.setPostalCode(getString(row, POSTAL_CODE_COLUMN_INDEX));
+        address.setCity(getString(row, CITY_COLUMN_INDEX));
+
+        CapitalTransferInformation capititalTransferInfo = new CapitalTransferInformation();
+        capititalTransferInfo.setAddress(address);
+        capititalTransferInfo.setName(getString(row, NAME_COLUMN_INDEX));
+        capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
+        capititalTransferInfo.setReference(getString(row, REFERENCE_COLUMN_INDEX));
+        capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
+        capititalTransferInfo.setIsrReference(getString(row, ISR_REFERENCE_COLUMN_INDEX));
+        jobStart.setCapitalTransferInfo(capititalTransferInfo);
+
         return Optional.of(jobStart);
     }
 
