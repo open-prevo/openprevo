@@ -34,7 +34,7 @@
 
 
 # gradle
-build/
+**/build/
 !gradle/wrapper/*.jar
 
 

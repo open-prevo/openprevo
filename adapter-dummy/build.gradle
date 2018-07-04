@@ -1,0 +1,13 @@
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile(project(":data-model"))
+}
+
+jar {
+    enabled = true
+}
