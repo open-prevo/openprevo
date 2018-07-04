@@ -25,4 +25,12 @@ public class Match {
         return newRetirementFundUid;
     }
 
+    @Override
+    public String toString() {
+        return "Match{" +
+                "encryptedOasiNumber='" + encryptedOasiNumber + '\'' +
+                ", previousRetirementFundUid='" + previousRetirementFundUid + '\'' +
+                ", newRetirementFundUid='" + newRetirementFundUid + '\'' +
+                '}';
+    }
 }
