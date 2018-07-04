@@ -51,8 +51,57 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 	}
 
 	private String getRetirementFundId(TozsPtverm ptVerm) {
-		// TODO retrieve uid
-		return Short.toString(ptVerm.getCdstf());
+		return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
+	}
+
+	enum RetirementFund {
+		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Bâloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
+				"CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
+						"Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
+		private Short cdStf;
+		private String name;
+		private String id;
+
+		private RetirementFund(Short cdStf, String name, String id) {
+			this.cdStf = cdStf;
+			this.name = name;
+			this.id = id;
+		}
+
+		public Short getCdStf() {
+			return cdStf;
+		}
+
+		public void setCdStf(Short cdStf) {
+			this.cdStf = cdStf;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public static RetirementFund getByCdStf(short cdStf) {
+			RetirementFund result = null;
+			for (RetirementFund candidate : RetirementFund.values()) {
+				if (candidate.cdStf == cdStf) {
+					result = candidate;
+					break;
+				}
+			}
+			return result;
+		}
 	}
 
 	@Override
@@ -69,17 +118,19 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 
 	private JobStart buildJobStart(TozsPtverm ptVerm) {
 		// TODO fulfill missing properties
-		return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm), buildCapitalTransferInformation(ptVerm));
+		return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
+				buildCapitalTransferInformation(ptVerm));
 	}
 
 	private CapitalTransferInformation buildCapitalTransferInformation(TozsPtverm ptVerm) {
 		// TODO Auto-generated method stub
-		CapitalTransferInformation capitalTransferInfo = new CapitalTransferInformation(ptVerm.getNameve(), ptVerm.getTxtiban());
-		capitalTransferInfo.setAddress(buuildAddress(ptVerm));
+		CapitalTransferInformation capitalTransferInfo = new CapitalTransferInformation(ptVerm.getNameve(),
+				ptVerm.getTxtiban());
+		capitalTransferInfo.setAddress(buildAddress(ptVerm));
 		return capitalTransferInfo;
 	}
 
-	private Address buuildAddress(TozsPtverm ptVerm) {
+	private Address buildAddress(TozsPtverm ptVerm) {
 		// TODO Auto-generated method stub
 		Address address = new Address();
 		return address;

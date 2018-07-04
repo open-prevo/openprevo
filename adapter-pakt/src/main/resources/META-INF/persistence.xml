@@ -3,5 +3,7 @@
 	<persistence-unit name="node-pakt">
 		<class>ch.prevo.pakt.TozsPtverm</class>
 		<class>ch.prevo.pakt.TozsPtvermPK</class>
+		
+		<class>ch.prevo.pakt.StringAttributeConverter</class>
 	</persistence-unit>
 </persistence>

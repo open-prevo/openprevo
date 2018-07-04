@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
@@ -29,10 +30,10 @@ public class MockJobEventProviderImpl implements JobEndProvider, JobStartProvide
 		int i = 0;		
 		return Arrays.asList(
 				new JobStart(Integer.toString(++i),
-						new JobInfo().setOasiNumber("756.1234.5678.97").setRetirementFundUid("CHE-109.740.084")),
+						new JobInfo().setOasiNumber("756.1234.5678.97").setRetirementFundUid("CHE-109.740.084"), new CapitalTransferInformation("dummyName", "dummyIban")),
 				new JobStart(Integer.toString(++i),
-						new JobInfo().setOasiNumber("756.5678.1234.17").setRetirementFundUid("CHE-109.740.078")),
+						new JobInfo().setOasiNumber("756.5678.1234.17").setRetirementFundUid("CHE-109.740.078"), new CapitalTransferInformation("dummyName", "dummyIban")),
 				new JobStart(Integer.toString(++i),
-						new JobInfo().setOasiNumber("756.1298.6578.97").setRetirementFundUid("CHE-109.537.488")));
+						new JobInfo().setOasiNumber("756.1298.6578.97").setRetirementFundUid("CHE-109.537.488"), new CapitalTransferInformation("dummyName", "dummyIban")));
 	}
 }
