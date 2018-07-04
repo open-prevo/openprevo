@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 class DockerNodeRegistry implements NodeRegistry {
 
     static final NodeConfiguration BALOISE_NODE =
-            new NodeConfiguration("http://node_baloise:8080/job-end",
+            new NodeConfiguration("http://node_baloise:8080",
                     singletonList("CHE-109.740.084-Baloise-Sammelstiftung"));
     static final NodeConfiguration HELVETIA_NODE =
-            new NodeConfiguration("http://node_helvetia:8080/job-end",
+            new NodeConfiguration("http://node_helvetia:8080",
                     singletonList("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung"));
 
     @Override
