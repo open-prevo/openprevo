@@ -31,7 +31,7 @@ class NodeConfiguration {
         return retirementFundUids;
     }
 
-    public void setRetirementFundUids(String[] retirementFundUids) {
+    public void setRetirementFundUids(String... retirementFundUids) {
         this.retirementFundUids = retirementFundUids;
     }
 
