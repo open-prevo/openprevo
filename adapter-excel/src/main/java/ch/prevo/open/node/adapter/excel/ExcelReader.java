@@ -19,14 +19,13 @@ public class ExcelReader {
     private static final int OASI_COLUMN_INDEX = 0;
     private static final int DATE_COLUMN_INDEX = 1;
     private static final int RETIREMENT_FUND_UID_COLUMN_INDEX = 2;
-    private static final int NAME_COLUMN_INDEX = 3;
-    private static final int ADDITIONAL_NAME_COLUMN_INDEX = 4;
-    private static final int STREET_COLUMN_INDEX = 5;
-    private static final int POSTAL_CODE_COLUMN_INDEX = 6;
-    private static final int CITY_COLUMN_INDEX = 7;
-    private static final int REFERENCE_COLUMN_INDEX = 8;
+    private static final int REFERENCE_COLUMN_INDEX = 3;
+    private static final int NAME_COLUMN_INDEX = 4;
+    private static final int ADDITIONAL_NAME_COLUMN_INDEX = 5;
+    private static final int STREET_COLUMN_INDEX = 6;
+    private static final int POSTAL_CODE_COLUMN_INDEX = 7;
+    private static final int CITY_COLUMN_INDEX = 8;
     private static final int IBAN_COLUMN_INDEX = 9;
-    private static final int ISR_REFERENCE_COLUMN_INDEX = 10;
 
     private static final int FIRST_DATA_ROW = 2;
 
@@ -77,9 +76,7 @@ public class ExcelReader {
         capititalTransferInfo.setAddress(address);
         capititalTransferInfo.setName(getString(row, NAME_COLUMN_INDEX));
         capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
-        capititalTransferInfo.setReference(getString(row, REFERENCE_COLUMN_INDEX));
         capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
-        capititalTransferInfo.setIsrReference(getString(row, ISR_REFERENCE_COLUMN_INDEX));
         jobStart.setCapitalTransferInfo(capititalTransferInfo);
 
         return Optional.of(jobStart);
@@ -104,6 +101,7 @@ public class ExcelReader {
         jobInfo.setOasiNumber(oasiNumber);
         jobInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));
         jobInfo.setDate(getDate(row, DATE_COLUMN_INDEX));
+        jobInfo.setInternalReferenz(getString(row, REFERENCE_COLUMN_INDEX));
         return jobInfo;
     }
 

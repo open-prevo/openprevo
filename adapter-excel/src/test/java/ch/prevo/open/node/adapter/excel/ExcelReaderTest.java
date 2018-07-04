@@ -23,7 +23,7 @@ public class ExcelReaderTest {
     }
 
     @Test
-    public void readEmploymentStarts_blabla_betterNaming() throws Exception {
+    public void readEmploymentStarts() throws Exception {
         List<JobStart> jobStarts = getExcelReader().getJobStarts();
 
         assertEquals(2, jobStarts.size());
@@ -34,12 +34,11 @@ public class ExcelReaderTest {
         assertEquals("7569678192446", jobInfo.getOasiNumber());
         assertEquals(LocalDate.of(2018, 8, 15), jobInfo.getDate());
         assertEquals("CHE-109.740.078", jobInfo.getRetirementFundUid());
+        assertEquals("our-ref-56", jobInfo.getInternalReferenz());
 
         CapitalTransferInformation capitalTransferInfo = jobStart.getCapitalTransferInfo();
         assertEquals("Zusatzname", capitalTransferInfo.getAdditionalName());
-        assertEquals("Zahlungszweck", capitalTransferInfo.getReference());
         assertEquals("IBAN", capitalTransferInfo.getIban());
-        assertEquals("ESR Referenznummer", capitalTransferInfo.getIsrReference());
 
         Address address = capitalTransferInfo.getAddress();
         assertEquals("Str/Postfach", address.getStreet());
