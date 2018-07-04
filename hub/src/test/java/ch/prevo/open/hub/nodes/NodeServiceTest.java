@@ -2,6 +2,7 @@ package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, NodeRegistry.class})
+@RestClientTest({NodeService.class, NodeRegistry.class, MatcherService.class})
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -42,8 +43,9 @@ public class NodeServiceTest {
     @MockBean
     private NodeRegistry nodeRegistry;
 
+
     @Test
-    public void currentExits() throws Exception {
+    public void currentEmploymentTerminations() throws Exception {
         when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_1));
         server.expect(requestTo(NODE_1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
@@ -56,7 +58,7 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void currentEntries() throws Exception {
+    public void currentEmploymentCommencements() throws Exception {
         when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_2));
         server.expect(requestTo(NODE_2.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));

@@ -11,11 +11,16 @@ import java.util.stream.Collectors;
 @Service
 public class MatcherService {
 
+    private final List<InsurantInformation> matchedEmploymentCommencements = new ArrayList<>();
+    private final List<InsurantInformation> matchedEmploymentTerminations = new ArrayList<>();
+
     public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
         List<Match> matches = new ArrayList<>();
         for (InsurantInformation exit : retirementFundExits) {
             InsurantInformation matchingEntry = findMatchingEntry(retirementFundEntries, exit);
             if (matchingEntry != null) {
+                matchedEmploymentCommencements.add(matchingEntry);
+                matchedEmploymentTerminations.add(exit);
                 matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid()));
             }
         }
@@ -46,4 +51,11 @@ public class MatcherService {
                 && entry.getDate().isBefore(exit.getDate());
     }
 
+    public boolean employmentCommencementNotMatched(InsurantInformation info) {
+        return !matchedEmploymentCommencements.contains(info);
+    }
+
+    public boolean employmentTerminationNotMatched(InsurantInformation info) {
+        return !matchedEmploymentTerminations.contains(info);
+    }
 }
