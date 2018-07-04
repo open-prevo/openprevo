@@ -7,13 +7,13 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import ch.prevo.open.data.api.Address;
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
-import ch.prevo.open.node.pakt.PartnerVermittlungRepository;
-import ch.prevo.open.node.pakt.TozsPtverm;
+import ch.prevo.pakt.PartnerVermittlungRepository;
+import ch.prevo.pakt.TozsPtverm;
 import ch.prevo.pakt.zd.utils.CdMeld;
 
 @Service
@@ -36,8 +36,18 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 
 	private JobEnd buildJobEnd(TozsPtverm ptVerm) {
 		// TODO fulfill missing properties
-		return new JobEnd(Integer.toString(ptVerm.getId().getId()),
-				new JobInfo().setOasiNumber(ptVerm.getAhv()).setRetirementFundUid(getRetirementFundId(ptVerm)));
+		return new JobEnd(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
+	}
+
+	private JobInfo buildJobInfo(TozsPtverm ptVerm) {
+		JobInfo jobInfo = new JobInfo();
+		jobInfo.setOasiNumber(ptVerm.getAhv());
+		jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
+		jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
+		jobInfo.setInternalReferenz(ptVerm.getNameve());
+		// TODO fulfill missing properties
+		return jobInfo;
+
 	}
 
 	private String getRetirementFundId(TozsPtverm ptVerm) {
@@ -59,8 +69,19 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 
 	private JobStart buildJobStart(TozsPtverm ptVerm) {
 		// TODO fulfill missing properties
-		return new JobStart(Integer.toString(ptVerm.getId().getId()),
-				new JobInfo().setOasiNumber(ptVerm.getAhv()).setRetirementFundUid(getRetirementFundId(ptVerm)));
+		return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm), buildCapitalTransferInformation(ptVerm));
+	}
 
+	private CapitalTransferInformation buildCapitalTransferInformation(TozsPtverm ptVerm) {
+		// TODO Auto-generated method stub
+		CapitalTransferInformation capitalTransferInfo = new CapitalTransferInformation(ptVerm.getNameve(), ptVerm.getTxtiban());
+		capitalTransferInfo.setAddress(buuildAddress(ptVerm));
+		return capitalTransferInfo;
+	}
+
+	private Address buuildAddress(TozsPtverm ptVerm) {
+		// TODO Auto-generated method stub
+		Address address = new Address();
+		return address;
 	}
 }

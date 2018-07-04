@@ -1,10 +1,8 @@
-package ch.prevo.open.node;
+package ch.prevo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan({"ch.prevo.open.node","ch.prevo.pakt"})
 @SpringBootApplication
 public class NodeApplication {
 

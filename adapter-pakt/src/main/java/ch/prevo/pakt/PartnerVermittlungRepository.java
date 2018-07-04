@@ -1,4 +1,4 @@
-package ch.prevo.open.node.pakt;
+package ch.prevo.pakt;
 
 import org.springframework.data.repository.CrudRepository;
 

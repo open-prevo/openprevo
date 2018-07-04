@@ -1,4 +1,4 @@
-package ch.prevo.open.node.pakt;
+package ch.prevo.pakt;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -41,11 +41,29 @@ public class TozsPtverm implements Serializable {
 
 	private String name;
 
+	private String namestrasse;
+
+	private String nameve;
+
 	private String namevor;
+
+	private String namezusatz;
 
 	private int nrgevo;
 
 	private Timestamp timestamp;
+
+	private String txtesr1;
+
+	private String txtesr2;
+
+	private String txtiban;
+
+	private String txtort;
+
+	private String txtpostfach;
+
+	private String txtpostleitzahl;
 
 	public TozsPtverm() {
 	}
@@ -138,12 +156,36 @@ public class TozsPtverm implements Serializable {
 		this.name = name;
 	}
 
+	public String getNamestrasse() {
+		return this.namestrasse;
+	}
+
+	public void setNamestrasse(String namestrasse) {
+		this.namestrasse = namestrasse;
+	}
+
+	public String getNameve() {
+		return this.nameve;
+	}
+
+	public void setNameve(String nameve) {
+		this.nameve = nameve;
+	}
+
 	public String getNamevor() {
 		return this.namevor;
 	}
 
 	public void setNamevor(String namevor) {
 		this.namevor = namevor;
+	}
+
+	public String getNamezusatz() {
+		return this.namezusatz;
+	}
+
+	public void setNamezusatz(String namezusatz) {
+		this.namezusatz = namezusatz;
 	}
 
 	public int getNrgevo() {
@@ -160,6 +202,54 @@ public class TozsPtverm implements Serializable {
 
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getTxtesr1() {
+		return this.txtesr1;
+	}
+
+	public void setTxtesr1(String txtesr1) {
+		this.txtesr1 = txtesr1;
+	}
+
+	public String getTxtesr2() {
+		return this.txtesr2;
+	}
+
+	public void setTxtesr2(String txtesr2) {
+		this.txtesr2 = txtesr2;
+	}
+
+	public String getTxtiban() {
+		return this.txtiban;
+	}
+
+	public void setTxtiban(String txtiban) {
+		this.txtiban = txtiban;
+	}
+
+	public String getTxtort() {
+		return this.txtort;
+	}
+
+	public void setTxtort(String txtort) {
+		this.txtort = txtort;
+	}
+
+	public String getTxtpostfach() {
+		return this.txtpostfach;
+	}
+
+	public void setTxtpostfach(String txtpostfach) {
+		this.txtpostfach = txtpostfach;
+	}
+
+	public String getTxtpostleitzahl() {
+		return this.txtpostleitzahl;
+	}
+
+	public void setTxtpostleitzahl(String txtpostleitzahl) {
+		this.txtpostleitzahl = txtpostleitzahl;
 	}
 
 }
