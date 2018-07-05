@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 public class NotificationWriterTest {
@@ -28,7 +28,7 @@ public class NotificationWriterTest {
 
         String notificationText = stringWriter.toString();
         assertNotNull(notificationText);
-        assertEquals(286, notificationText.length());
+        assertTrue(notificationText.startsWith("Match found for employment commencement"));
     }
 
     @Test
@@ -46,6 +46,6 @@ public class NotificationWriterTest {
 
         String notificationText = stringWriter.toString();
         assertNotNull(notificationText);
-        assertEquals(398, notificationText.length());
+        assertTrue(notificationText.startsWith("Match found for employment termination"));
     }
 }
