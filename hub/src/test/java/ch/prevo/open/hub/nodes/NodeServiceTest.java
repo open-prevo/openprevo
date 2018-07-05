@@ -1,7 +1,5 @@
 package ch.prevo.open.hub.nodes;
 
-import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_1;
-import static ch.prevo.open.hub.nodes.NodeRegistry.NODE_2;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
@@ -16,6 +14,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import java.util.Set;
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -27,9 +26,10 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({ NodeService.class, NodeRegistry.class })
+@RestClientTest({ NodeService.class, NodeRegistry.class, MatcherService.class })
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -48,10 +48,20 @@ public class NodeServiceTest {
     @MockBean
     private NodeRegistry nodeRegistry;
 
+    private NodeConfiguration node1;
+    private NodeConfiguration node2;
+
+    @Before
+    public void setUp() {
+        node1 = new NodeConfiguration("https://host1", singletonList(UID1));
+        node2 = new NodeConfiguration("https://host2", singletonList(UID2));
+    }
+
     @Test
-    public void currentExits() {
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_1));
-        server.expect(requestTo(NODE_1.getJobExitsUrl()))
+    public void currentEmploymentTerminations() {
+
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
+        server.expect(requestTo(node1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
@@ -64,9 +74,9 @@ public class NodeServiceTest {
     @Test
     public void tryGetCurrentExitsWithUnreachableNode() {
         // given
-        when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_2, NODE_1));
-        server.expect(requestTo(NODE_2.getJobExitsUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
-        server.expect(requestTo(NODE_1.getJobExitsUrl()))
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
+        server.expect(requestTo(node2.getJobExitsUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
+        server.expect(requestTo(node1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
         // when
@@ -79,9 +89,9 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void currentEntries() {
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(NODE_2));
-        server.expect(requestTo(NODE_2.getJobEntriesUrl()))
+    public void currentEmploymentCommencements() {
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
+        server.expect(requestTo(node1.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
@@ -93,27 +103,29 @@ public class NodeServiceTest {
 
     @Test
     public void notifyMatch() {
-        when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
-        String notificationResponse = "notification response";
-        server.expect(requestTo(NODE_1.getMatchNotifyUrl()))
-                .andRespond(withSuccess(notificationResponse, MediaType.TEXT_PLAIN));
-        server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+        String notification_response = "notification response";
+        server.expect(requestTo(node1.getMatchNotifyUrl()))
+                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
+        server.expect(requestTo(node2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getRetirementFundUids()[0])))
-                .andRespond(withSuccess(notificationResponse, MediaType.TEXT_PLAIN));
+                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
+                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
+        // when
         nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
 
+        // then
         server.verify();
     }
 
     @Test
     public void testNotificationForNonExistingRetirementFund() {
         // given
-        when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
         Match invalidMatch = new Match(OASI1, UID1, "RandomUID");
-        server.expect(never(), requestTo(NODE_1.getMatchNotifyUrl()));
-        server.expect(never(), requestTo(NODE_2.getMatchNotifyUrl()));
+        server.expect(never(), requestTo(node1.getMatchNotifyUrl()));
+        server.expect(never(), requestTo(node2.getMatchNotifyUrl()));
 
         // when
         nodeService.notifyMatches(singletonList(invalidMatch));
@@ -125,12 +137,12 @@ public class NodeServiceTest {
     @Test
     public void testNotificationForUnreachableNodes() {
         // given
-        when(nodeRegistry.currentNodes()).thenReturn(asList(NODE_1, NODE_2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
         String notification_response = "notification response";
-        server.expect(requestTo(NODE_1.getMatchNotifyUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
-        server.expect(requestTo(NODE_2.getMatchNotifyUrl()))
+        server.expect(requestTo(node1.getMatchNotifyUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
+        server.expect(requestTo(node2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.newRetirementFundUid", is(NODE_2.getRetirementFundUids()[0])))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
         // when

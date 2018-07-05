@@ -1,0 +1,31 @@
+version: '2'
+services:
+  node_baloise:
+    build:
+      context: adapter-dummy
+    hostname: baloise
+    ports:
+    - "8881:8080"
+  node_helvetia:
+    build:
+      context: adapter-dummy
+    hostname: helvetia
+    ports:
+    - "8882:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{"open.prevo.json.adapter.files":{
+                                    "jobstart":"classpath:pakt-sample-job-start-data.json",
+                                    "jobend":"classpath:pakt-sample-job-end-data.json"}
+                                }'
+  hub:
+    build: hub
+    ports:
+    - "8888:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    depends_on:
+      - node_baloise
+      - node_helvetia
+    links:
+      - node_baloise
+      - node_helvetia

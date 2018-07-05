@@ -19,12 +19,33 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile('org.springframework.boot:spring-boot-starter-jetty')
     compile('javax.inject:javax.inject:1')
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
 
     compile(project(':encrypted-data-model'))
+
+    testCompile('org.testcontainers:testcontainers:1.8.0')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+test {
+    // exclude integration tests by default
+    exclude 'ch/prevo/open/hub/integration/**'
+    finalizedBy 'ciIntegrationTesting'
+}
+
+task ciIntegrationTesting(type: GradleBuild) {
+    tasks = ['integrationTest']
+    onlyIf {
+        System.getenv("TRAVIS") == "true"
+    }
+}
+
+task integrationTest(dependsOn: project(':adapter-dummy').assemble, type: Test) {
+    include 'ch/prevo/open/hub/integration/**'
 }

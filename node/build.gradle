@@ -20,11 +20,20 @@ repositories {
 }
 
 dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile('org.springframework.boot:spring-boot-starter-jetty')
+
     compile(project(":data-model"))
     compile(project(':encrypted-data-model'))
 
     compile('javax.inject:javax.inject:1')
+    compile('commons-io:commons-io:2.6')
 
-    compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+jar {
+	enabled=true
 }
