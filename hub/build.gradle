@@ -24,6 +24,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
 
     compile('javax.inject:javax.inject:1')
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
 
     compile(project(':encrypted-data-model'))
     testCompile('org.springframework.boot:spring-boot-starter-test')
