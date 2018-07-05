@@ -28,28 +28,29 @@ Potentially more columns in case you need translations.
 | acronym | English | Deutsch| Française | Italiano |
 | https://www.ch.ch/en/ahv/[OASI] | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (AHV) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
 | https://www.bsv.admin.ch/bsv/de/home/glossar/auffangeinrichtung.html[AF] | **A**uxiliary **f**und | Auffangeinrichtung | Institution supplétive | Istituto Collettore |
-|  | Benefits | Leistungen | Prestations |  |
+|  | Benefits | Leistungen | Prestations | Prestazioni |
 | https://www.admin.ch/opc/de/classified-compilation/19820152/index.html[BVG] |  | **B**erufliche **V**orsorge **G**esetz | Loi fédérale sur la prévoyance professionnelle vieillesse, survivants et invalidité  (LPP) | Legge federale sulla previdenza professionale per la vecchiaia, i superstiti e l'invalidità (LPP) |
 | https://www.zas.admin.ch/zas/en/home.html[CCO] | **C**entral **C**ompensation **O**ffice | Zentrale Ausgleichsstelle (ZAS) | La Centrale de compensation (CdC) | L’Ufficio centrale di compensazione (UCC) |
-| CF | **C**ollective **F**oundation | Sammelstiftung |  |  |
-| CO | **C**ompensation **O**ffice | Ausgleichskasse | Caisse de compensation |  |
-| COE | **C**ommencement **o**f **E**mployment | Dienstaustritt |  |  |
+| CF | **C**ollective **F**oundation | Sammelstiftung | Fondation collective | Fondazione collettiva |
+| CO | **C**ompensation **O**ffice | Ausgleichskasse | Caisse de compensation | Cassa di compensazione |
+| COE | **C**ommencement **o**f **E**mployment | Diensteintritt | Entrée en service | Entrata in servizio |
 | EC | **E**mployer **C**hange | Stellenwechsel |  |  |
+| https://de.wikipedia.org/wiki/Einzahlungsschein_mit_Referenznummer[ESR] | inpayment slip with reference number (ISR) | **E**inzahlungs**s**chein mit **R**eferenznummer | bulletin de versement avec numéro de référence (BVR) | bollettino di versamento con numero di riferimento (BVR) |
 | https://www.admin.ch/opc/de/classified-compilation/19930375/index.html[FZG] | Federal law on vested benefits | **F**rei**z**ügigkeits**g**esetz | Loi sur le libre passage (LFLP) | Legge sul libero passaggio (LFLP) |
 | https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |
-| PF | **P**ension **F**und | https://www.bsv.admin.ch/bsv/de/home/glossar/pensionskasse.html[Pensionskasse] | Caisse de pensions |  |
+| PF | **P**ension **F**und | https://www.bsv.admin.ch/bsv/de/home/glossar/pensionskasse.html[Pensionskasse] (PK) | Caisse de pensions (CP) | Cassa pensioni (CP) |
 | https://www.prevo.ch/images/prevo/pdf/PAKT_Kurzbeschreibung_D.pdf[PAKT]|  | **P**ersonen **A**pplikation **K**ollek**t**iv |  |  |
-|  | Retirement | Pensionierung | Age de retraite |  |
+|  | Retirement | Pensionierung | Retraite | Pensionamento |
 | RF  | **R**etirement **f**und | Vorsorgeeinrichtung (VE) | Institution de prévoyance | istituto di previdenza |
-|  | Foundation | Stiftung |  |  |
+|  | Foundation | Stiftung | Fondation | Fondazione |
 | https://www.zas.admin.ch/zas/en/home/la-cdc/organisation/caisse-suisse-de-compensation.html[SCO] | **S**wiss **C**ompensation **O**ffice | Schweizerische Ausgleichskasse (SAK) | Caisse suisse de compensation (CSC) | Cassa svizzera di compensazione (CSC) |
-| TB | **T**ermination **b**enefit | Austrittsleistung | Prestation de sortie |  |
-| TOE | **T**ermination **o**f **E**mployment | Diensteintritt |  |  |
+| TB | **T**ermination **b**enefit | Austrittsleistung | Prestation de sortie | Prestazione di uscita |
+| TOE | **T**ermination **o**f **E**mployment | Dienstaustritt | Sortie de service | Uscita dal servizio |
 | https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/enterprise-identification.html[UID] | Enterprise Identification Number | **U**nternehmens-**Id**entifikationsnummer | Numéro d’identification des entreprises (IDE) | Numero d’identificazione delle imprese (IDI) |
 | VB  | **V**ested **B**enefits | Freizügigkeitsleistung (https://www.bsv.admin.ch/bsv/de/home/glossar/freizuegigkeitsleistung.html[FZL]) | prestation de libre passage | prestazione di libero passaggio |
 | VBI | **V**ested **B**enefits **I**nstitution | Freizügigkeitseinrichtung (https://www.bsv.admin.ch/bsv/de/home/glossar/freizuegigkeitseinrichtung.html[FZE]) | institution de libre passage | istituto di libero passaggio |
-| VBA | **V**ested **B**enefits **A**ccount | Freizügigkeitskonto | Compte de libre passage |  |
-| VBP | **V**ested **B**enefits **P**olicy | Freizügigkeitspolice | Police de libre passage |  |
-| WB  | **W**ithdrawal **B**enefits | **A**us**t**ritts**l**eistung |  |  |
+| VBA | **V**ested **B**enefits **A**ccount | Freizügigkeitskonto | Compte de libre passage | Conto di libero passaggio |
+| VBP | **V**ested **B**enefits **P**olicy | Freizügigkeitspolice | Police de libre passage | Polizza di libero passaggio |
+| WB  | **W**ithdrawal **B**enefits | **A**us**t**ritts**l**eistung | Prestation de sortie | Prestazione di uscita |
 |  |  |  |  |  |
 |===

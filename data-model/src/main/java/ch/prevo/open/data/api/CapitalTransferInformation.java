@@ -14,29 +14,24 @@ public class CapitalTransferInformation {
         this.iban = iban;
     }
 
-    public Address getAddress() {
-        return address;
-    }
+	public Address getAddress() {
+		return address;
+	}
+	public CapitalTransferInformation setAddress(Address address) {
+		this.address = address;
+	return this;}
+	public String getName() {
+		return name;
+	}
+	public CapitalTransferInformation setName(String name) {
+		this.name = name;
+	return this;}
+	public String getIban() {
+		return iban;}
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
+	public CapitalTransferInformation setIban(String iban) {
+		this.iban = iban;
+	return this;}
 
     public String getAdditionalName() {
         return additionalName;

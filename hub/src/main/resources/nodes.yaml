@@ -1,0 +1,14 @@
+-
+  retirementFundUids:
+    - CHE-223.471.073
+    - CHE-109.713.957
+  jobExitsUrl:    https://host1/job-exits
+  jobEntriesUrl:  https://host1/job-entries
+  matchNotifyUrl: https://host1/match-notify
+-
+  retirementFundUids:
+    - CHE-109.723.097
+  jobExitsUrl:    https://host2/job-exits
+  jobEntriesUrl:  https://host2/job-entries
+  matchNotifyUrl: https://host2/match-notify
+
