@@ -64,8 +64,6 @@ public class ExcelReader {
         if (jobInfo == null) {
             return Optional.empty();
         }
-        JobStart jobStart = new JobStart();
-        jobStart.setJobInfo(jobInfo);
 
         Address address = new Address();
         address.setStreet(getString(row, STREET_COLUMN_INDEX));
@@ -77,9 +75,8 @@ public class ExcelReader {
         capititalTransferInfo.setName(getString(row, NAME_COLUMN_INDEX));
         capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
         capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
-        jobStart.setCapitalTransferInfo(capititalTransferInfo);
 
-        return Optional.of(jobStart);
+        return Optional.of(new JobStart(null, jobInfo, capititalTransferInfo));
     }
 
     private Optional<JobEnd> mapJobEnd(Row row) {
@@ -87,9 +84,7 @@ public class ExcelReader {
         if (jobInfo == null) {
             return Optional.empty();
         }
-        JobEnd jobEnd = new JobEnd();
-        jobEnd.setJobInfo(jobInfo);
-        return Optional.of(jobEnd);
+        return Optional.of(new JobEnd(null, jobInfo));
     }
 
     private JobInfo mapJobInfo(Row row) {
