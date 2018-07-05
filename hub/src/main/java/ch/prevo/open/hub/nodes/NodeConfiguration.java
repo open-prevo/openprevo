@@ -1,8 +1,9 @@
 package ch.prevo.open.hub.nodes;
 
 import java.util.List;
+import java.util.Objects;
 
-public class NodeConfiguration {
+class NodeConfiguration {
 
     public static final String JOB_START_ENDPOINT = "/job-start";
     public static final String JOB_END_ENDPOINT = "/job-end";
@@ -13,6 +14,8 @@ public class NodeConfiguration {
     private String jobEntriesUrl;
     private String matchNotifyUrl;
 
+    public NodeConfiguration() {}
+
     public NodeConfiguration(String baseUrl, List<String> retirementFundUids) {
         this.jobEntriesUrl = baseUrl + JOB_START_ENDPOINT;
         this.jobExitsUrl = baseUrl + JOB_END_ENDPOINT;
@@ -20,35 +23,39 @@ public class NodeConfiguration {
         this.retirementFundUids = retirementFundUids;
     }
 
-    NodeConfiguration(String jobExitsUrl, String jobEntriesUrl, String matchNotifyUrl, List<String> retirementFundUids) {
-        this.jobExitsUrl = jobExitsUrl;
-        this.jobEntriesUrl = jobEntriesUrl;
-        this.retirementFundUids = retirementFundUids;
-        this.matchNotifyUrl = matchNotifyUrl;
-    }
-
     String getJobExitsUrl() {
         return jobExitsUrl;
+    }
+
+    public void setJobExitsUrl(String jobExitsUrl) {
+        this.jobExitsUrl = jobExitsUrl;
     }
 
     String getJobEntriesUrl() {
         return jobEntriesUrl;
     }
 
+    public void setJobEntriesUrl(String jobEntriesUrl) {
+        this.jobEntriesUrl = jobEntriesUrl;
+    }
+
     List<String> getRetirementFundUids() {
         return retirementFundUids;
+    }
+
+    public void setRetirementFundUids(List<String> retirementFundUids) {
+        this.retirementFundUids = retirementFundUids;
     }
 
     String getMatchNotifyUrl() {
         return matchNotifyUrl;
     }
 
+    public void setMatchNotifyUrl(String matchNotifyUrl) {
+        this.matchNotifyUrl = matchNotifyUrl;
+    }
+
     public boolean containsRetirementFundUid(String retirementFundUid) {
-        for (String fundUid : retirementFundUids) {
-            if (fundUid.equals(retirementFundUid)) {
-                return true;
-            }
-        }
-        return false;
+        return retirementFundUids.stream().anyMatch(s -> Objects.equals(s, retirementFundUid));
     }
 }
