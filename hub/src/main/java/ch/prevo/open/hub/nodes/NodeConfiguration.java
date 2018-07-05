@@ -3,7 +3,7 @@ package ch.prevo.open.hub.nodes;
 import java.util.List;
 import java.util.Objects;
 
-class NodeConfiguration {
+public class NodeConfiguration {
 
     public static final String JOB_START_ENDPOINT = "/job-start";
     public static final String JOB_END_ENDPOINT = "/job-end";

@@ -2,13 +2,13 @@ version: '2'
 services:
   node_baloise:
     build:
-      context: node
+      context: adapter-dummy
     hostname: baloise
     ports:
     - "8881:8080"
   node_helvetia:
     build:
-      context: node
+      context: adapter-dummy
     hostname: helvetia
     ports:
     - "8882:8080"

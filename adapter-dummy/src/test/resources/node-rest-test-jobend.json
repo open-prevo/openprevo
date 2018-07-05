@@ -1,14 +1,33 @@
+
 [
   {
-    "encryptedOasiNumber": "756.1335.5778.23",
-    "retirementFundUid": "CHE-109.740.084"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.740.084",
+      "internalReferenz": "",
+      "oasiNumber": "756.1335.5778.23",
+      "internalPersonId": "",
+      "date": null
+    }
   },
   {
-    "encryptedOasiNumber": "756.3412.8844.97",
-    "retirementFundUid": "CHE-109.537.488"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.537.488",
+      "internalReferenz": "",
+      "oasiNumber": "756.3412.8844.97",
+      "internalPersonId": "",
+      "date": null
+    }
   },
   {
-    "encryptedOasiNumber": "756.9534.5271.94",
-    "retirementFundUid": "CHE-109.740.078"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.740.078",
+      "internalReferenz": "",
+      "oasiNumber": "756.9534.5271.94",
+      "internalPersonId": "",
+      "date": null
+    }
   }
 ]

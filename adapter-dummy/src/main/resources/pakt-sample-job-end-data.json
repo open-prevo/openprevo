@@ -1,14 +1,32 @@
 [
   {
-    "encryptedOasiNumber": "756.1234.5678.97",
-    "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.1234.5678.97",
+      "internalPersonId": "",
+      "date": null
+    }
   },
   {
-    "encryptedOasiNumber": "756.3421.5678.97",
-    "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.3421.5678.97",
+      "internalPersonId": "",
+      "date": null
+    }
   },
   {
-    "encryptedOasiNumber": "756.3324.5678.58",
-    "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.3324.5678.58",
+      "internalPersonId": "",
+      "date": null
+    }
   }
 ]

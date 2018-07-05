@@ -1,14 +1,35 @@
 [
   {
-    "encryptedOasiNumber": "756.1234.5678.97",
-    "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.1234.5678.97",
+      "internalPersonId": "",
+      "date": null
+    },
+    "capitalTransferInfo": null
   },
   {
-    "encryptedOasiNumber": "756.1298.6578.97",
-    "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.1298.6578.97",
+      "internalPersonId": "",
+      "date": null
+    },
+    "capitalTransferInfo": null
   },
   {
-    "encryptedOasiNumber": "756.5678.1234.17",
-    "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung"
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
+      "internalReferenz": "",
+      "oasiNumber": "756.5678.1234.17",
+      "internalPersonId": "",
+      "date": null
+    },
+    "capitalTransferInfo": null
   }
 ]

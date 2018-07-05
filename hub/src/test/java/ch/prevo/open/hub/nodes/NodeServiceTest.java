@@ -24,7 +24,7 @@ import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, NodeRegistry.class})
+@RestClientTest({NodeService.class, ExternalizedNodeRegistry.class})
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -39,7 +39,7 @@ public class NodeServiceTest {
     @Inject
     private MockRestServiceServer server;
     @MockBean
-    private MockNodeRegistry nodeRegistry;
+    private NodeRegistry nodeRegistry;
 
     @Test
     public void currentExits() throws Exception {
