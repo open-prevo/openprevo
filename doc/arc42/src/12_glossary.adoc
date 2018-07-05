@@ -51,6 +51,5 @@ Potentially more columns in case you need translations.
 | VBI | **V**ested **B**enefits **I**nstitution | Freizügigkeitseinrichtung (https://www.bsv.admin.ch/bsv/de/home/glossar/freizuegigkeitseinrichtung.html[FZE]) | institution de libre passage | istituto di libero passaggio |
 | VBA | **V**ested **B**enefits **A**ccount | Freizügigkeitskonto | Compte de libre passage | Conto di libero passaggio |
 | VBP | **V**ested **B**enefits **P**olicy | Freizügigkeitspolice | Police de libre passage | Polizza di libero passaggio |
-| WB  | **W**ithdrawal **B**enefits | **A**us**t**ritts**l**eistung | Prestation de sortie | Prestazione di uscita |
 |  |  |  |  |  |
 |===
