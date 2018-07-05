@@ -1,4 +1,4 @@
-package ch.prevo.open.node.services;
+package ch.prevo.open.node.data.provider;
 
 import ch.prevo.open.data.api.JobEnd;
 

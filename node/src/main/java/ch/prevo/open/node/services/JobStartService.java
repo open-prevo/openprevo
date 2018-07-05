@@ -2,6 +2,7 @@ package ch.prevo.open.node.services;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
+import ch.prevo.open.node.data.provider.JobStartProvider;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
 import org.springframework.stereotype.Service;
 

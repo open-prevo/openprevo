@@ -1,14 +1,14 @@
-package ch.prevo.open.node.data.provider;
+package ch.prevo.open.node.data.provider.dummy;
 
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
-import org.springframework.stereotype.Service;
+import ch.prevo.open.node.data.provider.JobEndProvider;
+import ch.prevo.open.node.data.provider.JobStartProvider;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Service
 public class DummyProvider implements JobStartProvider, JobEndProvider {
 
     @Override
