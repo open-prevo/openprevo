@@ -1,19 +1,5 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.match.MatcherService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-
-import javax.inject.Inject;
-import java.util.Set;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
@@ -23,8 +9,23 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+import java.util.Set;
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.MockRestServiceServer;
+
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
+
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, NodeRegistry.class, MatcherService.class})
+@RestClientTest({NodeService.class, ExternalizedNodeRegistry.class, MatcherService.class})
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -47,7 +48,7 @@ public class NodeServiceTest {
         final NodeConfiguration node = new NodeConfiguration();
         node.setJobExitsUrl("https://host1/job-exits");
 
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(node));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node));
         server.expect(requestTo(node.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -63,7 +64,7 @@ public class NodeServiceTest {
         final NodeConfiguration node = new NodeConfiguration();
         node.setJobEntriesUrl("https://host2/job-entries");
 
-        when(nodeRegistry.currentNodes()).thenReturn(singletonList(node));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node));
         server.expect(requestTo(node.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -78,17 +79,17 @@ public class NodeServiceTest {
     public void notifyMatch() throws Exception {
         final NodeConfiguration node1 = new NodeConfiguration();
         node1.setMatchNotifyUrl("https://host1/match-notify");
-        node1.setRetirementFundUids(UID1);
+        node1.setRetirementFundUids(singletonList(UID1));
         final NodeConfiguration node2 = new NodeConfiguration();
         node2.setMatchNotifyUrl("https://host2/match-notify");
-        node2.setRetirementFundUids(UID2);
+        node2.setRetirementFundUids(singletonList(UID2));
 
-        when(nodeRegistry.currentNodes()).thenReturn(asList(node1, node2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
         String notification_response = "notification response";
         server.expect(requestTo(node1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(node2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids()[0])))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
 

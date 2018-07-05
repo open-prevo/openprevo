@@ -2,7 +2,6 @@ package ch.prevo.open.node.services;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
