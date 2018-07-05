@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Dummy mock service implementation to retrieve encrypted information about an insurant.
+ * Service implementation to retrieve encrypted information about an insurant.
  */
 @Service
 public class JobEndService {

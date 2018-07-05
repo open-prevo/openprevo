@@ -3,6 +3,7 @@ package ch.prevo.open.hub.nodes;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchNotification;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,12 +15,15 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class NodeService {
 
     @Inject
     private NodeRegistry nodeRegistry;
+    @Inject
+    private MatcherService matcherService;
 
     private final RestTemplate restTemplate;
 
@@ -30,17 +34,20 @@ public class NodeService {
     public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
-            exits.addAll(lookupInsurantInformationList(nodeConfig.getJobExitsUrl()));
+            List<InsurantInformation> pensionFundExits = lookupInsurantInformationList(nodeConfig.getJobExitsUrl());
+            exits.addAll(pensionFundExits.stream().filter(matcherService::employmentCommencementNotMatched).collect(toList()));
+
         }
         return exits;
     }
 
     public Set<InsurantInformation> getCurrentEntries() {
-        Set<InsurantInformation> exits = new HashSet<>();
+        Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
-            exits.addAll(lookupInsurantInformationList(nodeConfig.getJobEntriesUrl()));
+            List<InsurantInformation> pensionFundEntries = lookupInsurantInformationList(nodeConfig.getJobEntriesUrl());
+            entries.addAll(pensionFundEntries.stream().filter(matcherService::employmentTerminationNotMatched).collect(toList()));
         }
-        return exits;
+        return entries;
     }
 
     private List<InsurantInformation> lookupInsurantInformationList(String url) {

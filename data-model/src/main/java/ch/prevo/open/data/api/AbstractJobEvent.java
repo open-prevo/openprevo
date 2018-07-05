@@ -1,8 +1,21 @@
 package ch.prevo.open.data.api;
 
-public abstract class AbstractJobEvent {
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+@SuppressWarnings("unused")
+abstract class AbstractJobEvent {
 
     private String techId;
+    private JobInfo jobInfo;
+
+    AbstractJobEvent() {
+    }
+
+    AbstractJobEvent(String techId, JobInfo jobInfo) {
+        this.techId = techId;
+        this.jobInfo = jobInfo;
+    }
 
     public String getTechId() {
         return techId;
@@ -12,8 +25,6 @@ public abstract class AbstractJobEvent {
         this.techId = techId;
     }
 
-    private JobInfo jobInfo;
-
     public JobInfo getJobInfo() {
         return jobInfo;
     }
@@ -22,11 +33,11 @@ public abstract class AbstractJobEvent {
         this.jobInfo = jobInfo;
     }
 
-    public AbstractJobEvent() {
-    }
-
-    public AbstractJobEvent(String techId, JobInfo jobInfo) {
-        this.techId = techId;
-        this.jobInfo = jobInfo;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("techId", techId)
+                .append("jobInfo", jobInfo)
+                .toString();
     }
 }
