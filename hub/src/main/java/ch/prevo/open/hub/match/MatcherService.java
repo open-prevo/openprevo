@@ -11,11 +11,16 @@ import java.util.stream.Collectors;
 @Service
 public class MatcherService {
 
+    private final List<InsurantInformation> matchedEmploymentCommencements = new ArrayList<>();
+    private final List<InsurantInformation> matchedEmploymentTerminations = new ArrayList<>();
+
     public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
         List<Match> matches = new ArrayList<>();
         for (InsurantInformation exit : retirementFundExits) {
             InsurantInformation matchingEntry = findMatchingEntry(retirementFundEntries, exit);
             if (matchingEntry != null) {
+                matchedEmploymentCommencements.add(matchingEntry);
+                matchedEmploymentTerminations.add(exit);
                 matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid()));
             }
         }
@@ -24,7 +29,7 @@ public class MatcherService {
 
     private InsurantInformation findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation exit) {
         Set<InsurantInformation> matchingEntries = retirementFundEntries.stream()
-                .filter(entry -> entry.getEncryptedOasiNumber().equals(exit.getEncryptedOasiNumber()))
+                .filter(entry -> isMatching(entry, exit))
                 .collect(Collectors.toSet());
 
         if (matchingEntries.isEmpty()) {
@@ -36,4 +41,21 @@ public class MatcherService {
         return matchingEntries.iterator().next();
     }
 
+    private boolean isMatching(InsurantInformation entry, InsurantInformation exit) {
+        return entry.getEncryptedOasiNumber().equals(exit.getEncryptedOasiNumber())
+                && !isSameFundWithEntryBeforeExit(entry, exit);
+    }
+
+    private boolean isSameFundWithEntryBeforeExit(InsurantInformation entry, InsurantInformation exit) {
+        return entry.getRetirementFundUid().equals(exit.getRetirementFundUid())
+                && entry.getDate().isBefore(exit.getDate());
+    }
+
+    public boolean employmentCommencementNotMatched(InsurantInformation info) {
+        return !matchedEmploymentCommencements.contains(info);
+    }
+
+    public boolean employmentTerminationNotMatched(InsurantInformation info) {
+        return !matchedEmploymentTerminations.contains(info);
+    }
 }

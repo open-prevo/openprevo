@@ -22,9 +22,10 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, ExternalizedNodeRegistry.class})
+@RestClientTest({NodeService.class, ExternalizedNodeRegistry.class, MatcherService.class})
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -41,8 +42,9 @@ public class NodeServiceTest {
     @MockBean
     private NodeRegistry nodeRegistry;
 
+
     @Test
-    public void currentExits() throws Exception {
+    public void currentEmploymentTerminations() throws Exception {
         final NodeConfiguration node = new NodeConfiguration();
         node.setJobExitsUrl("https://host1/job-exits");
 
@@ -58,7 +60,7 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void currentEntries() throws Exception {
+    public void currentEmploymentCommencements() throws Exception {
         final NodeConfiguration node = new NodeConfiguration();
         node.setJobEntriesUrl("https://host2/job-entries");
 
