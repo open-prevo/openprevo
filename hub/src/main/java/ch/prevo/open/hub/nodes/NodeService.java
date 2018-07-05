@@ -7,10 +7,9 @@ import static java.util.stream.Collectors.toList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,7 +24,7 @@ import ch.prevo.open.hub.match.MatcherService;
 @Service
 public class NodeService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(NodeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NodeService.class);
 
     @Inject
     private NodeRegistry nodeRegistry;
@@ -43,7 +42,10 @@ public class NodeService {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = lookupInsurantInformationList(nodeConfig.getJobExitsUrl());
-            exits.addAll(pensionFundExits.stream().filter(matcherService::employmentCommencementNotMatched).collect(toList()));
+            List<InsurantInformation> invalidInsurants = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfig,
+                    pensionFundExits);
+            exits.addAll(filterMatches(pensionFundExits, invalidInsurants,
+                    matcherService::employmentCommencementNotMatched));
         }
         return exits;
     }
@@ -52,9 +54,21 @@ public class NodeService {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = lookupInsurantInformationList(nodeConfig.getJobEntriesUrl());
-            entries.addAll(pensionFundEntries.stream().filter(matcherService::employmentTerminationNotMatched).collect(toList()));
+            List<InsurantInformation> invalidInsurants = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfig,
+                    pensionFundEntries);
+            entries.addAll(filterMatches(pensionFundEntries, invalidInsurants,
+                    matcherService::employmentTerminationNotMatched));
         }
         return entries;
+    }
+
+    private List<InsurantInformation> filterMatches(List<InsurantInformation> insurantInformation,
+                                                    List<InsurantInformation> invalidMatches,
+                                                    Predicate<InsurantInformation> alreadyMatched) {
+        return insurantInformation.stream()
+                .filter(((Predicate<InsurantInformation>)invalidMatches::contains).negate())
+                .filter(alreadyMatched)
+                .collect(toList());
     }
 
     private List<InsurantInformation> lookupInsurantInformationList(String url) {
@@ -67,40 +81,39 @@ public class NodeService {
         return emptyList();
     }
 
+    private List<InsurantInformation> verifyInsurantInformationOnlyBelongsToThisNode(NodeConfiguration nodeConfig,
+                                                                                     List<InsurantInformation> pensionFundExits) {
+        List<InsurantInformation> invalidInsurants = pensionFundExits.stream()
+                .filter(insurant -> !nodeConfig.containsRetirementFundUid(insurant.getRetirementFundUid()))
+                .collect(toList());
+
+        if (invalidInsurants.size() > 0) {
+            LOGGER.error("Invalid data received from node {} the following insurants have an invalid retirement fund",
+                    nodeConfig, invalidInsurants);
+        }
+        return invalidInsurants;
+    }
+
     public void notifyMatches(List<Match> matches) {
         List<NodeConfiguration> nodeConfigurations = nodeRegistry.getCurrentNodes();
 
         for (Match match : matches) {
             try {
-                Pair<NodeConfiguration, NodeConfiguration> nodesToNotify = findNodesToNotify(match, nodeConfigurations);
-
                 // notify previous node
-                tryNotifyMatch(nodesToNotify.getLeft(), match);
-                tryNotifyMatch(nodesToNotify.getRight(), match);
+                tryNotifyMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match);
+                // notify new node
+                tryNotifyMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
             } catch (Exception e) {
                 LOGGER.error("Unexpected error occurred while notifying match: {}", match, e);
             }
         }
     }
 
-    private Pair<NodeConfiguration, NodeConfiguration> findNodesToNotify(Match match,
-                                                                         List<NodeConfiguration> configurations) {
-        NodeConfiguration nodeOfPreviousRetirementFund = null;
-        NodeConfiguration nodeOfNewRetirementFund = null;
+    private NodeConfiguration findNodeToNotify(String retirementFundUid, List<NodeConfiguration> nodeConfigurations) {
 
-        for (NodeConfiguration configuration : configurations) {
-            if (configuration.containsRetirementFundUid(match.getPreviousRetirementFundUid())) {
-                nodeOfPreviousRetirementFund = configuration;
-            } else if (configuration.containsRetirementFundUid(match.getNewRetirementFundUid())) {
-                nodeOfNewRetirementFund = configuration;
-            }
-        }
-
-        if (nodeOfPreviousRetirementFund != null && nodeOfNewRetirementFund != null) {
-            return new ImmutablePair<>(nodeOfPreviousRetirementFund, nodeOfNewRetirementFund);
-        } else {
-            throw new IllegalStateException("Could not find both nodes containing retirement funds for match " + match);
-        }
+        return nodeConfigurations.stream()
+                .filter(n -> n.containsRetirementFundUid(retirementFundUid)).findFirst()
+                .orElseThrow(IllegalStateException::new);
     }
 
     private void tryNotifyMatch(NodeConfiguration nodeConfig, Match match) {

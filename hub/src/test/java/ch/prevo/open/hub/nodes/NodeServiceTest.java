@@ -5,7 +5,6 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.ExpectedCount.never;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -72,7 +71,28 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void tryGetCurrentExitsWithUnreachableNode() {
+    public void testFilterOfInvalidInsurantInformation() {
+
+        // given
+        String invalidInsurant = "[{\"encryptedOasiNumber\" : \"OASI\", \"retirementFundUid\" : \"RandomUID\"}]";
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
+        server.expect(requestTo(node2.getJobExitsUrl()))
+                .andRespond(withSuccess(invalidInsurant, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(node1.getJobExitsUrl()))
+                .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
+
+        // when
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+
+        // then
+        server.verify();
+        assertEquals(1, currentEntries.size());
+        assertEqualsToTestdata(currentEntries);
+
+    }
+
+    @Test
+    public void tryGetCurrentCurrentEmploymentTerminationsWithUnreachableNode() {
         // given
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
         server.expect(requestTo(node2.getJobExitsUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
@@ -114,21 +134,6 @@ public class NodeServiceTest {
 
         // when
         nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
-
-        // then
-        server.verify();
-    }
-
-    @Test
-    public void testNotificationForNonExistingRetirementFund() {
-        // given
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        Match invalidMatch = new Match(OASI1, UID1, "RandomUID");
-        server.expect(never(), requestTo(node1.getMatchNotifyUrl()));
-        server.expect(never(), requestTo(node2.getMatchNotifyUrl()));
-
-        // when
-        nodeService.notifyMatches(singletonList(invalidMatch));
 
         // then
         server.verify();
