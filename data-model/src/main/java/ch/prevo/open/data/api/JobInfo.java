@@ -14,7 +14,17 @@ public class JobInfo {
 
 	private LocalDate date;
 
-	public String getRetirementFundUid() {
+	public JobInfo() {}
+
+    public JobInfo(String retirementFundUid, String internalReferenz, String oasiNumber, String internalPersonId, LocalDate date) {
+        this.retirementFundUid = retirementFundUid;
+        this.internalReferenz = internalReferenz;
+        this.oasiNumber = oasiNumber;
+        this.internalPersonId = internalPersonId;
+        this.date = date;
+    }
+
+    public String getRetirementFundUid() {
 		return retirementFundUid;
 	}
 
