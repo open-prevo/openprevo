@@ -7,8 +7,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import ch.prevo.open.data.api.Address;
-import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
@@ -55,9 +55,9 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 	}
 
 	enum RetirementFund {
-		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Bâloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
+		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Bï¿½loise-Sammelstiftung fï¿½r die obligatorische berufliche Vorsorge",
 				"CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
-						"Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
+						"Perspectiva Sammelstiftung fï¿½r berufliche Vorsorge", "CHE-223.471.073");
 		private Short cdStf;
 		private String name;
 		private String id;

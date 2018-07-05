@@ -1,6 +1,6 @@
 package ch.prevo.open.node.data.provider;
 
-import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;

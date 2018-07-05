@@ -1,6 +1,8 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.*;
+import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.junit.Test;
 
 import java.time.LocalDate;
