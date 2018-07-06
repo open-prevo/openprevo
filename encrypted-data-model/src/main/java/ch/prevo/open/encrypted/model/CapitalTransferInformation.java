@@ -12,6 +12,7 @@ public class CapitalTransferInformation {
     private String additionalName;
     private Address address;
     private String iban;
+    private String referenceId;
 
     public CapitalTransferInformation() {
     }
@@ -60,6 +61,14 @@ public class CapitalTransferInformation {
         this.iban = iban;
     }
 
+    public String getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +82,7 @@ public class CapitalTransferInformation {
                 .append(additionalName, that.additionalName)
                 .append(address, that.address)
                 .append(iban, that.iban)
+                .append(referenceId, that.referenceId)
                 .isEquals();
     }
 
@@ -83,6 +93,7 @@ public class CapitalTransferInformation {
                 .append(additionalName)
                 .append(address)
                 .append(iban)
+                .append(referenceId)
                 .toHashCode();
     }
 
@@ -93,6 +104,7 @@ public class CapitalTransferInformation {
                 .append("additionalName", additionalName)
                 .append("address", address)
                 .append("iban", iban)
+                .append("referenceId", referenceId)
                 .toString();
     }
 }

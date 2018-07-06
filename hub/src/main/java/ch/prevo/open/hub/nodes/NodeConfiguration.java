@@ -3,23 +3,27 @@ package ch.prevo.open.hub.nodes;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class NodeConfiguration {
 
-    public static final String JOB_START_ENDPOINT = "/job-start";
-    public static final String JOB_END_ENDPOINT = "/job-end";
-    public static final String MATCH_NOTIFICATION_ENDPOINT = "/match-notification";
+    private static final String JOB_START_ENDPOINT = "/job-start";
+    private static final String JOB_END_ENDPOINT = "/job-end";
+    private static final String COMMENCEMENT_MATCH_NOTIFICATION_ENDPOINT = "/commencement-match-notification";
+    private static final String TERMINATION_MATCH_NOTIFICATION_ENDPOINT = "/termination-match-notification";
 
     private List<String> retirementFundUids;
     private String jobExitsUrl;
     private String jobEntriesUrl;
-    private String matchNotifyUrl;
+    private String commencementMatchNotifyUrl;
+    private String terminationMatchNotifyUrl;
 
     public NodeConfiguration() {}
 
     public NodeConfiguration(String baseUrl, List<String> retirementFundUids) {
         this.jobEntriesUrl = baseUrl + JOB_START_ENDPOINT;
         this.jobExitsUrl = baseUrl + JOB_END_ENDPOINT;
-        this.matchNotifyUrl = baseUrl + MATCH_NOTIFICATION_ENDPOINT;
+        this.commencementMatchNotifyUrl = baseUrl + COMMENCEMENT_MATCH_NOTIFICATION_ENDPOINT;
+        this.terminationMatchNotifyUrl = baseUrl + TERMINATION_MATCH_NOTIFICATION_ENDPOINT;
         this.retirementFundUids = retirementFundUids;
     }
 
@@ -47,15 +51,23 @@ public class NodeConfiguration {
         this.retirementFundUids = retirementFundUids;
     }
 
-    String getMatchNotifyUrl() {
-        return matchNotifyUrl;
+    public String getCommencementMatchNotifyUrl() {
+        return commencementMatchNotifyUrl;
     }
 
-    public void setMatchNotifyUrl(String matchNotifyUrl) {
-        this.matchNotifyUrl = matchNotifyUrl;
+    public void setCommencementMatchNotifyUrl(String commencementMatchNotifyUrl) {
+        this.commencementMatchNotifyUrl = commencementMatchNotifyUrl;
     }
 
-    public boolean containsRetirementFundUid(String retirementFundUid) {
+    public String getTerminationMatchNotifyUrl() {
+        return terminationMatchNotifyUrl;
+    }
+
+    public void setTerminationMatchNotifyUrl(String terminationMatchNotifyUrl) {
+        this.terminationMatchNotifyUrl = terminationMatchNotifyUrl;
+    }
+
+    boolean containsRetirementFundUid(String retirementFundUid) {
         return retirementFundUids.stream().anyMatch(s -> Objects.equals(s, retirementFundUid));
     }
 }

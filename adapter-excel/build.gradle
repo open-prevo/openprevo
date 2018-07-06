@@ -26,6 +26,8 @@ repositories {
 dependencies {
     compile(project(":node"))
     compile(project(":data-model"))
+    compile(project(":node"))
+    compile('org.slf4j:slf4j-api:1.7.25')
     compile('org.apache.poi:poi:3.17')
     compile('org.apache.poi:poi-ooxml:3.17')
     compile('org.apache.poi:poi-ooxml-schemas:3.17')

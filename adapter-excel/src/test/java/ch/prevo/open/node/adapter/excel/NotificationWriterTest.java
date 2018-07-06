@@ -3,7 +3,7 @@ package ch.prevo.open.node.adapter.excel;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchNotification;
+import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class NotificationWriterTest {
     public void employmentCommencementMatchNotification() throws IOException {
         NotificationWriter notificationWriter = new NotificationWriter();
         StringWriter stringWriter = new StringWriter();
-        MatchNotification notification = new MatchNotification("7569678192446", "CHE-109.740.078");
+        CommencementMatchNotification notification = new CommencementMatchNotification("7569678192446", "CHE-109.740.078");
         JobInfo jobInfo =
                 new JobInfo("CHE-109.111.222", "our ref 1", "7569678192446", "our internal id", LocalDate.of(2018, 3, 15));
 
@@ -40,7 +40,7 @@ public class NotificationWriterTest {
                 new CapitalTransferInformation("Pension Fund name", "additional name", address, "1-234-567");
         JobInfo jobInfo =
                 new JobInfo("CHE-109.111.222", "our ref 1", "7569678192446", "our internal id", LocalDate.of(2018, 3, 15));
-        MatchNotification notification = new MatchNotification("7569678192446", "CHE-109.740.078");
+        CommencementMatchNotification notification = new CommencementMatchNotification("7569678192446", "CHE-109.740.078");
 
         notificationWriter.write(new PrintWriter(stringWriter), notification, capitalTransferInfo, jobInfo);
 
