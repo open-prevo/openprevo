@@ -162,5 +162,4 @@ public class NodeServiceTest {
         assertEquals(OASI1, insurantInformation.getEncryptedOasiNumber());
         assertEquals(UID1, insurantInformation.getRetirementFundUid());
     }
-
 }

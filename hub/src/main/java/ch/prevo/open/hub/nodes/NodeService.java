@@ -42,10 +42,10 @@ public class NodeService {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = lookupInsurantInformationList(nodeConfig.getJobExitsUrl());
-            List<InsurantInformation> invalidInsurants = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfig,
-                    pensionFundExits);
-            exits.addAll(filterMatches(pensionFundExits, invalidInsurants,
-                    matcherService::employmentCommencementNotMatched));
+            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
+                    pensionFundExits,
+                    matcherService::employmentCommencementNotMatched);
+            exits.addAll(filteredInformation);
         }
         return exits;
     }
@@ -54,20 +54,22 @@ public class NodeService {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = lookupInsurantInformationList(nodeConfig.getJobEntriesUrl());
-            List<InsurantInformation> invalidInsurants = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfig,
-                    pensionFundEntries);
-            entries.addAll(filterMatches(pensionFundEntries, invalidInsurants,
-                    matcherService::employmentTerminationNotMatched));
+            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
+                    pensionFundEntries,
+                    matcherService::employmentTerminationNotMatched);
+            entries.addAll(filteredInformation);
         }
         return entries;
     }
 
-    private List<InsurantInformation> filterMatches(List<InsurantInformation> insurantInformation,
-                                                    List<InsurantInformation> invalidMatches,
-                                                    Predicate<InsurantInformation> alreadyMatched) {
+    private List<InsurantInformation> filterInvalidAndAlreadyMatchedEntries(NodeConfiguration nodeConfiguration,
+                                                                            List<InsurantInformation> insurantInformation,
+                                                                            Predicate<InsurantInformation> notYetMatched) {
+        List<InsurantInformation> invalidMatches = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfiguration,
+                insurantInformation);
         return insurantInformation.stream()
-                .filter(((Predicate<InsurantInformation>)invalidMatches::contains).negate())
-                .filter(alreadyMatched)
+                .filter(((Predicate<InsurantInformation>) invalidMatches::contains).negate())
+                .filter(notYetMatched)
                 .collect(toList());
     }
 
@@ -109,13 +111,6 @@ public class NodeService {
         }
     }
 
-    private NodeConfiguration findNodeToNotify(String retirementFundUid, List<NodeConfiguration> nodeConfigurations) {
-
-        return nodeConfigurations.stream()
-                .filter(n -> n.containsRetirementFundUid(retirementFundUid)).findFirst()
-                .orElseThrow(IllegalStateException::new);
-    }
-
     private void tryNotifyMatch(NodeConfiguration nodeConfig, Match match) {
         try {
             MatchNotification matchNotification = new MatchNotification();
@@ -127,5 +122,13 @@ public class NodeService {
             LOGGER.error("Could not send notification for match {} to URL {}", match, nodeConfig.getMatchNotifyUrl(),
                     e);
         }
+    }
+
+    private NodeConfiguration findNodeToNotify(String retirementFundUid, List<NodeConfiguration> nodeConfigurations) {
+
+        return nodeConfigurations.stream()
+                .filter(n -> n.containsRetirementFundUid(retirementFundUid)).findFirst()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Did not find a node for retirement fund UID: " + retirementFundUid));
     }
 }
