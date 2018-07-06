@@ -117,6 +117,7 @@ public class NodeServiceTest {
         assertEqualsToTestdata(insurantInformations);
     }
 
+    // TODO: Fix tests
 //    @Test
 //    public void notifyMatch() {
 //        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));

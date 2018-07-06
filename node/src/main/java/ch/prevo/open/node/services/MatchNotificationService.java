@@ -1,8 +1,8 @@
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ public class MatchNotificationService {
         this.listener = listener;
     }
 
-    public CapitalTransferInformation handleMatchForEmploymentCommencement(CommencementMatchNotification matchNotification, JobInfo jobInfo) {
-
+    public void handleCommencementMatch(CommencementMatchNotification notification) {
+        listener.handleCommencementMatch(notification);
     }
 
-    public void handleMatchForEmploymentTermination(CommencementMatchNotification matchNotification, CapitalTransferInformation capitalTransferInfo, JobInfo jobInfo) {
-
+    public CapitalTransferInformation handleTerminationMatch(TerminationMatchNotification notification) {
+        return listener.handleTerminationMatch(notification);
     }
 }

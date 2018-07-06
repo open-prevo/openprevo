@@ -61,6 +61,7 @@ public class HubIntegrationTest {
         return "http://" + serviceHost + ":" + servicePort;
     }
 
+    // TODO: Fix test
 //    @Test
 //    public void testMatchingService() {
 //        //given
