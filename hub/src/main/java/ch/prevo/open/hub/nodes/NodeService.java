@@ -22,6 +22,7 @@ public class NodeService {
 
     @Inject
     private NodeRegistry nodeRegistry;
+
     @Inject
     private MatcherService matcherService;
 
@@ -33,17 +34,16 @@ public class NodeService {
 
     public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = lookupInsurantInformationList(nodeConfig.getJobExitsUrl());
             exits.addAll(pensionFundExits.stream().filter(matcherService::employmentCommencementNotMatched).collect(toList()));
-
         }
         return exits;
     }
 
     public Set<InsurantInformation> getCurrentEntries() {
         Set<InsurantInformation> entries = new HashSet<>();
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = lookupInsurantInformationList(nodeConfig.getJobEntriesUrl());
             entries.addAll(pensionFundEntries.stream().filter(matcherService::employmentTerminationNotMatched).collect(toList()));
         }
@@ -56,7 +56,7 @@ public class NodeService {
     }
 
     public void notifyMatches(List<Match> matches) {
-        for (NodeConfiguration nodeConfig : nodeRegistry.currentNodes()) {
+        for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             notifyMatches(nodeConfig, matches);
         }
     }

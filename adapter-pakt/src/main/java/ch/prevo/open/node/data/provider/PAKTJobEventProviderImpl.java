@@ -55,9 +55,9 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 	}
 
 	enum RetirementFund {
-		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Bâloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
+		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Baloise-Sammelstiftung fÃ¼r die obligatorische berufliche Vorsorge",
 				"CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
-						"Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
+						"Perspectiva Sammelstiftung fÃ¼r berufliche Vorsorge", "CHE-223.471.073");
 		private Short cdStf;
 		private String name;
 		private String id;

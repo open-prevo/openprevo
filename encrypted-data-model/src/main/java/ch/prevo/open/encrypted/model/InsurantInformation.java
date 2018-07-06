@@ -1,8 +1,8 @@
 package ch.prevo.open.encrypted.model;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.time.LocalDate;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * Encrypted information to exchange with OpenPrevo HUB.
