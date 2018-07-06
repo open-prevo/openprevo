@@ -1,13 +1,29 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.*;
+import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.JobStart;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.node.data.provider.JobEndProvider;
+import ch.prevo.open.node.data.provider.JobStartProvider;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -16,7 +32,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class ExcelReader {
+@Service
+public class ExcelReader implements JobStartProvider, JobEndProvider {
+
+    private static Logger LOG = LoggerFactory.getLogger(ExcelReader.class);
 
     private static final int OASI_COLUMN_INDEX = 0;
     private static final int DATE_COLUMN_INDEX = 1;
@@ -31,25 +50,37 @@ public class ExcelReader {
 
     private static final int FIRST_DATA_ROW = 2;
 
-    private final List<JobEnd> jobEnds;
-    private final List<JobStart> jobStarts;
+	public static final String FILE_PROPERTY = "node.adapter.excel.file";
+	private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
-
-    public ExcelReader(String filename) throws IOException, InvalidFormatException {
-        try (InputStream inp = getClass().getResourceAsStream(filename)) {
-            Workbook wb = WorkbookFactory.create(inp);
-            jobEnds = mapRows(wb.getSheetAt(0), this::mapJobEnd);
-            jobStarts = mapRows(wb.getSheetAt(1), this::mapJobStart);
+	private String getFile() {
+        String excelFilePath = System.getProperty(FILE_PROPERTY);
+        if (excelFilePath == null) {
+            excelFilePath = ClassLoader.getSystemResource(FALLBACK_FILE).getFile();
         }
-    }
+        return excelFilePath;
+	}
 
-    public List<JobEnd> getJobEnds() {
-        return jobEnds;
-    }
+	private Workbook getWorkbook() {
+		Workbook wb = null;
+		Path path = Paths.get(getFile());
 
-    public List<JobStart> getJobStarts() {
-        return jobStarts;
-    }
+		try(InputStream inp = Files.newInputStream(path)) {
+				wb = WorkbookFactory.create(inp);
+		} catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
+			throw new RuntimeException(e);
+		}
+
+		return wb;
+	}
+
+	public List<JobEnd> getJobEnds() {
+		return mapRows(getWorkbook().getSheetAt(1), this::mapJobEnd);
+	}
+
+	public List<JobStart> getJobStarts() {
+		return mapRows(getWorkbook().getSheetAt(0), this::mapJobStart);
+	}
 
     private <T> List<T> mapRows(Sheet sheet, Function<Row, Optional<T>> rowMapper) {
         List<T> result = new ArrayList<>();
