@@ -27,9 +27,16 @@ dependencies {
     compile(project(":node"))
     compile(project(":adapter-excel"))
 
+    compile('org.springframework.boot:spring-boot-starter-web')
+    
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-springBoot {
-    mainClassName = "ch.open.prevo.node.NodeApplication"
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+    if (project.hasProperty('jvmArgs') ) {
+        jvmArgs = (project.jvmArgs.split("\\s+") as List)
+    }
 }
