@@ -30,13 +30,15 @@ class NotificationWriter {
         writer.println();
         writer.println("Capital transfer information");
         final CapitalTransferInformation transferInformation = matchNotification.getTransferInformation();
-        writer.println("Name:                 " + transferInformation.getName());
-        writer.println("Additional name:      " + transferInformation.getAdditionalName());
-        writer.println("IBAN:                 " + transferInformation.getIban());
-        if (transferInformation.getAddress() != null) {
-            writer.println("Street:               " + transferInformation.getAddress().getStreet());
-            writer.println("Postal code / city:   " + transferInformation.getAddress().getPostalCode() + " "
-                    + transferInformation.getAddress().getCity());
+        if (transferInformation != null) {
+            writer.println("Name:                 " + transferInformation.getName());
+            writer.println("Additional name:      " + transferInformation.getAdditionalName());
+            writer.println("IBAN:                 " + transferInformation.getIban());
+            if (transferInformation.getAddress() != null) {
+                writer.println("Street:               " + transferInformation.getAddress().getStreet());
+                writer.println("Postal code / city:   " + transferInformation.getAddress().getPostalCode() + " "
+                        + transferInformation.getAddress().getCity());
+            }
         }
         writer.flush();
     }
