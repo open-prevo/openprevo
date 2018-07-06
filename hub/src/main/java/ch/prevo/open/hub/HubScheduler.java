@@ -1,15 +1,15 @@
 package ch.prevo.open.hub;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+
 @Component
-@Profile("docker")
+@Profile("!test")
 public class HubScheduler {
 
     private static Logger LOGGER = LoggerFactory.getLogger(HubScheduler.class);
