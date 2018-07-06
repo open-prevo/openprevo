@@ -45,5 +45,4 @@ public class ExcelReaderTest {
     private ExcelReader getExcelReader() throws Exception {
         return new ExcelReader();
     }
-
 }
