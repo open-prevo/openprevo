@@ -20,25 +20,26 @@ public class ExcelReaderTest {
 
     @Test
     public void readEmploymentTerminations() throws Exception {
-        List<JobEnd> jobEnds = getExcelReader().getJobEnds();
-        assertEquals(2, jobEnds.size());
+        List<JobEnd> employmentTerminations = getExcelReader().getJobEnds();
+        assertEquals(2, employmentTerminations.size());
 
-        JobInfo firstJobInfo = jobEnds.get(0).getJobInfo();
-        assertEquals("7566374437536", firstJobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 1, 1), firstJobInfo.getDate());
-        assertEquals("CHE-109.740.084", firstJobInfo.getRetirementFundUid());
+        JobInfo jobInfo = employmentTerminations.get(1).getJobInfo();
+        assertEquals("7568152139908", jobInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 8, 16), jobInfo.getDate());
+        assertEquals("CHE-223.471.073", jobInfo.getRetirementFundUid());
     }
 
     @Test
-    public void readEmploymentStarts_blabla_betterNaming() throws Exception {
-        List<JobStart> jobStarts = getExcelReader().getJobStarts();
+    public void readEmploymentCommencements() throws Exception {
+        List<JobStart> employmentCommencements = getExcelReader().getJobStarts();
 
-        assertEquals(2, jobStarts.size());
+        assertEquals(2, employmentCommencements.size());
 
-        JobInfo secondJobInfo = jobStarts.get(1).getJobInfo();
-        assertEquals("7568152139908", secondJobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 8, 16), secondJobInfo.getDate());
-        assertEquals("CHE-223.471.073", secondJobInfo.getRetirementFundUid());
+
+        JobInfo jobInfo = employmentCommencements.get(0).getJobInfo();
+        assertEquals("7566374437536", jobInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 1, 1), jobInfo.getDate());
+        assertEquals("CHE-109.740.084", jobInfo.getRetirementFundUid());
     }
 
     private ExcelReader getExcelReader() throws Exception {

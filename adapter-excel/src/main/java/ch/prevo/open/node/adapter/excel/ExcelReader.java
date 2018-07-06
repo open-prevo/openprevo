@@ -50,37 +50,37 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private static final int FIRST_DATA_ROW = 2;
 
-	public static final String FILE_PROPERTY = "node.adapter.excel.file";
-	private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
+    public static final String FILE_PROPERTY = "node.adapter.excel.file";
+    private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
-	private String getFile() {
+    private String getFile() {
         String excelFilePath = System.getProperty(FILE_PROPERTY);
         if (excelFilePath == null) {
             excelFilePath = ClassLoader.getSystemResource(FALLBACK_FILE).getFile();
         }
         return excelFilePath;
-	}
+    }
 
-	private Workbook getWorkbook() {
-		Workbook wb = null;
-		Path path = Paths.get(getFile());
+    private Workbook getWorkbook() {
+        Workbook wb = null;
+        Path path = Paths.get(getFile());
 
-		try(InputStream inp = Files.newInputStream(path)) {
-				wb = WorkbookFactory.create(inp);
-		} catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
-			throw new RuntimeException(e);
-		}
+        try (InputStream inp = Files.newInputStream(path)) {
+            wb = WorkbookFactory.create(inp);
+        } catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
 
-		return wb;
-	}
+        return wb;
+    }
 
-	public List<JobEnd> getJobEnds() {
-		return mapRows(getWorkbook().getSheetAt(1), this::mapJobEnd);
-	}
+    public List<JobEnd> getJobEnds() {
+        return mapRows(getWorkbook().getSheetAt(0), this::mapJobEnd);
+    }
 
-	public List<JobStart> getJobStarts() {
-		return mapRows(getWorkbook().getSheetAt(0), this::mapJobStart);
-	}
+    public List<JobStart> getJobStarts() {
+        return mapRows(getWorkbook().getSheetAt(1), this::mapJobStart);
+    }
 
     private <T> List<T> mapRows(Sheet sheet, Function<Row, Optional<T>> rowMapper) {
         List<T> result = new ArrayList<>();
@@ -127,8 +127,8 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
         }
         JobInfo jobInfo = new JobInfo();
         jobInfo.setOasiNumber(oasiNumber);
-        jobInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));
         jobInfo.setDate(getDate(row, DATE_COLUMN_INDEX));
+        jobInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));
         jobInfo.setInternalReferenz(getString(row, REFERENCE_COLUMN_INDEX));
         return jobInfo;
     }
@@ -144,6 +144,16 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private String getString(Row row, int i) {
         Cell cell = row.getCell(i);
-        return cell == null ? "" : cell.getStringCellValue();
+        if (cell == null) {
+            return "";
+        }
+        switch (cell.getCellTypeEnum()) {
+            case NUMERIC:
+                return Long.toString(Math.round(cell.getNumericCellValue()));
+            case FORMULA:
+                return "";
+            default:
+                return cell.getStringCellValue();
+        }
     }
 }
