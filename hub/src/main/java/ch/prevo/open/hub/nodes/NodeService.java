@@ -104,18 +104,18 @@ public class NodeService {
         for (Match match : matches) {
             try {
                 // notify new node
-                final CapitalTransferInformation transferInformation = tryNotifyCommencementMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
+                final CapitalTransferInformation transferInformation = tryNotifyNewRetirementFundAboutMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
                 // notify previous node
-                tryNotifyTerminationMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match, transferInformation);
+                tryNotifyPreviousRetirementFundAboutTerminationMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match, transferInformation);
             } catch (Exception e) {
                 LOGGER.error("Unexpected error occurred while notifying match: {}", match, e);
             }
         }
     }
 
-    private CapitalTransferInformation tryNotifyCommencementMatch(NodeConfiguration nodeConfig, Match match) {
+    private CapitalTransferInformation tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
         try {
-            CommencementMatchNotification matchNotification = new CommencementMatchNotification();
+            TerminationMatchNotification matchNotification = new TerminationMatchNotification();
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
             matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
             matchNotification.setReferenceId("");
@@ -129,9 +129,9 @@ public class NodeService {
         }
     }
 
-    private void tryNotifyTerminationMatch(NodeConfiguration nodeConfig, Match match, CapitalTransferInformation transferInformation) {
+    private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig, Match match, CapitalTransferInformation transferInformation) {
         try {
-            TerminationMatchNotification matchNotification = new TerminationMatchNotification();
+            CommencementMatchNotification matchNotification = new CommencementMatchNotification();
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
             matchNotification.setRetirementFundUid(match.getPreviousRetirementFundUid());
             matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());

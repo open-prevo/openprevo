@@ -1,8 +1,8 @@
 package ch.prevo.open.node.data.provider;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import org.springframework.stereotype.Service;
 
 import java.io.PrintWriter;

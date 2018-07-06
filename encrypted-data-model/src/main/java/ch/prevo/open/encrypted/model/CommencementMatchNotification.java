@@ -12,9 +12,10 @@ public class CommencementMatchNotification {
 
     private String encryptedOasiNumber;
     private String retirementFundUid;
-    private String referenceId;
-    private String previousRetirementFundUid;
+    private String newRetirementFundUid;
     private LocalDate entryDate;
+    private LocalDate exitDate;
+    private CapitalTransferInformation transferInformation;
 
     public String getEncryptedOasiNumber() {
         return encryptedOasiNumber;
@@ -32,20 +33,12 @@ public class CommencementMatchNotification {
         this.retirementFundUid = retirementFundUid;
     }
 
-    public String getReferenceId() {
-        return referenceId;
+    public String getNewRetirementFundUid() {
+        return newRetirementFundUid;
     }
 
-    public void setReferenceId(String referenceId) {
-        this.referenceId = referenceId;
-    }
-
-    public String getPreviousRetirementFundUid() {
-        return previousRetirementFundUid;
-    }
-
-    public void setPreviousRetirementFundUid(String previousRetirementFundUid) {
-        this.previousRetirementFundUid = previousRetirementFundUid;
+    public void setNewRetirementFundUid(String newRetirementFundUid) {
+        this.newRetirementFundUid = newRetirementFundUid;
     }
 
     public LocalDate getEntryDate() {
@@ -56,14 +49,31 @@ public class CommencementMatchNotification {
         this.entryDate = entryDate;
     }
 
+    public LocalDate getExitDate() {
+        return exitDate;
+    }
+
+    public void setExitDate(LocalDate exitDate) {
+        this.exitDate = exitDate;
+    }
+
+    public CapitalTransferInformation getTransferInformation() {
+        return transferInformation;
+    }
+
+    public void setTransferInformation(CapitalTransferInformation transferInformation) {
+        this.transferInformation = transferInformation;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("encryptedOasiNumber", encryptedOasiNumber)
                 .append("retirementFundUid", retirementFundUid)
-                .append("referenceId", referenceId)
-                .append("previousRetirementFundUid", previousRetirementFundUid)
+                .append("newRetirementFundUid", newRetirementFundUid)
                 .append("entryDate", entryDate)
+                .append("exitDate", exitDate)
+                .append("transferInformation", transferInformation)
                 .toString();
     }
 }
