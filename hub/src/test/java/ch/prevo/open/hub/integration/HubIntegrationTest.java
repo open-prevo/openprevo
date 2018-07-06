@@ -1,11 +1,14 @@
 package ch.prevo.open.hub.integration;
 
 import ch.prevo.open.hub.HubService;
+import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.nodes.NodeConfiguration;
 import ch.prevo.open.hub.nodes.NodeRegistry;
 import ch.prevo.open.hub.nodes.NodeService;
+
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,9 +19,13 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 import javax.inject.Inject;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -61,23 +68,22 @@ public class HubIntegrationTest {
         return "http://" + serviceHost + ":" + servicePort;
     }
 
-    // TODO: Fix test
-//    @Test
-//    public void testMatchingService() {
-//        //given
-//        Match expectedMatchFromHelvetiaToBaloise = new Match("756.1234.5678.97",
-//                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
-//                "CHE-109.740.084-Baloise-Sammelstiftung", entryDate, exitDate);
-//        Match expectedMatchFromBaloiseToHelvetia = new Match("756.1335.5778.23",
-//                "CHE-109.740.084-Baloise-Sammelstiftung",
-//                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", entryDate, exitDate);
-//
-//        // when
-//        List<Match> matches = hubService.matchAndNotify();
-//
-//        // then
-//        assertThat(matches).hasSize(2)
-//                .containsExactlyInAnyOrder(expectedMatchFromHelvetiaToBaloise, expectedMatchFromBaloiseToHelvetia);
-//        verify(nodeService).notifyMatches(matches);
-//    }
+    @Test
+    public void testMatchingService() {
+        //given
+        Match expectedMatchFromHelvetiaToBaloise = new Match("756.1234.5678.97",
+                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
+                "CHE-109.740.084-Baloise-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
+        Match expectedMatchFromBaloiseToHelvetia = new Match("756.1335.5778.23",
+                "CHE-109.740.084-Baloise-Sammelstiftung",
+                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
+
+        // when
+        List<Match> matches = hubService.matchAndNotify();
+
+        // then
+        assertThat(matches).hasSize(2)
+                .containsExactlyInAnyOrder(expectedMatchFromHelvetiaToBaloise, expectedMatchFromBaloiseToHelvetia);
+        verify(nodeService).notifyMatches(matches);
+    }
 }

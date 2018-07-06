@@ -25,8 +25,8 @@ public class MockJobEventProviderImpl implements JobEndProvider, JobStartProvide
 	public List<JobStart> getJobStarts() {
 		int i = 0;		
 		return Arrays.asList(
-				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.740.084", "756.1234.5678.97"), new CapitalTransferInformation("dummyName", "dummyIban")),
-				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.740.078", "756.5678.1234.17"), new CapitalTransferInformation("dummyName", "dummyIban")),
-				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.537.488", "756.1298.6578.97"), new CapitalTransferInformation("dummyName", "dummyIban")));
+				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.740.084", "756.1234.5678.97"), new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")),
+				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.740.078", "756.5678.1234.17"), new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")),
+				new JobStart(Integer.toString(++i), new JobInfo("CHE-109.537.488", "756.1298.6578.97"), new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")));
 	}
 }
