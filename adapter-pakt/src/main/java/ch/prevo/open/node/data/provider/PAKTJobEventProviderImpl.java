@@ -1,20 +1,18 @@
 package ch.prevo.open.node.data.provider;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.pakt.PartnerVermittlungRepository;
 import ch.prevo.pakt.TozsPtverm;
 import ch.prevo.pakt.zd.utils.CdMeld;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {
@@ -55,9 +53,9 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
 	}
 
 	enum RetirementFund {
-		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "B�loise-Sammelstiftung f�r die obligatorische berufliche Vorsorge",
+		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Baloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
 				"CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
-						"Perspectiva Sammelstiftung f�r berufliche Vorsorge", "CHE-223.471.073");
+						"Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
 		private Short cdStf;
 		private String name;
 		private String id;

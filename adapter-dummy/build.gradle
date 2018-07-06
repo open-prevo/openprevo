@@ -21,4 +21,7 @@ repositories {
 
 dependencies {
     compile(project(":node"))
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
 }

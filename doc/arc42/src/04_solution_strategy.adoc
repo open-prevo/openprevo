@@ -31,3 +31,6 @@ In the team we've decided to use the following technologies:
 * Framework: link:https://spring.io/projects/spring-boot[Spring Boot]
 * REST API
 ** link:https://swagger.io/specification/[OpenAPI] Swagger for documentation
+* used during development
+** link:https://www.docker.com/open-source[Docker container] for integration testing
+** link:https://www.eclipse.org/openj9/[OpenJ9]-JVM
