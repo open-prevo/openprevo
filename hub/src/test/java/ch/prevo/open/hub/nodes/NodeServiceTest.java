@@ -7,15 +7,18 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import java.util.Set;
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -25,7 +28,7 @@ import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, ExternalizedNodeRegistry.class, MatcherService.class})
+@RestClientTest({ NodeService.class, NodeRegistry.class, MatcherService.class })
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -37,19 +40,27 @@ public class NodeServiceTest {
 
     @Inject
     private NodeService nodeService;
+
     @Inject
     private MockRestServiceServer server;
+
     @MockBean
     private NodeRegistry nodeRegistry;
 
+    private NodeConfiguration node1;
+    private NodeConfiguration node2;
+
+    @Before
+    public void setUp() {
+        node1 = new NodeConfiguration("https://host1", singletonList(UID1));
+        node2 = new NodeConfiguration("https://host2", singletonList(UID2));
+    }
 
     @Test
-    public void currentEmploymentTerminations() throws Exception {
-        final NodeConfiguration node = new NodeConfiguration();
-        node.setJobExitsUrl("https://host1/job-exits");
+    public void currentEmploymentTerminations() {
 
-        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node));
-        server.expect(requestTo(node.getJobExitsUrl()))
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
+        server.expect(requestTo(node1.getJobExitsUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
@@ -60,12 +71,47 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void currentEmploymentCommencements() throws Exception {
-        final NodeConfiguration node = new NodeConfiguration();
-        node.setJobEntriesUrl("https://host2/job-entries");
+    public void testFilterOfInvalidInsurantInformation() {
 
-        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node));
-        server.expect(requestTo(node.getJobEntriesUrl()))
+        // given
+        String invalidInsurant = "[{\"encryptedOasiNumber\" : \"OASI\", \"retirementFundUid\" : \"RandomUID\"}]";
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
+        server.expect(requestTo(node2.getJobExitsUrl()))
+                .andRespond(withSuccess(invalidInsurant, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(node1.getJobExitsUrl()))
+                .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
+
+        // when
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+
+        // then
+        server.verify();
+        assertEquals(1, currentEntries.size());
+        assertEqualsToTestdata(currentEntries);
+
+    }
+
+    @Test
+    public void tryGetCurrentCurrentEmploymentTerminationsWithUnreachableNode() {
+        // given
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
+        server.expect(requestTo(node2.getJobExitsUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
+        server.expect(requestTo(node1.getJobExitsUrl()))
+                .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
+
+        // when
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+
+        // then
+        server.verify();
+        assertEquals(1, currentEntries.size());
+        assertEqualsToTestdata(currentEntries);
+    }
+
+    @Test
+    public void currentEmploymentCommencements() {
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
+        server.expect(requestTo(node1.getJobEntriesUrl()))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
@@ -76,25 +122,38 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void notifyMatch() throws Exception {
-        final NodeConfiguration node1 = new NodeConfiguration();
-        node1.setMatchNotifyUrl("https://host1/match-notify");
-        node1.setRetirementFundUids(singletonList(UID1));
-        final NodeConfiguration node2 = new NodeConfiguration();
-        node2.setMatchNotifyUrl("https://host2/match-notify");
-        node2.setRetirementFundUids(singletonList(UID2));
-
+    public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
         String notification_response = "notification response";
-        server.expect(requestTo(node1.getMatchNotifyUrl())).andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
+        server.expect(requestTo(node1.getMatchNotifyUrl()))
+                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
         server.expect(requestTo(node2.getMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
                 .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
                 .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
 
-
+        // when
         nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
 
+        // then
+        server.verify();
+    }
+
+    @Test
+    public void testNotificationForUnreachableNodes() {
+        // given
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+        String notification_response = "notification response";
+        server.expect(requestTo(node1.getMatchNotifyUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
+        server.expect(requestTo(node2.getMatchNotifyUrl()))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
+                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
+
+        // when
+        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
+
+        // then
         server.verify();
     }
 
@@ -103,5 +162,4 @@ public class NodeServiceTest {
         assertEquals(OASI1, insurantInformation.getEncryptedOasiNumber());
         assertEquals(UID1, insurantInformation.getRetirementFundUid());
     }
-
 }

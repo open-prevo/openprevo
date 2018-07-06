@@ -42,4 +42,13 @@ public class Match {
     public int hashCode() {
         return Objects.hash(encryptedOasiNumber, previousRetirementFundUid, newRetirementFundUid);
     }
+
+    @Override
+    public String toString() {
+        return "Match{" +
+                "encryptedOasiNumber='" + encryptedOasiNumber + '\'' +
+                ", previousRetirementFundUid='" + previousRetirementFundUid + '\'' +
+                ", newRetirementFundUid='" + newRetirementFundUid + '\'' +
+                '}';
+    }
 }
