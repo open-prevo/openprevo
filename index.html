@@ -2026,7 +2026,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#section-runtime-view">6. Runtime View</a>
 <ul class="sectlevel2">
-<li><a href="#_runtime_scenario_1">6.1. &lt;Runtime Scenario 1&gt;</a></li>
+<li><a href="#_hub">6.1. Hub</a></li>
 <li><a href="#_runtime_scenario_2">6.2. &lt;Runtime Scenario 2&gt;</a></li>
 <li><a href="#">6.3. &#8230;&#8203;</a></li>
 <li><a href="#_runtime_scenario_n">6.4. &lt;Runtime Scenario n&gt;</a></li>
@@ -2887,17 +2887,77 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_1"><a class="anchor" href="#_runtime_scenario_1"></a>6.1. &lt;Runtime Scenario 1&gt;</h3>
+<h3 id="_hub"><a class="anchor" href="#_hub"></a>6.1. Hub</h3>
+<div class="sect3">
+<h4 id="_main_loop_data_lookup_matching_and_notification"><a class="anchor" href="#_main_loop_data_lookup_matching_and_notification"></a>6.1.1. main loop: data lookup, matching and notification</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><em>&lt;insert runtime diagram or textual description of the scenario&gt;</em></p>
+<p><strong>Node A</strong>: has a matching termination</p>
 </li>
 <li>
-<p><em>&lt;insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.&gt;</em></p>
+<p><strong>Node B</strong>: has a matching commencement</p>
 </li>
 </ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/matchFlow.png" alt="Match Flow sequence diagram">
+</div>
+<div class="title">Figure 3. OpenPrevo high-level MatchFlow sequence diagram</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Step: <strong>lookup</strong> data at nodes (in parallel)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ask nodes for commencement of employment(s)</p>
+</li>
+<li>
+<p>ask nodes for termination of employment(s)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Step: wait for response(s)</p>
+</li>
+<li>
+<p>Step: find <strong>match</strong>(es) in response(s)</p>
+</li>
+<li>
+<p>Step: <strong>notify</strong> about match(es)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>notify node B with matching commencement (passing the public key from node A with termination) and ask for payload</p>
+</li>
+<li>
+<p>notify node A with matching termination (and encrypted payload from B)</p>
+</li>
+<li>
+<p><strong>optional</strong> (in grey)</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>response from A to B</p>
+</li>
+<li>
+<p>pass the public key on notify from node B to A</p>
+</li>
+<li>
+<p>pass encrypted response from A to B</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3718,7 +3778,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-06 06:17:18 UTC
+Last updated 2018-07-09 15:15:27 UTC
 </div>
 </div>
 </body>
