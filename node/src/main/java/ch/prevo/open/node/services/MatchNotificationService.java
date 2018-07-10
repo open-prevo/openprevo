@@ -5,11 +5,13 @@ import ch.prevo.open.data.api.JobStart;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.JobStartProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
-
+import ch.prevo.open.node.data.provider.ProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -24,9 +26,10 @@ public class MatchNotificationService {
     private final JobStartProvider jobStartProvider;
 
     @Inject
-    public MatchNotificationService(JobStartProvider jobStartProvider, MatchNotificationListener listener) {
-        this.jobStartProvider = jobStartProvider;
-        this.listener = listener;
+    public MatchNotificationService(ServiceListFactoryBean factoryBean) {
+        final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
+        this.jobStartProvider = factory != null? factory.getJobStartProvider() : null;
+        this.listener = factory != null? factory.getMatchNotificationListener() : null;
     }
 
     public void handleCommencementMatch(CommencementMatchNotification notification) {

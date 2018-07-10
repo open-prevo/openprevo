@@ -1,7 +1,7 @@
 package ch.prevo.open.node.api;
 
 import ch.prevo.open.node.NodeApplication;
-import ch.prevo.open.node.data.provider.MockJobEventProviderImpl;
+import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.node.services.JobEndService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class JobEndControllerTest extends RestBaseTest {
         @Bean
         public JobEndService jobEndService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
-            given(factory.getObject()).willReturn(Collections.singletonList(new MockJobEventProviderImpl()));
+            given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
             return new JobEndService(factory);
         }
     }

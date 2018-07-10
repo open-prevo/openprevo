@@ -6,4 +6,5 @@ public interface ProviderFactory {
 
     JobEndProvider getJobEndProvider();
 
+    MatchNotificationListener getMatchNotificationListener();
 }
