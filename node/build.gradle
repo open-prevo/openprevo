@@ -34,6 +34,9 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-jar {
-	enabled=true
+bootJar {
+    manifest {
+        attributes 'Main-Class': 'org.springframework.boot.loader.PropertiesLauncher'
+    }
+    mainClassName = 'ch.prevo.open.node.NodeApplication'
 }

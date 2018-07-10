@@ -1,13 +1,11 @@
 package ch.prevo.open.node.config;
 
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.ProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -17,25 +15,10 @@ public class AdapterServiceConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AdapterServiceConfiguration.class);
 
     @Bean
-    public ServiceListFactoryBean jobStartProviderFactory() {
+    public ServiceListFactoryBean factory() {
         final ServiceListFactoryBean serviceListFactoryBean = new ServiceListFactoryBean();
-        serviceListFactoryBean.setServiceType(JobStartProvider.class);
+        serviceListFactoryBean.setServiceType(ProviderFactory.class);
         return serviceListFactoryBean;
-    }
-
-    @Bean
-    public ServiceListFactoryBean jobEndServiceFactory() {
-        ServiceListFactoryBean serviceListFactoryBean = new ServiceListFactoryBean();
-        serviceListFactoryBean.setServiceType(JobEndProvider.class);
-        return serviceListFactoryBean;
-    }
-
-    @Bean
-    @Lazy
-    public JobEndProvider jobEndProvider() {
-        ServiceListFactoryBean serviceListFactoryBean = new ServiceListFactoryBean();
-        serviceListFactoryBean.setServiceType(JobEndProvider.class);
-        return getAdapterService(serviceListFactoryBean);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,18 +1,16 @@
 package ch.prevo.open.node.data.provider;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-import javax.inject.Inject;
-
+import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.JobStart;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobStart;
-import ch.prevo.open.node.NodeApplication;
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = JsonAdapter.class)

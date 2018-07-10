@@ -1,16 +1,15 @@
 package ch.prevo.open.node.services;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
-import org.springframework.stereotype.Service;
-
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.ProviderFactory;
+import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation to retrieve encrypted information about an insurant.
@@ -21,8 +20,9 @@ public class JobStartService {
     private final JobStartProvider jobStartProvider;
 
     @Inject
-    public JobStartService(@Named("jobStartProviderFactory") ServiceListFactoryBean factory) {
-        jobStartProvider = AdapterServiceConfiguration.getAdapterService(factory);
+    public JobStartService(ServiceListFactoryBean factoryBean) {
+        final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
+        jobStartProvider = factory != null? factory.getJobStartProvider() : null;
     }
 
     public Set<InsurantInformation> getAllJobStartData() {

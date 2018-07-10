@@ -1,27 +1,25 @@
 package ch.prevo.open.node.data.provider;
 
-import static java.util.Collections.emptyList;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.JobStart;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobStart;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Sample json dummy adapter to provide hardcoded test data.
