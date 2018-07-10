@@ -10,6 +10,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+import java.time.LocalDate;
 import java.util.Set;
 import javax.inject.Inject;
 
@@ -35,8 +36,14 @@ public class NodeServiceTest {
     private static final String UID1 = "CHE-223.471.073";
     private static final String UID2 = "CHE-109.723.097";
 
+    private static final String RETIREMENT_FUND_NAME = "Baloise-Sammelstiftung";
+    private static final String IBAN = "CH53 0077 0016 02222 3334 4";
+
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\"}]";
+
+    private static final String CAPITAL_TRANSFER_INFORMATION
+            = "{\"name\" : \"" + RETIREMENT_FUND_NAME + "\", \"iban\" : \"" + IBAN + "\"}";
 
     @Inject
     private NodeService nodeService;
@@ -124,38 +131,37 @@ public class NodeServiceTest {
     @Test
     public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        String notification_response = "notification response";
-        server.expect(requestTo(node1.getMatchNotifyUrl()))
-                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
-        server.expect(requestTo(node2.getMatchNotifyUrl()))
+
+        server.expect(requestTo(node2.getCommencementMatchNotifyUrl()))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+
+
+        server.expect(requestTo(node1.getTerminationMatchNotifyUrl()))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
                 .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
-                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
+                .andRespond(withSuccess());
 
         // when
-        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
+        nodeService.notifyMatches(
+                singletonList(new Match(OASI1, UID1, UID2, LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30))));
 
         // then
         server.verify();
     }
 
-    @Test
-    public void testNotificationForUnreachableNodes() {
-        // given
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        String notification_response = "notification response";
-        server.expect(requestTo(node1.getMatchNotifyUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
-        server.expect(requestTo(node2.getMatchNotifyUrl()))
-                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.newRetirementFundUid", is(node2.getRetirementFundUids().get(0))))
-                .andRespond(withSuccess(notification_response, MediaType.TEXT_PLAIN));
+        @Test
+        public void testNotificationForUnreachableNodes() {
+            // given
+            when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+            server.expect(requestTo(node2.getCommencementMatchNotifyUrl())).andRespond(withStatus(HttpStatus.NOT_FOUND));
+            server.expect(requestTo(node1.getTerminationMatchNotifyUrl()));
 
-        // when
-        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2)));
+            // when
+            nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30))));
 
-        // then
-        server.verify();
-    }
+            // then
+            server.verify();
+        }
 
     private void assertEqualsToTestdata(Set<InsurantInformation> insurantInformations) {
         InsurantInformation insurantInformation = insurantInformations.iterator().next();

@@ -21,7 +21,7 @@ public class MatcherService {
             if (matchingEntry != null) {
                 matchedEmploymentCommencements.add(matchingEntry);
                 matchedEmploymentTerminations.add(exit);
-                matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid()));
+                matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid(), matchingEntry.getDate(), exit.getDate()));
             }
         }
         return matches;

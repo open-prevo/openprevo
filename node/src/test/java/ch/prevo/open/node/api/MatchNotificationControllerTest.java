@@ -1,17 +1,20 @@
 package ch.prevo.open.node.api;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MvcResult;
 
-import ch.prevo.open.encrypted.model.MatchNotification;
+import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 import ch.prevo.open.node.NodeApplication;
 
 @RunWith(SpringRunner.class)
@@ -20,15 +23,24 @@ import ch.prevo.open.node.NodeApplication;
 public class MatchNotificationControllerTest extends RestBaseTest {
 
     @Test
-    public void getAllJobEndData() throws Exception {
+    public void sendCommencementNotificationToPreviousRetirementFund() throws Exception {
 
-        MvcResult result = mockMvc.perform(post("/match-notification")
-                .content(this.convertToJson(new MatchNotification("756.1234.5678.97", "CHE-109.740.084")))
+        // given
+        TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
+        commencementMatchNotification.setEncryptedOasiNumber("756.1234.5678.97");
+        commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
+        commencementMatchNotification.setEntryDate(LocalDate.of(2018, 7, 1));
+
+        // when
+        mockMvc.perform(post("/commencement-match-notification")
+                .content(this.convertToJson(commencementMatchNotification))
                 .contentType(contentType))
-                .andExpect(status().isCreated()).andReturn();
 
-        String encryptedCapitalTransferInformation = result.getResponse().getContentAsString();
+                //then
 
-        assertThat(encryptedCapitalTransferInformation).contains("BKB");
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.name", is("BKB_Test_Bank")))
+                .andExpect(jsonPath("$.iban", is("CH53 0077 0016 02222 3334 4")));
     }
 }

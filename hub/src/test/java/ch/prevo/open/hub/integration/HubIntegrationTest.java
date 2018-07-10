@@ -1,14 +1,10 @@
 package ch.prevo.open.hub.integration;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.nio.file.Paths;
-import java.util.List;
-import javax.inject.Inject;
+import ch.prevo.open.hub.HubService;
+import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.nodes.NodeConfiguration;
+import ch.prevo.open.hub.nodes.NodeRegistry;
+import ch.prevo.open.hub.nodes.NodeService;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -21,17 +17,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-import ch.prevo.open.hub.HubService;
-import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.nodes.NodeConfiguration;
-import ch.prevo.open.hub.nodes.NodeRegistry;
-import ch.prevo.open.hub.nodes.NodeService;
+import javax.inject.Inject;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class HubIntegrationTest {
 
-    private static final int NODE_PORT = 8080;
+    private static final int NODE_PORT = 8881;
 
     @Inject
     private HubService hubService;
@@ -72,10 +73,10 @@ public class HubIntegrationTest {
         //given
         Match expectedMatchFromHelvetiaToBaloise = new Match("756.1234.5678.97",
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
-                "CHE-109.740.084-Baloise-Sammelstiftung");
+                "CHE-109.740.084-Baloise-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
         Match expectedMatchFromBaloiseToHelvetia = new Match("756.1335.5778.23",
                 "CHE-109.740.084-Baloise-Sammelstiftung",
-                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
+                "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
 
         // when
         List<Match> matches = hubService.matchAndNotify();

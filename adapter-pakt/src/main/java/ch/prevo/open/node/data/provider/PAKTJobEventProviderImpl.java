@@ -1,20 +1,18 @@
 package ch.prevo.open.node.data.provider;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-
-import ch.prevo.open.data.api.Address;
-import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.pakt.PartnerVermittlungRepository;
 import ch.prevo.pakt.TozsPtverm;
 import ch.prevo.pakt.zd.utils.CdMeld;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {

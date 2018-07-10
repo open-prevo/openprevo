@@ -5,13 +5,13 @@ services:
       context: adapter-dummy
     hostname: baloise
     ports:
-    - "8881:8080"
+    - "8881:8881"
   node_helvetia:
     build:
       context: adapter-dummy
     hostname: helvetia
     ports:
-    - "8882:8080"
+    - "8882:8881"
     environment:
       SPRING_APPLICATION_JSON: '{"open.prevo.json.adapter.files":{
                                     "jobstart":"classpath:pakt-sample-job-start-data.json",

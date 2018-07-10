@@ -1,41 +1,43 @@
 package ch.prevo.open.hub.nodes;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import javax.inject.Inject;
-
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchNotification;
-import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.match.MatcherService;
+import javax.inject.Inject;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class NodeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NodeService.class);
 
-    @Inject
-    private NodeRegistry nodeRegistry;
+    private final NodeRegistry nodeRegistry;
 
-    @Inject
-    private MatcherService matcherService;
+    private final MatcherService matcherService;
 
     private final RestTemplate restTemplate;
 
-    public NodeService(RestTemplateBuilder restTemplateBuilder) {
+    @Inject
+    public NodeService(RestTemplateBuilder restTemplateBuilder, NodeRegistry nodeRegistry, MatcherService matcherService) {
         this.restTemplate = restTemplateBuilder.build();
+        this.nodeRegistry = nodeRegistry;
+        this.matcherService = matcherService;
     }
 
     public Set<InsurantInformation> getCurrentExits() {
@@ -101,26 +103,44 @@ public class NodeService {
 
         for (Match match : matches) {
             try {
-                // notify previous node
-                tryNotifyMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match);
                 // notify new node
-                tryNotifyMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
+                final CapitalTransferInformation transferInformation = tryNotifyNewRetirementFundAboutMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
+                // notify previous node
+                tryNotifyPreviousRetirementFundAboutTerminationMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match, transferInformation);
             } catch (Exception e) {
                 LOGGER.error("Unexpected error occurred while notifying match: {}", match, e);
             }
         }
     }
 
-    private void tryNotifyMatch(NodeConfiguration nodeConfig, Match match) {
+    private CapitalTransferInformation tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
         try {
-            MatchNotification matchNotification = new MatchNotification();
+            TerminationMatchNotification matchNotification = new TerminationMatchNotification();
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
-            matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());
-            restTemplate.postForEntity(nodeConfig.getMatchNotifyUrl(), matchNotification, String.class);
+            matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
+            matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
+            matchNotification.setEntryDate(match.getEntryDate());
+            return restTemplate.postForObject(nodeConfig.getCommencementMatchNotifyUrl(), matchNotification, CapitalTransferInformation.class);
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later
-            LOGGER.error("Could not send notification for match {} to URL {}", match, nodeConfig.getMatchNotifyUrl(),
-                    e);
+            LOGGER.error("Could not send notification for match {} to URL {}", match, nodeConfig.getCommencementMatchNotifyUrl(), e);
+            return null;
+        }
+    }
+
+    private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig, Match match, CapitalTransferInformation transferInformation) {
+        try {
+            CommencementMatchNotification matchNotification = new CommencementMatchNotification();
+            matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
+            matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
+            matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());
+            matchNotification.setCommencementDate(match.getEntryDate());
+            matchNotification.setTerminationDate(match.getExitDate());
+            matchNotification.setTransferInformation(transferInformation);
+            restTemplate.postForEntity(nodeConfig.getTerminationMatchNotifyUrl(), matchNotification, Void.class);
+        } catch (Exception e) {
+            // TODO persist information that match needs to be notified later
+            LOGGER.error("Could not send notification for match {} to URL {}", match, nodeConfig.getTerminationMatchNotifyUrl(), e);
         }
     }
 

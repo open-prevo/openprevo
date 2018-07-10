@@ -1,5 +1,9 @@
 package ch.prevo.open.node.api;
 
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.node.services.MatchNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,19 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ch.prevo.open.data.api.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchNotification;
+import javax.inject.Inject;
 
 @RestController
 public class MatchNotificationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(MatchNotificationController.class);
 
-    @RequestMapping(value = "/match-notification", method = RequestMethod.POST)
-    public ResponseEntity<String> receiveMatchNotification(@RequestBody MatchNotification matchNotification) {
-        LOGGER.debug("Receive match notification for OASI {}, switching to new retirement fund: {}",
+    private final MatchNotificationService notificationService;
+
+    @Inject
+    public MatchNotificationController(MatchNotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
+    public ResponseEntity<CapitalTransferInformation> receiveCommencementMatchNotification(@RequestBody TerminationMatchNotification matchNotification) {
+        LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
+                matchNotification.getEncryptedOasiNumber(), matchNotification.getRetirementFundUid());
+
+        final CapitalTransferInformation transferInformation = notificationService.handleTerminationMatch(matchNotification);
+
+        return ResponseEntity.status(HttpStatus.OK).body(transferInformation);
+    }
+
+    @RequestMapping(value = "/termination-match-notification", method = RequestMethod.POST)
+    public ResponseEntity<Void> receiveTerminationMatchNotification(@RequestBody CommencementMatchNotification matchNotification) {
+        LOGGER.debug("Receive termination match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
-        String capitalTransferInformation = new CapitalTransferInformation("BKB", "CH53 0077 0015 0222 3334 4").toString();
-        return ResponseEntity.status(HttpStatus.CREATED).body(capitalTransferInformation);
+
+        notificationService.handleCommencementMatch(matchNotification);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
