@@ -17,120 +17,120 @@ import java.util.List;
 @Service
 public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {
 
-	@Inject
-	private PartnerVermittlungRepository repository;
+    @Inject
+    private PartnerVermittlungRepository repository;
 
-	@Override
-	public List<JobEnd> getJobEnds() {
-		final List<JobEnd> jobEnds = new ArrayList<>();
+    @Override
+    public List<JobEnd> getJobEnds() {
+        final List<JobEnd> jobEnds = new ArrayList<>();
 
-		repository.findAll().forEach(ptVerm -> {
-			if (CdMeld.DADURCHF.getCode() == ptVerm.getCdmeld()) {
-				jobEnds.add(buildJobEnd(ptVerm));
-			}
-		});
-		return jobEnds;
-	}
+        repository.findAll().forEach(ptVerm -> {
+            if (CdMeld.DADURCHF.getCode() == ptVerm.getCdmeld()) {
+                jobEnds.add(buildJobEnd(ptVerm));
+            }
+        });
+        return jobEnds;
+    }
 
-	private JobEnd buildJobEnd(TozsPtverm ptVerm) {
-		// TODO fulfill missing properties
-		return new JobEnd(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
-	}
+    private JobEnd buildJobEnd(TozsPtverm ptVerm) {
+        // TODO fulfill missing properties
+        return new JobEnd(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
+    }
 
-	private JobInfo buildJobInfo(TozsPtverm ptVerm) {
-		JobInfo jobInfo = new JobInfo();
-		jobInfo.setOasiNumber(ptVerm.getAhv());
-		jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
-		jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
-		jobInfo.setInternalReferenz(ptVerm.getNameve());
-		// TODO fulfill missing properties
-		return jobInfo;
+    private JobInfo buildJobInfo(TozsPtverm ptVerm) {
+        JobInfo jobInfo = new JobInfo();
+        jobInfo.setOasiNumber(ptVerm.getAhv());
+        jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
+        jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
+        jobInfo.setInternalReferenz(ptVerm.getNameve());
+        // TODO fulfill missing properties
+        return jobInfo;
 
-	}
+    }
 
-	private String getRetirementFundId(TozsPtverm ptVerm) {
-		return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
-	}
+    private String getRetirementFundId(TozsPtverm ptVerm) {
+        return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
+    }
 
-	enum RetirementFund {
-		BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Baloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
-				"CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
-						"Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
-		private Short cdStf;
-		private String name;
-		private String id;
+    enum RetirementFund {
+        BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), "Baloise-Sammelstiftung für die obligatorische berufliche Vorsorge",
+                "CHE-109.740.084"), PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
+                "Perspectiva Sammelstiftung für berufliche Vorsorge", "CHE-223.471.073");
+        private Short cdStf;
+        private String name;
+        private String id;
 
-		private RetirementFund(Short cdStf, String name, String id) {
-			this.cdStf = cdStf;
-			this.name = name;
-			this.id = id;
-		}
+        private RetirementFund(Short cdStf, String name, String id) {
+            this.cdStf = cdStf;
+            this.name = name;
+            this.id = id;
+        }
 
-		public Short getCdStf() {
-			return cdStf;
-		}
+        public Short getCdStf() {
+            return cdStf;
+        }
 
-		public void setCdStf(Short cdStf) {
-			this.cdStf = cdStf;
-		}
+        public void setCdStf(Short cdStf) {
+            this.cdStf = cdStf;
+        }
 
-		public String getName() {
-			return name;
-		}
+        public String getName() {
+            return name;
+        }
 
-		public void setName(String name) {
-			this.name = name;
-		}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-		public String getId() {
-			return id;
-		}
+        public String getId() {
+            return id;
+        }
 
-		public void setId(String id) {
-			this.id = id;
-		}
+        public void setId(String id) {
+            this.id = id;
+        }
 
-		public static RetirementFund getByCdStf(short cdStf) {
-			RetirementFund result = null;
-			for (RetirementFund candidate : RetirementFund.values()) {
-				if (candidate.cdStf == cdStf) {
-					result = candidate;
-					break;
-				}
-			}
-			return result;
-		}
-	}
+        public static RetirementFund getByCdStf(short cdStf) {
+            RetirementFund result = null;
+            for (RetirementFund candidate : RetirementFund.values()) {
+                if (candidate.cdStf == cdStf) {
+                    result = candidate;
+                    break;
+                }
+            }
+            return result;
+        }
+    }
 
-	@Override
-	public List<JobStart> getJobStarts() {
-		final List<JobStart> jobStarts = new ArrayList<>();
+    @Override
+    public List<JobStart> getJobStarts() {
+        final List<JobStart> jobStarts = new ArrayList<>();
 
-		repository.findAll().forEach(ptVerm -> {
-			if (CdMeld.NEUEINTRERF.getCode() == ptVerm.getCdmeld()) {
-				jobStarts.add(buildJobStart(ptVerm));
-			}
-		});
-		return jobStarts;
-	}
+        repository.findAll().forEach(ptVerm -> {
+            if (CdMeld.NEUEINTRERF.getCode() == ptVerm.getCdmeld()) {
+                jobStarts.add(buildJobStart(ptVerm));
+            }
+        });
+        return jobStarts;
+    }
 
-	private JobStart buildJobStart(TozsPtverm ptVerm) {
-		// TODO fulfill missing properties
-		return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
-				buildCapitalTransferInformation(ptVerm));
-	}
+    private JobStart buildJobStart(TozsPtverm ptVerm) {
+        // TODO fulfill missing properties
+        return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
+                buildCapitalTransferInformation(ptVerm));
+    }
 
-	private CapitalTransferInformation buildCapitalTransferInformation(TozsPtverm ptVerm) {
-		// TODO Auto-generated method stub
-		CapitalTransferInformation capitalTransferInfo = new CapitalTransferInformation(ptVerm.getNameve(),
-				ptVerm.getTxtiban());
-		capitalTransferInfo.setAddress(buildAddress(ptVerm));
-		return capitalTransferInfo;
-	}
+    private CapitalTransferInformation buildCapitalTransferInformation(TozsPtverm ptVerm) {
+        // TODO Auto-generated method stub
+        CapitalTransferInformation capitalTransferInfo = new CapitalTransferInformation(ptVerm.getNameve(),
+                ptVerm.getTxtiban());
+        capitalTransferInfo.setAddress(buildAddress(ptVerm));
+        return capitalTransferInfo;
+    }
 
-	private Address buildAddress(TozsPtverm ptVerm) {
-		// TODO Auto-generated method stub
-		Address address = new Address();
-		return address;
-	}
+    private Address buildAddress(TozsPtverm ptVerm) {
+        // TODO Auto-generated method stub
+        Address address = new Address();
+        return address;
+    }
 }
