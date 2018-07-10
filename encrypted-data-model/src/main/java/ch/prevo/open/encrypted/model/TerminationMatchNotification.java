@@ -12,7 +12,6 @@ public class TerminationMatchNotification {
 
     private String encryptedOasiNumber;
     private String retirementFundUid;
-    private String referenceId;
     private String previousRetirementFundUid;
     private LocalDate entryDate;
 
@@ -30,14 +29,6 @@ public class TerminationMatchNotification {
 
     public void setRetirementFundUid(String retirementFundUid) {
         this.retirementFundUid = retirementFundUid;
-    }
-
-    public String getReferenceId() {
-        return referenceId;
-    }
-
-    public void setReferenceId(String referenceId) {
-        this.referenceId = referenceId;
     }
 
     public String getPreviousRetirementFundUid() {
@@ -61,7 +52,6 @@ public class TerminationMatchNotification {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("encryptedOasiNumber", encryptedOasiNumber)
                 .append("retirementFundUid", retirementFundUid)
-                .append("referenceId", referenceId)
                 .append("previousRetirementFundUid", previousRetirementFundUid)
                 .append("entryDate", entryDate)
                 .toString();

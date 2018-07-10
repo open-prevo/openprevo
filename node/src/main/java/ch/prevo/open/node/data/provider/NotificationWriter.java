@@ -10,7 +10,7 @@ class NotificationWriter {
 
     void write(PrintWriter writer, TerminationMatchNotification matchNotification) {
         writer.println("---------------------------------------");
-        writer.println("Match found for employment commencement: " + matchNotification.getReferenceId());
+        writer.println("Match found for employment commencement: ");
         writer.println();
         writer.println("OASI number:                  " + matchNotification.getEncryptedOasiNumber());
         writer.println("Previous retirement fund:     " + matchNotification.getPreviousRetirementFundUid());
@@ -25,7 +25,7 @@ class NotificationWriter {
         writer.println("Match found for employment termination");
         writer.println();
         writer.println("OASI number:                 " + matchNotification.getEncryptedOasiNumber());
-        writer.println("Employment termination date: " + matchNotification.getExitDate());
+        writer.println("Employment termination date: " + matchNotification.getTerminationDate());
         writer.println("New retirmeent fund:         " + matchNotification.getNewRetirementFundUid());
         writer.println();
         writer.println("Capital transfer information");

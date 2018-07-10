@@ -11,10 +11,10 @@ import java.time.LocalDate;
 public class CommencementMatchNotification {
 
     private String encryptedOasiNumber;
-    private String retirementFundUid;
+    private String previousRetirementFundUid;
     private String newRetirementFundUid;
-    private LocalDate entryDate;
-    private LocalDate exitDate;
+    private LocalDate commencementDate;
+    private LocalDate terminationDate;
     private CapitalTransferInformation transferInformation;
 
     public String getEncryptedOasiNumber() {
@@ -25,12 +25,12 @@ public class CommencementMatchNotification {
         this.encryptedOasiNumber = encryptedOasiNumber;
     }
 
-    public String getRetirementFundUid() {
-        return retirementFundUid;
+    public String getPreviousRetirementFundUid() {
+        return previousRetirementFundUid;
     }
 
-    public void setRetirementFundUid(String retirementFundUid) {
-        this.retirementFundUid = retirementFundUid;
+    public void setPreviousRetirementFundUid(String previousRetirementFundUid) {
+        this.previousRetirementFundUid = previousRetirementFundUid;
     }
 
     public String getNewRetirementFundUid() {
@@ -41,20 +41,20 @@ public class CommencementMatchNotification {
         this.newRetirementFundUid = newRetirementFundUid;
     }
 
-    public LocalDate getEntryDate() {
-        return entryDate;
+    public LocalDate getCommencementDate() {
+        return commencementDate;
     }
 
-    public void setEntryDate(LocalDate entryDate) {
-        this.entryDate = entryDate;
+    public void setCommencementDate(LocalDate commencementDate) {
+        this.commencementDate = commencementDate;
     }
 
-    public LocalDate getExitDate() {
-        return exitDate;
+    public LocalDate getTerminationDate() {
+        return terminationDate;
     }
 
-    public void setExitDate(LocalDate exitDate) {
-        this.exitDate = exitDate;
+    public void setTerminationDate(LocalDate terminationDate) {
+        this.terminationDate = terminationDate;
     }
 
     public CapitalTransferInformation getTransferInformation() {
@@ -69,10 +69,10 @@ public class CommencementMatchNotification {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("encryptedOasiNumber", encryptedOasiNumber)
-                .append("retirementFundUid", retirementFundUid)
+                .append("previousRetirementFundUid", previousRetirementFundUid)
                 .append("newRetirementFundUid", newRetirementFundUid)
-                .append("entryDate", entryDate)
-                .append("exitDate", exitDate)
+                .append("commencementDate", commencementDate)
+                .append("terminationDate", terminationDate)
                 .append("transferInformation", transferInformation)
                 .toString();
     }

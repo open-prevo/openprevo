@@ -19,14 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,22 +53,39 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     @Override
     public List<JobEnd> getJobEnds() {
-        return mapRows(getWorkbook().getSheetAt(0), this::mapJobEnd);
+        List<JobEnd> jobEnds = Collections.emptyList();
+        try (final Workbook wb = getWorkbook()) {
+            if (wb != null) {
+                jobEnds = mapRows(wb.getSheetAt(0), this::mapJobEnd);
+            }
+        } catch (IOException e) {
+            LOG.error("An exception occurred while trying to read the employment terminations", e);
+        }
+        return jobEnds;
     }
 
     @Override
     public List<JobStart> getJobStarts() {
-        return mapRows(getWorkbook().getSheetAt(1), this::mapJobStart);
+        List<JobStart> jobStarts = Collections.emptyList();
+        try (final Workbook wb = getWorkbook()) {
+            if (wb != null) {
+                jobStarts = mapRows(wb.getSheetAt(1), this::mapJobStart);
+            }
+        } catch (IOException e) {
+            LOG.error("An exception occurred while trying to read the employment commencements", e);
+        }
+        return jobStarts;
     }
 
     private Workbook getWorkbook() {
-        Workbook wb = null;
-        Path path = Paths.get(getFile());
+        final File file = new File(getFile());
 
-        try (InputStream inp = Files.newInputStream(path)) {
-            wb = WorkbookFactory.create(inp);
+        final Workbook wb;
+        try {
+            wb = WorkbookFactory.create(file, null, true);
         } catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
-            throw new RuntimeException(e);
+            LOG.error("An exception occurred while trying to get the workbook", e);
+            return null;
         }
 
         return wb;

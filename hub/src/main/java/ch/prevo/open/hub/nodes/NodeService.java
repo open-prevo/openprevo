@@ -118,7 +118,6 @@ public class NodeService {
             TerminationMatchNotification matchNotification = new TerminationMatchNotification();
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
             matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
-            matchNotification.setReferenceId("");
             matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
             matchNotification.setEntryDate(match.getEntryDate());
             return restTemplate.postForObject(nodeConfig.getCommencementMatchNotifyUrl(), matchNotification, CapitalTransferInformation.class);
@@ -133,10 +132,10 @@ public class NodeService {
         try {
             CommencementMatchNotification matchNotification = new CommencementMatchNotification();
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
-            matchNotification.setRetirementFundUid(match.getPreviousRetirementFundUid());
+            matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
             matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());
-            matchNotification.setEntryDate(match.getEntryDate());
-            matchNotification.setExitDate(match.getExitDate());
+            matchNotification.setCommencementDate(match.getEntryDate());
+            matchNotification.setTerminationDate(match.getExitDate());
             matchNotification.setTransferInformation(transferInformation);
             restTemplate.postForEntity(nodeConfig.getTerminationMatchNotifyUrl(), matchNotification, Void.class);
         } catch (Exception e) {

@@ -1,15 +1,19 @@
 package ch.prevo.open.node.services;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
 @Service
 public class MatchNotificationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MatchNotificationService.class);
 
     private final MatchNotificationListener listener;
 
@@ -23,6 +27,12 @@ public class MatchNotificationService {
     }
 
     public CapitalTransferInformation handleTerminationMatch(TerminationMatchNotification notification) {
-        return listener.handleTerminationMatch(notification);
+        final CapitalTransferInformation transferInformation = listener.handleTerminationMatch(notification);
+
+        if (transferInformation == null) {
+            LOG.warn("No CaptialTransferInformation returned for notification " + notification);
+        }
+
+        return transferInformation;
     }
 }
