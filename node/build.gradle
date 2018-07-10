@@ -40,3 +40,9 @@ bootJar {
     }
     mainClassName = 'ch.prevo.open.node.NodeApplication'
 }
+
+task runDbNode(dependsOn: [bootJar, project(":adapter-db").shadowJar], type: JavaExec) {
+    main = '-jar'
+    args "${bootJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-db').shadowJar.outputs.files.getFiles().first()}"
+}
