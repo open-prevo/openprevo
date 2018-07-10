@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,14 +28,15 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         // given
         TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
         commencementMatchNotification.setEncryptedOasiNumber("756.1234.5678.97");
-        commencementMatchNotification.setPreviousRetirementFundUid("CHE-109.740.084");
+        commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
+        commencementMatchNotification.setEntryDate(LocalDate.of(2018, 7, 1));
 
         // when
         mockMvc.perform(post("/commencement-match-notification")
                 .content(this.convertToJson(commencementMatchNotification))
                 .contentType(contentType))
 
-        //then
+                //then
 
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))

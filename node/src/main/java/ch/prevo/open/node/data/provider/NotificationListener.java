@@ -1,5 +1,6 @@
 package ch.prevo.open.node.data.provider;
 
+import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
@@ -28,12 +29,19 @@ public class NotificationListener implements MatchNotificationListener {
         notificationWriter.write(writer, notification);
 
         return jobStartProvider.getJobStarts().stream()
-                .filter(j -> j.getJobInfo().getOasiNumber().equals(notification.getEncryptedOasiNumber())).findAny()
+                .filter(j -> isSameAsNotification(j, notification)).findAny()
                 .map(JobStart::getCapitalTransferInfo).orElse(null);
     }
 
     @Override
     public void handleCommencementMatch(CommencementMatchNotification notification) {
         notificationWriter.write(writer, notification);
+    }
+
+    private boolean isSameAsNotification(JobStart jobStart, TerminationMatchNotification notification) {
+        JobInfo jobInfo = jobStart.getJobInfo();
+        return jobInfo.getOasiNumber().equals(notification.getEncryptedOasiNumber()) &&
+                jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
+                jobInfo.getDate().equals(notification.getEntryDate());
     }
 }

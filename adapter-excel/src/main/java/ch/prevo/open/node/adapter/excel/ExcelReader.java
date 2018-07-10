@@ -53,12 +53,14 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
     public static final String FILE_PROPERTY = "node.adapter.excel.file";
     private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
-    private String getFile() {
-        String excelFilePath = System.getProperty(FILE_PROPERTY);
-        if (excelFilePath == null) {
-            excelFilePath = ClassLoader.getSystemResource(FALLBACK_FILE).getFile();
-        }
-        return excelFilePath;
+    @Override
+    public List<JobEnd> getJobEnds() {
+        return mapRows(getWorkbook().getSheetAt(0), this::mapJobEnd);
+    }
+
+    @Override
+    public List<JobStart> getJobStarts() {
+        return mapRows(getWorkbook().getSheetAt(1), this::mapJobStart);
     }
 
     private Workbook getWorkbook() {
@@ -74,12 +76,12 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
         return wb;
     }
 
-    public List<JobEnd> getJobEnds() {
-        return mapRows(getWorkbook().getSheetAt(0), this::mapJobEnd);
-    }
-
-    public List<JobStart> getJobStarts() {
-        return mapRows(getWorkbook().getSheetAt(1), this::mapJobStart);
+    private String getFile() {
+        String excelFilePath = System.getProperty(FILE_PROPERTY);
+        if (excelFilePath == null) {
+            excelFilePath = ClassLoader.getSystemResource(FALLBACK_FILE).getFile();
+        }
+        return excelFilePath;
     }
 
     private <T> List<T> mapRows(Sheet sheet, Function<Row, Optional<T>> rowMapper) {
