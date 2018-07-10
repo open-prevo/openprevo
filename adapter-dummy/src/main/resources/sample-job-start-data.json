@@ -6,9 +6,19 @@
       "internalReferenz": "",
       "oasiNumber": "756.1234.5678.97",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Perspectiva Sammelstiftung für berufliche Vorsorge",
+      "additionalName": "Basler Leben AG",
+      "address": {
+        "street": "Aeschengraben 21, Postfach",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH53 0077 0016 02222 3334 4",
+      "referenceId": "756.1234.5678.97"
+    }
   },
   {
     "techId": "",
@@ -17,9 +27,19 @@
       "internalReferenz": "",
       "oasiNumber": "756.1298.6578.97",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Perspectiva Sammelstiftung für berufliche Vorsorge",
+      "additionalName": "Basler Leben AG",
+      "address": {
+        "street": "Aeschengraben 21, Postfach",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH53 0077 0016 02222 3334 4",
+      "referenceId": "756.1298.6578.97"
+    }
   },
   {
     "techId": "",
@@ -28,8 +48,18 @@
       "internalReferenz": "",
       "oasiNumber": "756.5678.1234.17",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Perspectiva Sammelstiftung für berufliche Vorsorge",
+      "additionalName": "Basler Leben AG",
+      "address": {
+        "street": "Aeschengraben 21, Postfach",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH53 0077 0016 02222 3334 4",
+      "referenceId": "756.5678.1234.17"
+    }
   }
 ]

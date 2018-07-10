@@ -30,12 +30,27 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
-=== <Runtime Scenario 1>
+=== Hub
 
+==== main loop: data lookup, matching and notification
 
-* _<insert runtime diagram or textual description of the scenario>_
-* _<insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.>_
+- **Node A**: has a matching termination
+- **Node B**: has a matching commencement
+
+image::../images/matchFlow.png["Match Flow sequence diagram", title="OpenPrevo high-level MatchFlow sequence diagram"]
+
+. Step: **lookup** data at nodes (in parallel)
+* ask nodes for commencement of employment(s)
+* ask nodes for termination of employment(s)
+. Step: wait for response(s)
+. Step: find **match**(es) in response(s)
+. Step: **notify** about match(es)
+.. notify node B with matching commencement (passing the public key from node A with termination) and ask for payload
+.. notify node A with matching termination (and encrypted payload from B)
+.. **optional** (in grey)
+... response from A to B
+... pass the public key on notify from node B to A
+... pass encrypted response from A to B
 
 === <Runtime Scenario 2>
 

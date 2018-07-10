@@ -25,10 +25,10 @@ public class JobStartService {
         jobStartProvider = factory != null? factory.getJobStartProvider() : null;
     }
 
-    public Set<InsurantInformation> getAllJobStartData() {
-        return jobStartProvider.getJobStarts().stream()
-                .map(jobEnd -> new InsurantInformation(jobEnd.getJobInfo().getOasiNumber(),
-                        jobEnd.getJobInfo().getRetirementFundUid()))
-                .collect(Collectors.toSet());
-    }
+	public Set<InsurantInformation> getAllJobStartData() {
+		return jobStartProvider.getJobStarts().stream()
+				.map(jobEnd -> new InsurantInformation(jobEnd.getJobInfo().getOasiNumber(),
+						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
+				.collect(Collectors.toSet());
+	}
 }

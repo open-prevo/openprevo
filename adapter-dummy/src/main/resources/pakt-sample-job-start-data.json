@@ -6,9 +6,19 @@
       "internalReferenz": "",
       "oasiNumber": "756.1335.5778.23",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Helvetia Prisma Sammelstiftung",
+      "additionalName": "Helvetia Versicherungen Schweiz",
+      "address": {
+        "street": "St. Alban-Anlage 26",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH52 0483 5012 3456 7100 0",
+      "referenceId": "756.1335.5778.23"
+    }
   },
   {
     "techId": "",
@@ -17,9 +27,19 @@
       "internalReferenz": "",
       "oasiNumber": "756.9874.5778.58",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Helvetia Prisma Sammelstiftung",
+      "additionalName": "Helvetia Versicherungen Schweiz",
+      "address": {
+        "street": "St. Alban-Anlage 26",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH52 0483 5012 3456 7100 0",
+      "referenceId": "756.1335.5778.23"
+    }
   },
   {
     "techId": "",
@@ -28,8 +48,18 @@
       "internalReferenz": "",
       "oasiNumber": "756.3256.6598.23",
       "internalPersonId": "",
-      "date": null
+      "date": "2018-07-01"
     },
-    "capitalTransferInfo": null
+    "capitalTransferInfo": {
+      "name": "Helvetia Prisma Sammelstiftung",
+      "additionalName": "Helvetia Versicherungen Schweiz",
+      "address": {
+        "street": "St. Alban-Anlage 26",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH52 0483 5012 3456 7100 0",
+      "referenceId": "756.1335.5778.23"
+    }
   }
 ]
