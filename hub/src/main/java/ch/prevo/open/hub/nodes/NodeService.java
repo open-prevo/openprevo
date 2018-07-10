@@ -42,7 +42,7 @@ public class NodeService {
             List<InsurantInformation> pensionFundExits = nodeCaller.getInsurantInformationList(nodeConfig.getJobExitsUrl());
             List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
                     pensionFundExits,
-                    matcherService::employmentCommencementNotMatched);
+                    matcherService::employmentTerminationNotMatched);
             exits.addAll(filteredInformation);
         }
         return exits;
@@ -54,7 +54,7 @@ public class NodeService {
             List<InsurantInformation> pensionFundEntries = nodeCaller.getInsurantInformationList(nodeConfig.getJobEntriesUrl());
             List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
                     pensionFundEntries,
-                    matcherService::employmentTerminationNotMatched);
+                    matcherService::employmentCommencementNotMatched);
             entries.addAll(filteredInformation);
         }
         return entries;

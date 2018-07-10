@@ -8,7 +8,7 @@ import ch.prevo.open.hub.match.MatcherService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,17 +16,18 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static java.time.LocalDate.of;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeService.class, NodeRegistry.class, MatcherService.class})
+@SpringBootTest(classes = {NodeService.class, MatcherService.class})
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -35,10 +36,11 @@ public class NodeServiceTest {
 
     @Inject
     private NodeService nodeService;
+    @Inject
+    private MatcherService matcherService;
 
     @MockBean
     private NodeCaller nodeCaller;
-
     @MockBean
     private NodeRegistry nodeRegistry;
 
@@ -50,7 +52,7 @@ public class NodeServiceTest {
     public void setUp() {
         node1 = new NodeConfiguration("https://host1", singletonList(UID1));
         node2 = new NodeConfiguration("https://host2", singletonList(UID2));
-        insurantInformation = new InsurantInformation(OASI1, UID1, LocalDate.of(2020, 12, 15));
+        insurantInformation = new InsurantInformation(OASI1, UID1, of(2020, 12, 15));
     }
 
     @Test
@@ -122,14 +124,45 @@ public class NodeServiceTest {
                 .thenReturn(transferInformation);
 
         // when
-        LocalDate entryDate = LocalDate.of(2018, 7, 1);
-        LocalDate exitDate = LocalDate.of(2018, 6, 30);
+        LocalDate entryDate = of(2018, 7, 1);
+        LocalDate exitDate = of(2018, 6, 30);
         nodeService.notifyMatches(
                 singletonList(new Match(OASI1, UID1, UID2, entryDate, exitDate)));
 
         // then
         CommencementMatchNotification matchNotification = new CommencementMatchNotification(OASI1, UID1, UID2, entryDate, exitDate, transferInformation);
         verify(nodeCaller).postTerminationNotification(eq(node1.getTerminationMatchNotifyUrl()), eq(matchNotification));
+    }
+
+
+    @Test
+    public void testIgnoringAlreadyMatchedEmploymentTerminations() {
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+        InsurantInformation entry = this.insurantInformation;
+        InsurantInformation exit = new InsurantInformation(OASI1, UID2, of(2018, 6, 30));
+        matcherService.findMatches(singleton(exit), singleton(entry));
+
+        when(nodeCaller.getInsurantInformationList(node2.getJobExitsUrl()))
+                .thenReturn(singletonList(exit));
+
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
+
+        assertTrue(insurantInformations.isEmpty());
+    }
+
+    @Test
+    public void testIgnoringAlreadyMatchedEmploymentCommencements() {
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+        InsurantInformation entry = this.insurantInformation;
+        InsurantInformation exit = new InsurantInformation(OASI1, UID2, of(2018, 6, 30));
+        matcherService.findMatches(singleton(exit), singleton(entry));
+
+        when(nodeCaller.getInsurantInformationList(node1.getJobEntriesUrl()))
+                .thenReturn(singletonList(entry));
+
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
+
+        assertTrue(insurantInformations.isEmpty());
     }
 
     @Test
@@ -139,7 +172,7 @@ public class NodeServiceTest {
         when(nodeCaller.postCommencementNotification(eq(node2.getCommencementMatchNotifyUrl()), any())).thenReturn(null);
 
         // when
-        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30))));
+        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, of(2018, 7, 1), of(2018, 6, 30))));
 
         // then
         // TODO: fix and activate; we should not notify without the Transfer info
