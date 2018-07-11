@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class HubIntegrationTest {
 
-    private static final int NODE_PORT = 8881;
+    private static final int NODE_PORT = 8080;
 
     @Inject
     private HubService hubService;

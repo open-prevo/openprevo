@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.0.3.RELEASE'
+        shadowPluginVersion = '2.0.4'
     }
     repositories {
         mavenCentral()
@@ -8,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
     }
 }
 

@@ -1,64 +1,60 @@
 package ch.prevo.open.node.data.provider;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobStart;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Repository;
+import static java.util.Collections.emptyList;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.JobStart;
 
 /**
  * Sample json dummy adapter to provide hardcoded test data.
  */
-@EnableAutoConfiguration
-@Repository
 public class JsonAdapter implements JobStartProvider, JobEndProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonAdapter.class);
 
     private ObjectMapper objectMapper;
     private ResourceLoader resourceLoader;
-    private String jobStartJsonFile;
-    private String jobEndJsonFile;
-    private List<JobStart> jobStartInformation;
-    private List<JobEnd> jobEndInformation;
+    private String employmentCommencementJsonFile;
+    private String employmentTerminationJsonFile;
+    private List<JobStart> employmentCommencementInformation;
+    private List<JobEnd> employmentTerminationInformation;
 
-    @Inject
-    public JsonAdapter(ObjectMapper objectMapper,
-                       ResourceLoader resourceLoader,
-                       @Value("${open.prevo.json.adapter.files.jobstart}") String jobStartJsonFile,
-                       @Value("${open.prevo.json.adapter.files.jobend}") String jobEndJsonFile) {
-        this.objectMapper = objectMapper;
-        this.resourceLoader = resourceLoader;
-        this.jobStartJsonFile = jobStartJsonFile;
-        this.jobEndJsonFile = jobEndJsonFile;
+    public JsonAdapter() {
+        this(getEmploymentCommencementJsonFile(), getEmploymentTerminationJsonFile());
     }
 
-    @PostConstruct
-    public void init() {
-        this.jobStartInformation = new ArrayList<>(readJsonFile(jobStartJsonFile, JobStart.class));
-        this.jobEndInformation = new ArrayList<>(readJsonFile(jobEndJsonFile, JobEnd.class));
+    public JsonAdapter(String employmentCommencementJsonFile, String employmentTerminationJsonFile) {
+        this.employmentCommencementJsonFile = employmentCommencementJsonFile;
+        this.employmentTerminationJsonFile = employmentTerminationJsonFile;
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.findAndRegisterModules();
+        this.resourceLoader = new ResourceLoader();
+        this.readJsonFiles();
+    }
+
+    private void readJsonFiles() {
+        this.employmentCommencementInformation = new ArrayList<>(
+                readJsonFile(employmentCommencementJsonFile, JobStart.class));
+        this.employmentTerminationInformation = new ArrayList<>(
+                readJsonFile(employmentTerminationJsonFile, JobEnd.class));
     }
 
     private <T> List<T> readJsonFile(String filePath, Class<T> clazz) {
         LOGGER.debug("Read json file {} in adapter", filePath);
         try {
-            Resource jsonResource = resourceLoader.getResource(filePath);
-            String jsonString = IOUtils.toString(jsonResource.getInputStream(), Charset.forName("UTF-8"));
+            InputStream jsonStream = resourceLoader.getResource(filePath);
+            String jsonString = IOUtils.toString(jsonStream, Charset.forName("UTF-8"));
             JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, clazz);
             return objectMapper.readValue(jsonString, type);
         } catch (Exception e) {
@@ -69,11 +65,27 @@ public class JsonAdapter implements JobStartProvider, JobEndProvider {
 
     @Override
     public List<JobStart> getJobStarts() {
-        return jobStartInformation;
+        return employmentCommencementInformation;
     }
 
     @Override
     public List<JobEnd> getJobEnds() {
-        return jobEndInformation;
+        return employmentTerminationInformation;
+    }
+
+    private static String getEmploymentCommencementJsonFile() {
+        String employmentCommencementJson = System.getenv("EMPLOYMENT_COMMENCEMENT_JSON");
+        if (employmentCommencementJson == null) {
+            employmentCommencementJson = "classpath:sample-employment-commencement.json";
+        }
+        return employmentCommencementJson;
+    }
+
+    private static String getEmploymentTerminationJsonFile() {
+        String employmentTerminationJson = System.getenv("EMPLOYMENT_TERMINATION_JSON");
+        if (employmentTerminationJson == null) {
+            employmentTerminationJson = "classpath:sample-employment-termination.json";
+        }
+        return employmentTerminationJson;
     }
 }
