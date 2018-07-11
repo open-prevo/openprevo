@@ -58,10 +58,10 @@ task buildDockerImage {
     dependsOn docker
 }
 
-task runDbNode(dependsOn: [bootJar, project(":adapter-db").shadowJar], type: JavaExec) {
+task runExampleAdapterWithSpring(dependsOn: [bootJar, project(":adapter-example-spring").shadowJar], type: JavaExec) {
     main = '-jar'
     args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-db').shadowJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-example-spring').shadowJar.outputs.files.getFiles().first()}"
 }
 
 task runDummyNode(dependsOn: [bootJar, project(":adapter-dummy").shadowJar], type: JavaExec) {
