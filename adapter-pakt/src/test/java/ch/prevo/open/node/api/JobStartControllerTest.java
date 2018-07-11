@@ -23,10 +23,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import ch.prevo.NodeApplication;
+import ch.prevo.pakt.PaktAdapterConfig;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NodeApplication.class)
+@SpringBootTest(classes = PaktAdapterConfig.class)
 @WebAppConfiguration
 public class JobStartControllerTest {
 

@@ -1,4 +1,4 @@
-package ch.prevo.pakt;
+package ch.prevo.pakt.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;

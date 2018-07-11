@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.nio.charset.Charset;
-
 import javax.inject.Inject;
 
 import org.junit.Before;
@@ -23,10 +22,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import ch.prevo.NodeApplication;
+import ch.prevo.pakt.PaktAdapterConfig;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = NodeApplication.class)
+@SpringBootTest(classes = PaktAdapterConfig.class)
 @WebAppConfiguration
 public class JobEndControllerTest {
 

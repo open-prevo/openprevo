@@ -54,10 +54,6 @@ docker {
     buildArgs(['NODE_JAR': "${bootJar.archiveName}", 'ADAPTER_JAR': "${project(":adapter-dummy").shadowJar.archiveName}"])
 }
 
-task buildDockerImage {
-    dependsOn docker
-}
-
 task runDbNode(dependsOn: [bootJar, project(":adapter-db").shadowJar], type: JavaExec) {
     main = '-jar'
     args "${bootJar.outputs.files.getFiles().first()}"
@@ -68,4 +64,11 @@ task runDummyNode(dependsOn: [bootJar, project(":adapter-dummy").shadowJar], typ
     main = '-jar'
     args "${bootJar.outputs.files.getFiles().first()}"
     jvmArgs "-Dloader.path=${project(':adapter-dummy').shadowJar.outputs.files.getFiles().first()}"
+}
+
+task runPaktNode(dependsOn: [bootJar, project(":adapter-pakt").shadowJar], type: JavaExec) {
+    systemProperties = System.properties
+    main = '-jar'
+    args "${bootJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-pakt').shadowJar.outputs.files.getFiles().first()}"
 }
