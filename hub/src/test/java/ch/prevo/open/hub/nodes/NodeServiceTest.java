@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeService.class, MatcherService.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -53,6 +55,8 @@ public class NodeServiceTest {
         node1 = new NodeConfiguration("https://host1", singletonList(UID1));
         node2 = new NodeConfiguration("https://host2", singletonList(UID2));
         insurantInformation = new InsurantInformation(OASI1, UID1, of(2020, 12, 15));
+        assertTrue(matcherService.employmentTerminationNotMatched(insurantInformation));
+        assertTrue(matcherService.employmentCommencementNotMatched(insurantInformation));
     }
 
     @Test
