@@ -13,7 +13,8 @@ public class TerminationMatchNotification {
     private String encryptedOasiNumber;
     private String retirementFundUid;
     private String previousRetirementFundUid;
-    private LocalDate entryDate;
+    private LocalDate commencementDate;
+    private LocalDate terminationDate;
 
     public String getEncryptedOasiNumber() {
         return encryptedOasiNumber;
@@ -39,12 +40,20 @@ public class TerminationMatchNotification {
         this.previousRetirementFundUid = previousRetirementFundUid;
     }
 
-    public LocalDate getEntryDate() {
-        return entryDate;
+    public LocalDate getCommencementDate() {
+        return commencementDate;
     }
 
-    public void setEntryDate(LocalDate entryDate) {
-        this.entryDate = entryDate;
+    public void setCommencementDate(LocalDate commencementDate) {
+        this.commencementDate = commencementDate;
+    }
+
+    public LocalDate getTerminationDate() {
+        return terminationDate;
+    }
+
+    public void setTerminationDate(LocalDate terminationDate) {
+        this.terminationDate = terminationDate;
     }
 
     @Override
@@ -53,7 +62,8 @@ public class TerminationMatchNotification {
                 .append("encryptedOasiNumber", encryptedOasiNumber)
                 .append("retirementFundUid", retirementFundUid)
                 .append("previousRetirementFundUid", previousRetirementFundUid)
-                .append("entryDate", entryDate)
+                .append("commencementDate", commencementDate)
+                .append("terminationDate", terminationDate)
                 .toString();
     }
 }

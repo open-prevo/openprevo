@@ -48,7 +48,7 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private static final int FIRST_DATA_ROW = 2;
 
-    public static final String FILE_PROPERTY = "node.adapter.excel.file";
+    public static final String FILE_PROPERTY = "node.adapter.excel.in.file";
     private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
     @Override

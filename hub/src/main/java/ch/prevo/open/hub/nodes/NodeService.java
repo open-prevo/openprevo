@@ -119,7 +119,8 @@ public class NodeService {
             matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
             matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
             matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
-            matchNotification.setEntryDate(match.getEntryDate());
+            matchNotification.setCommencementDate(match.getEntryDate());
+            matchNotification.setTerminationDate(match.getExitDate());
             return restTemplate.postForObject(nodeConfig.getCommencementMatchNotifyUrl(), matchNotification, CapitalTransferInformation.class);
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later

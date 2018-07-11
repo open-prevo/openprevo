@@ -1,12 +1,12 @@
 package ch.prevo.open.node.data.provider;
 
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.data.api.FullCommencementNotification;
+import ch.prevo.open.data.api.FullTerminationNotification;
 
 public interface MatchNotificationListener {
 
-    void handleTerminationMatch(TerminationMatchNotification notification);
+    void handleTerminationMatch(FullTerminationNotification notification);
 
-    void handleCommencementMatch(CommencementMatchNotification notification);
+    void handleCommencementMatch(FullCommencementNotification notification);
 
 }
