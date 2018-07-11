@@ -46,6 +46,8 @@ task ciIntegrationTesting(type: GradleBuild) {
     }
 }
 
-task integrationTest(dependsOn: project(':adapter-dummy').assemble, type: Test) {
+task integrationTest(type: Test) {
     include 'ch/prevo/open/hub/integration/**'
 }
+
+integrationTest.dependsOn { project(":node").tasks.docker }
