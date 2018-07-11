@@ -56,23 +56,23 @@ Since we're operating on very sensitive information, security is an important as
 
 ==== Authentication
 
-In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one VE (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won't implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.
+In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won't implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.
 
 ==== Asymmetric Encryption
 
 To encrypt the data asymmetrically, we're using the **RSA** algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair.
 
-The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a VEs environment.
+The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a RFs environment.
 
 NOTE: Depending on the amount of data we need to encrypt, we might have to use symmetrical encryption for the data and exchange the symmetric key via RSA. This will be decided depending on the attributes to use for the matching.
 
 ==== Public Key Registry
 
-Every VE needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every VE.
+Every RF needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every RF.
 
 ==== Hashing
 
-According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a VE is responsible for sending us only a _hash_ of their data.
+According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a _hash_ of their data.
 
 === Legal compliance
 
