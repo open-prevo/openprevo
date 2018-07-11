@@ -4,6 +4,7 @@ import ch.prevo.open.encrypted.model.InsurantInformation;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 @Service
 public class MatcherService {
 
-    private final List<InsurantInformation> matchedEmploymentCommencements = new ArrayList<>();
-    private final List<InsurantInformation> matchedEmploymentTerminations = new ArrayList<>();
+    private final List<InsurantInformation> matchedEmploymentCommencements = Collections.synchronizedList(new ArrayList<>());
+    private final List<InsurantInformation> matchedEmploymentTerminations = Collections.synchronizedList(new ArrayList<>());
 
     public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
         List<Match> matches = new ArrayList<>();
