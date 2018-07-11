@@ -26,7 +26,7 @@ Potentially more columns in case you need translations.
 [options="header"]
 |===
 | acronym | English | Deutsch| Française | Italiano |
-| https://www.ch.ch/en/ahv/[OASI] | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (AHV) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
+| https://www.ch.ch/en/ahv/[OASI] | **O**ld-**a**ge and **s**urvivor's **i**nsurance | Alters- und Hinterlassenenversicherung (https://www.bsv.admin.ch/bsv/de/home/sozialversicherungen/ahv/grundlagen-gesetze/ahv-nummer.html[AHV]) | Assurance-vieillesse et survivants (AVS) | Assicurazione vecchiaia e superstiti (AVS) |
 | https://www.bsv.admin.ch/bsv/de/home/glossar/auffangeinrichtung.html[AF] | **A**uxiliary **f**und | Auffangeinrichtung | Institution supplétive | Istituto Collettore |
 |  | Benefits | Leistungen | Prestations | Prestazioni |
 | https://www.admin.ch/opc/de/classified-compilation/19820152/index.html[BVG] |  | **B**erufliche **V**orsorge **G**esetz | Loi fédérale sur la prévoyance professionnelle vieillesse, survivants et invalidité  (LPP) | Legge federale sulla previdenza professionale per la vecchiaia, i superstiti e l'invalidità (LPP) |
@@ -35,6 +35,7 @@ Potentially more columns in case you need translations.
 | CO | **C**ompensation **O**ffice | Ausgleichskasse | Caisse de compensation | Cassa di compensazione |
 | COE | **C**ommencement **o**f **E**mployment | Diensteintritt | Entrée en service | Entrata in servizio |
 | EC | **E**mployer **C**hange | Stellenwechsel |  |  |
+| EDI |  | Eidgenössische Departement des Innern | Le Département fédéral de l'intérieur (DFI) | Dipartimento federale dell'interno (DFI) |
 | https://de.wikipedia.org/wiki/Einzahlungsschein_mit_Referenznummer[ESR] | inpayment slip with reference number (ISR) | **E**inzahlungs**s**chein mit **R**eferenznummer | bulletin de versement avec numéro de référence (BVR) | bollettino di versamento con numero di riferimento (BVR) |
 | https://www.admin.ch/opc/de/classified-compilation/19930375/index.html[FZG] | Federal law on vested benefits | **F**rei**z**ügigkeits**g**esetz | Loi sur le libre passage (LFLP) | Legge sul libero passaggio (LFLP) |
 | https://www.bfs.admin.ch/bfs/en/home/statistics/social-security/occupational-pension-plans.html[OPP] | **O**ccupational **p**ension **p**lan | Berufliche Vorsorge (BV) | Prévoyance professionelle (PP) | Previdenza professionale (PP) |

@@ -56,7 +56,7 @@ Since we're operating on very sensitive information, security is an important as
 
 ==== Authentication
 
-In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won't implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.
+We need end-to-end encryption: as an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won't implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.
 
 ==== Asymmetric Encryption
 
@@ -78,24 +78,24 @@ According to data protection guidelines in Switzerland we are not allowed to rea
 
 ==== FZG background
 
-The old / previous retirement fund is legally obligated to transfer the FZL to the new / next retirement fund.
+===== The old / previous retirement fund is legally obligated to transfer the FZL to the new / next retirement fund.
 
 .Übertragung an die neue Vorsorgeeinrichtung
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a3[Artikel 3 Absatz 1]']     
 Treten Versicherte in eine neue Vorsorgeeinrichtung ein, so hat die frühere Vorsorgeeinrichtung die Austrittsleistung an die neue zu überweisen.
 
-The insured person has no choice: only if no new retirement fund is available he has a choice.
+===== The insured person has no choice: only if no new retirement fund is available he has a choice.
 
 .Erhaltung des Vorsorgeschutzes in anderer Form
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a4[Artikel 4 Absatz 1]']     
 Versicherte, die nicht in eine neue Vorsorgeeinrichtung eintreten, haben ihrer Vorsorgeeinrichtung mitzuteilen, in welcher zulässigen Form sie den Vorsorgeschutz erhalten wollen.
 
-When entering a new retirement fund the FZE has to transfer the vested benefits to the new retirement fund.
+===== When entering a new retirement fund the FZE has to transfer the vested benefits to the new retirement fund.
 
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a4[Artikel 4 Absatz 2bis]']     
 Treten die Versicherten in eine neue Vorsorgeeinrichtung ein, so müssen die Freizügigkeitseinrichtungen das Vorsorgekapital für die Erhaltung des Vorsorgeschutzes der neuen Vorsorgeeinrichtung überweisen.
 
-The new retirement fund is allowed to claim the FZL from the previous retirment fund.
+===== The new retirement fund is allowed to claim the FZL from the previous retirment fund.
 
 .Recht auf Einsicht und Einforderung
 [quote, Freizügigkeitsgesetz, 'https://www.admin.ch/opc/de/classified-compilation/19930375/index.html#a11[Artikel 11 Absatz 2]']     
@@ -103,11 +103,37 @@ Die Vorsorgeeinrichtung kann die Austrittsleistung aus dem früheren Vorsorgever
 
 ==== BVG background
 
-Neutral institutions assigned with tasks (performing, controlling, supervision) related to the federal BVG law are allowed to process the necessary data.
+===== Neutral institutions assigned with tasks (performing, controlling, supervision) related to the federal BVG law are allowed to process the necessary data.
 
 .Datenbekanntgabe 
 [quote, Berufliche Vorsorge Gesetz, 'https://www.admin.ch/opc/de/classified-compilation/19820152/index.html#a86a[Artikel 86a Abschnitt g/a]']     
 Sofern kein überwiegendes Privatinteresse entgegensteht, dürfen Daten bekannt gegeben werden an a. andere mit der Durchführung sowie der Kontrolle oder der Beaufsichtigung der Durchführung dieses Gesetzes betrauten Organe, wenn sie für die Erfüllung der ihnen nach diesem Gesetz übertragenen Aufgaben erforderlich sind;
+
+==== "Verordnung des EDI" background: Usage of OASI numbers
+
+===== We process OASI numbers in a systematic way without mutations, hence this by-law is applicable for OpenPrevo.
+
+.Geltungsbereich
+[quote, Verordnung des EDI, 'https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#a2[Artikel 2 Absatz 2]']     
+Für die systematische Verwendung der Versichertennummer in Datensammlungen, in denen keinerlei Mutationen im Zusammenhang mit der Versichertennummer vorgenommen werden, sind nur die Bestimmungen nach den Artikeln 6-8 anwendbar.
+
+===== Risk analysis and minimal security requirements 
+
+.Massnahmen zum Schutz vor missbräuchlicher Verwendung - Grundsätze
+[quote, Verordnung des EDI, 'https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#a6[Artikel 6 Absatz 2 und 3]']     
+2) Wird die Versichertennummer in komplexen Systemen systematisch verwendet, so sind die nötigen Schutzmassnahmen gestützt auf eine detaillierte Risikoanalyse zu treffen. Die Analyse hat insbesondere dem Risiko einer unerlaubten Zusammenführung von Datensammlungen Rechnung zu tragen. 3) Beim Betrieb von Informatikmitteln und Datenspeichern sind die minimalen Sicherheitsvorgaben nach Anhang 2 einzuhalten.
+
+===== Transferred data in public IT infrastructure has to be encrypted.
+
+.Massnahmen zum Schutz vor missbräuchlicher Verwendung - Datenübertragung über öffentliche Netze
+[quote, Verordnung des EDI, 'https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#a7[Artikel 7]']     
+Werden Datensammlungen mit Datensätzen, welche die Versichertennummer enthalten, über ein öffentliches Netz übertragen, so sind sie nach dem Stand der Technik zu verschlüsseln.
+
+===== Encrypted access only for authenticated and authorized partners with active auditing of activities and events
+
+.Minimale Sicherheitsvorgaben für den Betrieb von Informatikmitteln und Datenspeichern, die bei der systematischen Verwendung der Versichertennummern eingesetzt werden
+[quote, Verordnung des EDI, 'https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#app2ahref0[Anhang 2]']     
+1) [...] Beim Einsatz mobiler Informatikmittel und Datenspeicher muss mit Hilfe von dem Stand der Technik entsprechenden kryptografischen Verfahren (Datenverschlüsselung) sichergestellt sein, dass die Nutzung bzw. der Zugriff für Unberechtigte nicht möglich ist. 2) Der Zugriff auf Informatikmittel und Datenspeicher muss mit Hilfe von angemessenen, dem Stand der Technik und der Risikolage entsprechenden Informatiksicherheitsmassnahmen geschützt sein. [...] 3) Benutzer und Benutzerinnen, die auf Informatikmittel und Datenspeicher zugreifen, müssen authentifiziert werden. [...] 5) Auf Informatiksystemen sind wichtige Aktivitäten und Ereignisse aufzuzeichnen und regelmässig auszuwerten. [...]
 
 === _<Concept n>_
 
