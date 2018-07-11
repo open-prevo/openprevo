@@ -67,5 +67,11 @@ task runDbNode(dependsOn: [bootJar, project(":adapter-db").shadowJar], type: Jav
 task runDummyNode(dependsOn: [bootJar, project(":adapter-dummy").shadowJar], type: JavaExec) {
     main = '-jar'
     args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-dummy').shadowJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-dummy').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8881"
+}
+
+task runExcelNode(dependsOn: [bootJar, project(":adapter-excel").shadowJar], type: JavaExec) {
+    main = '-jar'
+    args "${bootJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-excel').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8882"
 }

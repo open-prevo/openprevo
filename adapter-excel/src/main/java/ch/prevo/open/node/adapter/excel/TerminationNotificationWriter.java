@@ -28,6 +28,7 @@ public class TerminationNotificationWriter implements Closeable {
     private final Workbook workbook;
     private final Sheet sheet;
     private final CellStyle headingStyle;
+    private final CellStyle dateStyle;
 
     public TerminationNotificationWriter() {
         this.workbook = new XSSFWorkbook();
@@ -40,6 +41,10 @@ public class TerminationNotificationWriter implements Closeable {
         this.headingStyle = workbook.createCellStyle();
         headingStyle.setFont(font);
 
+        this.dateStyle = workbook.createCellStyle();
+        final short shortDateFormat = workbook.getCreationHelper().createDataFormat().getFormat("d-mmm-yy");
+        dateStyle.setDataFormat(shortDateFormat);
+
         addHeadingRow();
     }
 
@@ -48,10 +53,14 @@ public class TerminationNotificationWriter implements Closeable {
 
         final JobInfo jobInfo = notification.getJobStart().getJobInfo();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());
-        row.createCell(1).setCellValue(convert(jobInfo.getDate()));
+        final Cell commencementDate = row.createCell(1);
+        commencementDate.setCellValue(convert(jobInfo.getDate()));
+        commencementDate.setCellStyle(dateStyle);
         row.createCell(2).setCellValue(jobInfo.getRetirementFundUid());
         row.createCell(3).setCellValue(jobInfo.getInternalReferenz());
-        row.createCell(4).setCellValue(convert(notification.getTerminationDate()));
+        final Cell terminationDate = row.createCell(4);
+        terminationDate.setCellValue(convert(notification.getTerminationDate()));
+        terminationDate.setCellStyle(dateStyle);
         row.createCell(5).setCellValue(notification.getPreviousRetirementFundUid());
     }
 

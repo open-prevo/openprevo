@@ -30,6 +30,7 @@ public class CommencementNotificationWriter implements Closeable {
     private final Workbook workbook;
     private final Sheet sheet;
     private final CellStyle headingStyle;
+    private final CellStyle dateStyle;
 
     public CommencementNotificationWriter() {
         this.workbook = new XSSFWorkbook();
@@ -42,6 +43,10 @@ public class CommencementNotificationWriter implements Closeable {
         this.headingStyle = workbook.createCellStyle();
         headingStyle.setFont(font);
 
+        this.dateStyle = workbook.createCellStyle();
+        final short shortDateFormat = workbook.getCreationHelper().createDataFormat().getFormat("d-mmm-yy");
+        dateStyle.setDataFormat(shortDateFormat);
+
         addHeadingRow();
     }
 
@@ -52,10 +57,14 @@ public class CommencementNotificationWriter implements Closeable {
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());
-        row.createCell(1).setCellValue(convert(jobInfo.getDate()));
+        final Cell terminationDate = row.createCell(1);
+        terminationDate.setCellValue(convert(jobInfo.getDate()));
+        terminationDate.setCellStyle(dateStyle);
         row.createCell(2).setCellValue(jobInfo.getRetirementFundUid());
         row.createCell(3).setCellValue(jobInfo.getInternalReferenz());
-        row.createCell(4).setCellValue(convert(notification.getCommencementDate()));
+        final Cell commencementDate = row.createCell(4);
+        commencementDate.setCellValue(convert(notification.getCommencementDate()));
+        commencementDate.setCellStyle(dateStyle);
         row.createCell(5).setCellValue(notification.getNewRetirementFundUid());
         row.createCell(6).setCellValue(transferInformation.getName());
         row.createCell(7).setCellValue(transferInformation.getAdditionalName());
