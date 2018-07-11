@@ -2314,17 +2314,17 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 <div class="sect3">
 <h4 id="_general_overview"><a class="anchor" href="#_general_overview"></a>3.1.1. General Overview</h4>
 <div class="paragraph">
-<p>The following graphic depicts 4 different examples how different VEs could potentially interact with our platform (OpenPrevo HUB).</p>
+<p>The following graphic depicts 4 different examples how different RFs could potentially interact with our platform (OpenPrevo Hub).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/open_prevo_business_context.png" alt="Business Context">
+<img src="images/businessContext.svg" alt="Business Context">
 </div>
 <div class="title">Figure 1. OpenPrevo Business Context</div>
 </div>
 <div class="paragraph">
 <p>The following table explains the graphic above in more detail. All the different interfaces used for the communication between the different systems, would be
-pre-defined REST interfaces. Therefore a VE can implement their system independent of any programming language / framework. Every time the platform informs a VE about a match, it would send the payment information to the VE so that they have all information needed to transfer the money.</p>
+pre-defined REST interfaces. Therefore a RF can implement their system independent of any programming language / framework. Every time the platform informs a RF about a match, it would send the payment information to the RF so that they have all information needed to transfer the money.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. OpenPrevo Business Context</caption>
@@ -2340,42 +2340,42 @@ pre-defined REST interfaces. Therefore a VE can implement their system independe
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo HUB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The HUB knows all different VEs which are registered on the platform and it is aware of their matching strategies. It is responsible for the matching.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo Hub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Hub knows all different RFs which are registered on the platform and it is aware of their matching strategies. It is responsible for the matching.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EX1 / VE1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The first and most likely the default strategy would be, that the VE provides the data of people leaving or entering this VE. The platform fetches
-the data in regular intervals and matches it. The VE will be informed about the matches. Every match must be notified only once.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EX1 / RF1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The first and most likely the default strategy would be, that the RF provides the data of people leaving or entering this RF. The platform fetches
+the data in regular intervals and matches it. The RF will be informed about the matches. Every match must be notified only once.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EX2 / VE2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If the VE does not want to provide an interface, it can also push the data into the platform and the platform stores the data. The platform still
-performs regularly its matching. The VE can consume the current matches via an API.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EX2 / RF2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the RF does not want to provide an interface, it can also push the data into the platform and the platform stores the data. The platform still
+performs regularly its matching. The RF can consume the current matches via an API.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EX3 / VE3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Another strategy would be that the VE itself does the matching. Therefore the platform would ask the VE for matches during the execution of the matching. On the other hand the VE can also ask the platform for matches, e.g. when a new person enters into their system. Also here the platform would notify
-the VE if there is a match and provide the payment information. The goal of this strategy would be that the data never leaves the VE.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EX3 / RF3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Another strategy would be that the RF itself does the matching. Therefore the platform would ask the RF for matches during the execution of the matching. On the other hand the RF can also ask the platform for matches, e.g. when a new person enters into their system. Also here the platform would notify
+the RF if there is a match and provide the payment information. The goal of this strategy would be that the data never leaves the RF.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EX4 / VE4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">There might be even the case that a VE wants to manually enter the data on the platform. This would most likely be a web application. The application would also display all matches for the entered data.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EX4 / RF4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">There might be even the case that a RF wants to manually enter the data on the platform. This would most likely be a web application. The application would also display all matches for the entered data.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>To limit the information that will be exchanged between the different VEs and the platform, every VE needs to provide a unique identifier (UID) for each person. In the case of a match the platform would then only inform the VE that we found a match for a certain UID and how the money needs to be transferred to the new VE.</p>
+<p>To limit the information that will be exchanged between the different RFs and the platform, every RF needs to provide a unique identifier (UID) for each person. In the case of a match the platform would then only inform the RF that we found a match for a certain UID and how the money needs to be transferred to the new RF.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_mvp_business_context"><a class="anchor" href="#_mvp_business_context"></a>3.1.2. MVP Business Context</h4>
 <div class="paragraph">
-<p>To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/VE1), but we&#8217;ll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we&#8217;ll provide a simple implementation which could potentially be used by a small VE.</p>
+<p>To limit the scope for the MVP, we decided to implement the following solution. There will be only one of the above mentioned strategies (EX1/RF1), but we&#8217;ll provide two different implementations. One of the implementation would integrate with the PAKT system and on the other hand we&#8217;ll provide a simple implementation which could potentially be used by a small RF.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/open_prevo_mvp_business_context.png" alt="MVP Business Context">
+<img src="images/mvpBusinessContext.svg" alt="MVP Business Context">
 </div>
 <div class="title">Figure 2. OpenPrevo MVP Business Context</div>
 </div>
@@ -2393,20 +2393,20 @@ the VE if there is a match and provide the payment information. The goal of this
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo HUB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The HUB fetches the data of the different VEs and is responsible for the matching.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo Hub</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Hub fetches the data of the different RFs and is responsible for the matching.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PAKT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"Personen Applikation Kollektiv" which is used by different VEs to manage their customers. The DA / DE will be extracted from the system and stored in a database that can be consumed by the OpenPrevo Client.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Personen Applikation Kollektiv" which is used by different RFs to manage their customers. The TOE / COE will be extracted from the system and stored in a database that can be consumed by the OpenPrevo Client.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo Client</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An implementation of the API that can be consumed by the OpenPrevo HUB. The client should be able to consume different data storages like e.g. a database or an Excel file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPrevo Node</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An implementation of the API that can be consumed by the OpenPrevo Hub. The node should be able to consume different data storages like e.g. a database or an Excel file.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Excel File</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Could be a simple data exchange format for a small VE, if they&#8217;re not able to provide an integration into their system.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Could be a simple data exchange format for a small RF, if they&#8217;re not able to provide an integration into their system.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2902,7 +2902,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/matchFlow.png" alt="Match Flow sequence diagram">
+<img src="images/matchFlow.svg" alt="Match Flow sequence diagram">
 </div>
 <div class="title">Figure 3. OpenPrevo high-level MatchFlow sequence diagram</div>
 </div>
@@ -3219,7 +3219,7 @@ on this list.</p>
 <div class="sect3">
 <h4 id="_authentication"><a class="anchor" href="#_authentication"></a>8.1.1. Authentication</h4>
 <div class="paragraph">
-<p>In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one VE (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won&#8217;t implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.</p>
+<p>In a later stage of the product, we need end-to-end encryption. As an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won&#8217;t implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3228,7 +3228,7 @@ on this list.</p>
 <p>To encrypt the data asymmetrically, we&#8217;re using the <strong>RSA</strong> algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair.</p>
 </div>
 <div class="paragraph">
-<p>The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a VEs environment.</p>
+<p>The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a RFs environment.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3246,13 +3246,13 @@ Depending on the amount of data we need to encrypt, we might have to use symmetr
 <div class="sect3">
 <h4 id="_public_key_registry"><a class="anchor" href="#_public_key_registry"></a>8.1.3. Public Key Registry</h4>
 <div class="paragraph">
-<p>Every VE needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every VE.</p>
+<p>Every RF needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every RF.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_hashing"><a class="anchor" href="#_hashing"></a>8.1.4. Hashing</h4>
 <div class="paragraph">
-<p>According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a VE is responsible for sending us only a <em>hash</em> of their data.</p>
+<p>According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a <em>hash</em> of their data.</p>
 </div>
 </div>
 </div>
@@ -3777,7 +3777,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-10 14:38:48 UTC
+Last updated 2018-07-11 06:02:21 UTC
 </div>
 </div>
 </body>
