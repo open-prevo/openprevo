@@ -33,8 +33,8 @@ import static org.mockito.Mockito.when;
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
-    private static final String UID1 = "CHE-223.471.073";
-    private static final String UID2 = "CHE-109.723.097";
+    private static final String UID1_OLD = "CHE-223.471.073";
+    private static final String UID2_NEW = "CHE-109.723.097";
 
     @Inject
     private NodeService nodeService;
@@ -46,40 +46,42 @@ public class NodeServiceTest {
     @MockBean
     private NodeRegistry nodeRegistry;
 
-    private NodeConfiguration node1;
-    private NodeConfiguration node2;
-    private InsurantInformation insurantInformation;
+    private NodeConfiguration node1_new;
+    private NodeConfiguration node2_old;
+    private InsurantInformation terminationInsurantInfo;
+    private InsurantInformation commencementInsurantInfo;
 
     @Before
     public void setUp() {
-        node1 = new NodeConfiguration("https://host1", singletonList(UID1));
-        node2 = new NodeConfiguration("https://host2", singletonList(UID2));
-        insurantInformation = new InsurantInformation(OASI1, UID1, of(2020, 12, 15));
-        assertTrue(matcherService.employmentTerminationNotMatched(insurantInformation));
-        assertTrue(matcherService.employmentCommencementNotMatched(insurantInformation));
+        node1_new = new NodeConfiguration("https://host1", singletonList(UID1_OLD));
+        node2_old = new NodeConfiguration("https://host2", singletonList(UID2_NEW));
+        terminationInsurantInfo = new InsurantInformation(OASI1, UID1_OLD, of(2020, 12, 15));
+        commencementInsurantInfo = new InsurantInformation(OASI1, UID2_NEW, of(2021, 2, 1));
+        assertTrue(matcherService.employmentTerminationNotMatched(terminationInsurantInfo));
+        assertTrue(matcherService.employmentCommencementNotMatched(terminationInsurantInfo));
     }
 
     @Test
     public void currentEmploymentTerminations() {
-        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
-        when(nodeCaller.getInsurantInformationList(node1.getJobExitsUrl()))
-                .thenReturn(singletonList(insurantInformation));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1_new));
+        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+                .thenReturn(singletonList(terminationInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
 
         assertEquals(1, insurantInformations.size());
-        assertEquals(insurantInformation, insurantInformations.iterator().next());
+        assertEquals(terminationInsurantInfo, insurantInformations.iterator().next());
     }
 
     @Test
     public void testFilterOfInvalidInsurantInformation() {
         // given
         InsurantInformation invalidInsurant = new InsurantInformation(OASI1, "RandomUID");
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
-        when(nodeCaller.getInsurantInformationList(node2.getJobExitsUrl()))
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2_old, node1_new));
+        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
                 .thenReturn(singletonList(invalidInsurant));
-        when(nodeCaller.getInsurantInformationList(node1.getJobExitsUrl()))
-                .thenReturn(singletonList(insurantInformation));
+        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+                .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
         Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
@@ -93,11 +95,11 @@ public class NodeServiceTest {
     @Test
     public void tryGetCurrentCurrentEmploymentTerminationsWithUnreachableNode() {
         // given
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2, node1));
-        when(nodeCaller.getInsurantInformationList(node2.getJobExitsUrl()))
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2_old, node1_new));
+        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
                 .thenReturn(emptyList());
-        when(nodeCaller.getInsurantInformationList(node1.getJobExitsUrl()))
-                .thenReturn(singletonList(insurantInformation));
+        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+                .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
         Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
@@ -109,45 +111,43 @@ public class NodeServiceTest {
 
     @Test
     public void currentEmploymentCommencements() {
-        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1));
-        when(nodeCaller.getInsurantInformationList(node1.getJobEntriesUrl()))
-                .thenReturn(singletonList(insurantInformation));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node2_old));
+        when(nodeCaller.getInsurantInformationList(node2_old.getJobEntriesUrl()))
+                .thenReturn(singletonList(commencementInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
 
         assertEquals(1, insurantInformations.size());
-        assertEquals(insurantInformation, insurantInformations.iterator().next());
+        assertEquals(commencementInsurantInfo, insurantInformations.iterator().next());
     }
 
     @Test
     public void notifyMatch() {
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
 
         CapitalTransferInformation transferInformation = new CapitalTransferInformation();
-        when(nodeCaller.postCommencementNotification(eq(node2.getCommencementMatchNotifyUrl()), any()))
+        when(nodeCaller.postCommencementNotification(eq(node2_old.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 
         // when
         LocalDate entryDate = of(2018, 7, 1);
         LocalDate exitDate = of(2018, 6, 30);
         nodeService.notifyMatches(
-                singletonList(new Match(OASI1, UID1, UID2, entryDate, exitDate)));
+                singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate)));
 
         // then
-        CommencementMatchNotification matchNotification = new CommencementMatchNotification(OASI1, UID1, UID2, entryDate, exitDate, transferInformation);
-        verify(nodeCaller).postTerminationNotification(eq(node1.getTerminationMatchNotifyUrl()), eq(matchNotification));
+        CommencementMatchNotification matchNotification = new CommencementMatchNotification(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
+        verify(nodeCaller).postTerminationNotification(eq(node1_new.getTerminationMatchNotifyUrl()), eq(matchNotification));
     }
 
 
     @Test
     public void testIgnoringAlreadyMatchedEmploymentTerminations() {
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        InsurantInformation entry = this.insurantInformation;
-        InsurantInformation exit = new InsurantInformation(OASI1, UID2, of(2018, 6, 30));
-        matcherService.findMatches(singleton(exit), singleton(entry));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
+        matcherService.findMatches(singleton(terminationInsurantInfo), singleton(commencementInsurantInfo));
 
-        when(nodeCaller.getInsurantInformationList(node2.getJobExitsUrl()))
-                .thenReturn(singletonList(exit));
+        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
+                .thenReturn(singletonList(terminationInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
 
@@ -156,13 +156,11 @@ public class NodeServiceTest {
 
     @Test
     public void testIgnoringAlreadyMatchedEmploymentCommencements() {
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        InsurantInformation entry = this.insurantInformation;
-        InsurantInformation exit = new InsurantInformation(OASI1, UID2, of(2018, 6, 30));
-        matcherService.findMatches(singleton(exit), singleton(entry));
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
+        matcherService.findMatches(singleton(terminationInsurantInfo), singleton(commencementInsurantInfo));
 
-        when(nodeCaller.getInsurantInformationList(node1.getJobEntriesUrl()))
-                .thenReturn(singletonList(entry));
+        when(nodeCaller.getInsurantInformationList(node1_new.getJobEntriesUrl()))
+                .thenReturn(singletonList(commencementInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
 
@@ -172,11 +170,11 @@ public class NodeServiceTest {
     @Test
     public void testNotificationForUnreachableNodes() {
         // given
-        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1, node2));
-        when(nodeCaller.postCommencementNotification(eq(node2.getCommencementMatchNotifyUrl()), any())).thenReturn(null);
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
+        when(nodeCaller.postCommencementNotification(eq(node1_new.getCommencementMatchNotifyUrl()), any())).thenReturn(null);
 
         // when
-        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, of(2018, 7, 1), of(2018, 6, 30))));
+        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, commencementInsurantInfo.getDate(), terminationInsurantInfo.getDate())));
 
         // then
         // TODO: fix and activate; we should not notify without the Transfer info
@@ -186,6 +184,6 @@ public class NodeServiceTest {
     private void assertEqualsToTestdata(Set<InsurantInformation> insurantInformations) {
         InsurantInformation insurantInformation = insurantInformations.iterator().next();
         assertEquals(OASI1, insurantInformation.getEncryptedOasiNumber());
-        assertEquals(UID1, insurantInformation.getRetirementFundUid());
+        assertEquals(UID1_OLD, insurantInformation.getRetirementFundUid());
     }
 }
