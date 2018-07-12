@@ -1,35 +1,55 @@
 package ch.prevo.open.node.data.provider.dummy;
 
+import ch.prevo.open.data.api.FullCommencementNotification;
+import ch.prevo.open.data.api.FullTerminationNotification;
+import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 
 import java.io.PrintWriter;
 
 class NotificationWriter {
 
-    void write(PrintWriter writer, TerminationMatchNotification matchNotification) {
-        writer.println("---------------------------------------");
+    void write(PrintWriter writer, FullTerminationNotification notification) {
+
+        writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment commencement: ");
-        writer.println();
-        writer.println("OASI number:                  " + matchNotification.getEncryptedOasiNumber());
-        writer.println("Previous retirement fund:     " + matchNotification.getPreviousRetirementFundUid());
-        writer.println("Employment commencement date: " + matchNotification.getEntryDate());
-        writer.println();
-        writer.println("The previous retirement fund will receive a notification with capital transfer details.");
+
+        final JobInfo jobInfo = notification.getJobStart().getJobInfo();
+        if (jobInfo != null) {
+            writer.println("\nMy data (employment commencement)");
+            writer.println("OASI number:                  " + jobInfo.getOasiNumber());
+            writer.println("Employment commencement date: " + jobInfo.getDate());
+            writer.println("Internal Reference:           " + jobInfo.getInternalReferenz());
+            writer.println("Retirement fund:              " + jobInfo.getRetirementFundUid());
+        }
+
+        writer.println("\nOther data (employment termination)");
+        writer.println("Previous retirement fund:     " + notification.getPreviousRetirementFundUid());
+        writer.println("Employment termination date:  " + notification.getTerminationDate());
+
+        writer.println("\nThe previous retirement fund will receive a notification with capital transfer details.");
+
         writer.flush();
     }
 
-    void write(PrintWriter writer, CommencementMatchNotification matchNotification) {
-        writer.println("---------------------------------------");
+    void write(PrintWriter writer, FullCommencementNotification notification) {
+        writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment termination");
-        writer.println();
-        writer.println("OASI number:                 " + matchNotification.getEncryptedOasiNumber());
-        writer.println("Employment termination date: " + matchNotification.getTerminationDate());
-        writer.println("New retirmeent fund:         " + matchNotification.getNewRetirementFundUid());
-        writer.println();
+
+        final JobInfo jobInfo = notification.getJobEnd().getJobInfo();
+        if (jobInfo != null) {
+            writer.println("\nMy data (employment termination)");
+            writer.println("OASI number:                 " + jobInfo.getOasiNumber());
+            writer.println("Employment termination date: " + jobInfo.getDate());
+            writer.println("Internal Reference:          " + jobInfo.getInternalReferenz());
+            writer.println("Retirement fund:             " + jobInfo.getRetirementFundUid());
+        }
+
+        writer.println("\nOther data (employment commencement)");
+        writer.println("New retirement fund:           " + notification.getNewRetirementFundUid());
+        writer.println("Employment commencement date:  " + notification.getCommencementDate());
         writer.println("Capital transfer information");
-        final CapitalTransferInformation transferInformation = matchNotification.getTransferInformation();
+        final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         if (transferInformation != null) {
             writer.println("Name:                 " + transferInformation.getName());
             writer.println("Additional name:      " + transferInformation.getAdditionalName());
@@ -40,6 +60,7 @@ class NotificationWriter {
                         + transferInformation.getAddress().getCity());
             }
         }
+
         writer.flush();
     }
 }

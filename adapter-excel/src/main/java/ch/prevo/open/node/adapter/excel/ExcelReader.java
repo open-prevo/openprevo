@@ -17,10 +17,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Service
 public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private static Logger LOG = LoggerFactory.getLogger(ExcelReader.class);
@@ -48,7 +48,7 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private static final int FIRST_DATA_ROW = 2;
 
-    public static final String FILE_PROPERTY = "node.adapter.excel.file";
+    public static final String FILE_PROPERTY = "node.adapter.excel.in.file";
     private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
     @Override
@@ -78,25 +78,20 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
     }
 
     private Workbook getWorkbook() {
-        final File file = new File(getFile());
-
-        final Workbook wb;
         try {
-            wb = WorkbookFactory.create(file, null, true);
+            final InputStream inputStream = getFileInput();
+            return WorkbookFactory.create(inputStream);
         } catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
             LOG.error("An exception occurred while trying to get the workbook", e);
             return null;
         }
-
-        return wb;
     }
 
-    private String getFile() {
-        String excelFilePath = System.getProperty(FILE_PROPERTY);
-        if (excelFilePath == null) {
-            excelFilePath = ClassLoader.getSystemResource(FALLBACK_FILE).getFile();
-        }
-        return excelFilePath;
+    private InputStream getFileInput() throws FileNotFoundException {
+        final String excelFilePath = System.getProperty(FILE_PROPERTY);
+        return excelFilePath != null ?
+                new FileInputStream(excelFilePath)
+                : ExcelReader.class.getClassLoader().getResourceAsStream(FALLBACK_FILE);
     }
 
     private <T> List<T> mapRows(Sheet sheet, Function<Row, Optional<T>> rowMapper) {

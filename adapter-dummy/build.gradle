@@ -3,7 +3,6 @@ buildscript {
         shadowPluginVersion = '2.0.4'
     }
     repositories {
-        mavenCentral()
         jcenter()
     }
     dependencies {

@@ -149,7 +149,8 @@ public class NodeCallerTest {
     private TerminationMatchNotification createTerminationMatchNotification() {
         TerminationMatchNotification terminationMatchNotification = new TerminationMatchNotification();
         terminationMatchNotification.setEncryptedOasiNumber(OASI1);
-        terminationMatchNotification.setEntryDate(of(2018, 7, 1));
+        terminationMatchNotification.setCommencementDate(of(2018, 7, 1));
+        terminationMatchNotification.setTerminationDate(of(2018, 6, 30));
         terminationMatchNotification.setPreviousRetirementFundUid(UID1);
         terminationMatchNotification.setRetirementFundUid(UID2);
         return terminationMatchNotification;
