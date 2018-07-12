@@ -1,12 +1,19 @@
-version '0.0.1-SNAPSHOT'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version = '0.0.1-SNAPSHOT'
+
+// only create the fat jar
+jar.enabled = false
+build.dependsOn(shadowJar)
 
 dependencies {
-    compile(project(":node"))
     compile(project(":data-model"))
 
+    compile('org.slf4j:slf4j-api')
     compile("org.apache.poi:poi")
     compile("org.apache.poi:poi-ooxml")
     compile("org.apache.poi:poi-ooxml-schemas")
 
     testCompile("junit:junit")
+    testCompile("org.assertj:assertj-core")
 }

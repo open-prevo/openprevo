@@ -1,11 +1,11 @@
 package ch.prevo.open.node.data.provider;
 
+import ch.prevo.open.data.api.FullCommencementNotification;
+import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.data.api.JobEnd;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.data.api.JobStart;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -41,12 +41,12 @@ public class MockProvider implements JobEndProvider, JobStartProvider, MatchNoti
     }
 
     @Override
-    public void handleTerminationMatch(TerminationMatchNotification notification) {
+    public void handleTerminationMatch(FullTerminationNotification notification) {
 
     }
 
     @Override
-    public void handleCommencementMatch(CommencementMatchNotification notification) {
+    public void handleCommencementMatch(FullCommencementNotification notification) {
 
     }
 }

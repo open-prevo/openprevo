@@ -46,7 +46,8 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
         commencementMatchNotification.setEncryptedOasiNumber("756.1234.5678.97");
         commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
-        commencementMatchNotification.setEntryDate(LocalDate.of(2018, 7, 1));
+        commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));
+        commencementMatchNotification.setTerminationDate(LocalDate.of(2018, 6, 30));
 
         // when
         mockMvc.perform(post("/commencement-match-notification")

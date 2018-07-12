@@ -104,7 +104,8 @@ public class NodeService {
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
-        matchNotification.setEntryDate(match.getEntryDate());
+        matchNotification.setCommencementDate(match.getEntryDate());
+        matchNotification.setTerminationDate(match.getExitDate());
         return nodeCaller.postCommencementNotification(nodeConfig.getCommencementMatchNotifyUrl(), matchNotification);
     }
 

@@ -1,7 +1,7 @@
 package ch.prevo.open.node.data.provider.dummy;
 
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.data.api.FullCommencementNotification;
+import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 
 import java.io.PrintWriter;
@@ -12,12 +12,12 @@ public class DefaultMatchNotificationListener implements MatchNotificationListen
     private final NotificationWriter notificationWriter = new NotificationWriter();
 
     @Override
-    public void handleTerminationMatch(TerminationMatchNotification notification) {
+    public void handleTerminationMatch(FullTerminationNotification notification) {
         notificationWriter.write(writer, notification);
     }
 
     @Override
-    public void handleCommencementMatch(CommencementMatchNotification notification) {
+    public void handleCommencementMatch(FullCommencementNotification notification) {
         notificationWriter.write(writer, notification);
     }
 }
