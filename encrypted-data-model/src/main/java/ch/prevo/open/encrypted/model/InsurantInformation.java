@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.apache.commons.lang3.ObjectUtils;
 
 /**
- * Encrypted information to exchange with OpenPrevo HUB.
+ * Encrypted information to exchange with OpenPrevo Hub.
  */
 public class InsurantInformation implements Comparable<InsurantInformation> {
 

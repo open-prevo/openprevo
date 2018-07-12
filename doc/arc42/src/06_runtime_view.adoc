@@ -37,7 +37,7 @@ There are many notations for describing scenarios, e.g.
 - **Node A**: has a matching termination
 - **Node B**: has a matching commencement
 
-image::../images/matchFlow.png["Match Flow sequence diagram", title="OpenPrevo high-level MatchFlow sequence diagram"]
+image::../images/matchFlow.svg["Match Flow sequence diagram", title="OpenPrevo high-level MatchFlow sequence diagram"]
 
 . Step: **lookup** data at nodes (in parallel)
 * ask nodes for commencement of employment(s)
