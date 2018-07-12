@@ -43,7 +43,6 @@ allprojects { project ->
     project.apply plugin: 'eclipse'
 
     project.group = 'ch.prevo.open'
-
 }
 
 subprojects { project ->

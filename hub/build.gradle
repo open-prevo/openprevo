@@ -3,9 +3,9 @@ apply plugin: 'org.springframework.boot'
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
-    compile(project(':encrypted-data-model'))
+    compile(project(":encrypted-data-model"))
 
-    compile('org.springframework.boot:spring-boot-starter-web') {
+    compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
 
@@ -13,8 +13,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 
-    testCompile('org.testcontainers:testcontainers')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.testcontainers:testcontainers")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 test {
