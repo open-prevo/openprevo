@@ -3,6 +3,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
+import ch.prevo.open.node.services.Cryptography;
 import ch.prevo.open.node.services.MatchNotificationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { NodeApplication.class, MatchNotificationControllerTest.Config.class } )
+@SpringBootTest(classes = { NodeApplication.class, MatchNotificationControllerTest.Config.class })
 @WebAppConfiguration
 public class MatchNotificationControllerTest extends RestBaseTest {
 
@@ -35,16 +36,17 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         public MatchNotificationService matchNotificationService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new MatchNotificationService(factory);
+            return new MatchNotificationService(factory, new Cryptography());
         }
     }
 
     @Test
     public void sendCommencementNotificationToPreviousRetirementFund() throws Exception {
+        final Cryptography cryptography = new Cryptography();
 
         // given
         TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
-        commencementMatchNotification.setEncryptedOasiNumber("756.1234.5678.97");
+        commencementMatchNotification.setEncryptedOasiNumber(cryptography.hash("756.1234.5678.97"));
         commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
         commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));
         commencementMatchNotification.setTerminationDate(LocalDate.of(2018, 6, 30));

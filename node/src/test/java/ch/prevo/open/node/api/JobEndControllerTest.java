@@ -2,6 +2,7 @@ package ch.prevo.open.node.api;
 
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
+import ch.prevo.open.node.services.Cryptography;
 import ch.prevo.open.node.services.JobEndService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,17 +35,19 @@ public class JobEndControllerTest extends RestBaseTest {
         public JobEndService jobEndService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new JobEndService(factory);
+            return new JobEndService(factory, new Cryptography());
         }
     }
 
     @Test
     public void getAllJobEndData() throws Exception {
+        final Cryptography cryptography = new Cryptography();
+
         mockMvc.perform(get("/job-end"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.1335.5778.23")))
-                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")));
+                .andExpect(jsonPath("$[0].encryptedOasiNumber", is(cryptography.hash("756.9534.5271.94"))))
+                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.078")));
     }
 }

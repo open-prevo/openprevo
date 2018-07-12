@@ -30,13 +30,16 @@ public class MatchNotificationService {
 
     private final JobStartProvider jobStartProvider;
     private final JobEndProvider jobEndProvider;
+    private final Cryptography cryptography;
 
     @Inject
-    public MatchNotificationService(ServiceListFactoryBean factoryBean) {
+    public MatchNotificationService(ServiceListFactoryBean factoryBean, Cryptography cryptography) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.jobStartProvider = factory != null ? factory.getJobStartProvider() : null;
         this.jobEndProvider = factory != null ? factory.getJobEndProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
+
+        this.cryptography = cryptography;
     }
 
     public void handleCommencementMatch(CommencementMatchNotification notification) {
@@ -80,14 +83,14 @@ public class MatchNotificationService {
 
     private boolean isSameAsNotification(JobStart jobStart, TerminationMatchNotification notification) {
         JobInfo jobInfo = jobStart.getJobInfo();
-        return jobInfo.getOasiNumber().equals(notification.getEncryptedOasiNumber()) &&
+        return cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getCommencementDate());
     }
 
     private boolean isSameAsNotification(JobEnd jobEnd, CommencementMatchNotification notification) {
         JobInfo jobInfo = jobEnd.getJobInfo();
-        return jobInfo.getOasiNumber().equals(notification.getEncryptedOasiNumber()) &&
+        return cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getTerminationDate());
     }
