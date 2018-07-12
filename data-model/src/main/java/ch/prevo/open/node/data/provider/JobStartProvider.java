@@ -1,9 +1,11 @@
 package ch.prevo.open.node.data.provider;
 
-import java.util.List;
-
 import ch.prevo.open.data.api.JobStart;
 
+import java.util.List;
+
 public interface JobStartProvider {
-	public List<JobStart> getJobStarts();
+
+    List<JobStart> getJobStarts();
+
 }

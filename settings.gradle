@@ -8,4 +8,4 @@ include 'encrypted-data-model'
 include 'adapter-excel'
 include 'adapter-pakt'
 include 'adapter-dummy'
-
+include 'adapter-example-spring'

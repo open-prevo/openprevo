@@ -1,17 +1,17 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.3.RELEASE'
+        shadowPluginVersion = '2.0.4'
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
     }
 }
 
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 version = '0.0.1-SNAPSHOT'
 
@@ -19,9 +19,18 @@ repositories {
     mavenCentral()
 }
 
+// only create the fat jar
+jar.enabled = false
+build.dependsOn(shadowJar)
+
 dependencies {
-    compile(project(":node"))
+    compile(project(":data-model"))
+    compile("commons-io:commons-io:2.6")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.9.6")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6")
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile("org.slf4j:slf4j-api:1.7.25")
 
+    testCompile("junit:junit:4.12")
+    testCompile("org.assertj:assertj-core:3.10.0")
 }

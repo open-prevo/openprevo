@@ -1,14 +1,12 @@
-package ch.prevo.open.node.data.provider;
-
-import java.io.PrintWriter;
-
-import org.springframework.stereotype.Service;
+package ch.prevo.open.node.data.provider.dummy;
 
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.node.data.provider.MatchNotificationListener;
 
-@Service
-public class NotificationListener implements MatchNotificationListener {
+import java.io.PrintWriter;
+
+public class DefaultMatchNotificationListener implements MatchNotificationListener {
 
     private final PrintWriter writer = new PrintWriter(System.out);
     private final NotificationWriter notificationWriter = new NotificationWriter();

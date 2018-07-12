@@ -1,4 +1,4 @@
-package ch.prevo.open.node.data.provider;
+package ch.prevo.open.node.data.provider.dummy;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
