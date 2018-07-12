@@ -1,0 +1,62 @@
+
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    compile(project(":node"))
+    compile(project(':adapter-excel'))
+    compile(project(':adapter-pakt'))
+    compile(project(':hub'))
+}
+
+//
+// Note: this duplication seems unnecessary and combersome, if you read this and have a better way,
+// please change the code below :)
+//
+
+task prepareNodeBaloiseExcel(dependsOn: [project(":adapter-excel").jar, project(":node").jar], type: Copy) {
+    from(project(':adapter-excel').shadowJar)
+    from(project(':node').jar)
+    from("src/start-node.bat") {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8851'])
+    }
+    into "${buildDir}/demo/node-baloise-excel"
+}
+task prepareNodeBaloisePakt(dependsOn: [project(":adapter-pakt").jar, project(":node").jar], type: Copy) {
+    from(project(':adapter-pakt').shadowJar)
+    from(project(':node').jar)
+    from("src/start-node.bat") {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8851'])
+    }
+    into "${buildDir}/demo/node-baloise-pakt"
+}
+
+task prepareNodeHelvetiaExcel(dependsOn: [project(":adapter-excel").jar, project(":node").jar], type: Copy) {
+    from(project(':adapter-excel').shadowJar)
+    from(project(':node').jar)
+    from("src/start-node.bat") {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8852'])
+    }
+    into "${buildDir}/demo/node-helvetia-excel"
+}
+
+task prepareHub(dependsOn: [project(":hub").jar], type: Copy) {
+    from(project(':hub').jar)
+    from("src/start-hub.bat") {
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8859'])
+    }
+    into "${buildDir}/demo/hub"
+}
+
+// does not work:
+task buildDemoZip(type: Zip) {
+    from '${buildDir}/demo'
+    include('**/*')
+    archiveName 'demo.zip'
+    destinationDir file('${buildDir}/')
+}
+buildDemoZip.dependsOn([
+        prepareHub,
+        prepareNodeHelvetiaExcel,
+        prepareNodeBaloisePakt,
+        prepareNodeBaloiseExcel
+])
