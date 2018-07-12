@@ -1,35 +1,19 @@
-buildscript {
-    ext {
-        springBootVersion = '2.0.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
-
 apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 
 version = '0.0.1-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
+    compile(project(':encrypted-data-model'))
+
     compile('org.springframework.boot:spring-boot-starter-web') {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile('org.springframework.boot:spring-boot-starter-jetty')
-    compile('javax.inject:javax.inject:1')
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
 
-    compile(project(':encrypted-data-model'))
+    compile("javax.inject:javax.inject")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 
-    testCompile('org.testcontainers:testcontainers:1.8.0')
+    testCompile('org.testcontainers:testcontainers')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Service
 public class ExcelReader implements JobStartProvider, JobEndProvider {
 
     private static Logger LOG = LoggerFactory.getLogger(ExcelReader.class);

@@ -1,43 +1,21 @@
-buildscript {
-    ext {
-        springBootVersion = '2.0.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0")
-
-    }
-}
-
 apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
 
 version = '0.0.1-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web') {
+    compile(project(":data-model"))
+    compile(project(":encrypted-data-model"))
+
+    compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile('org.springframework.boot:spring-boot-starter-jetty')
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("javax.inject:javax.inject")
+    compile("commons-io:commons-io")
 
-    compile(project(":data-model"))
-    compile(project(':encrypted-data-model'))
-
-    compile('javax.inject:javax.inject:1')
-    compile('commons-io:commons-io:2.6')
-
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 bootJar {
