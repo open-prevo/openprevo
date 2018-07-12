@@ -31,4 +31,5 @@ dependencies {
     compile('org.apache.poi:poi-ooxml-schemas:3.17')
 
     testCompile("junit:junit:4.12")
+    testCompile("org.hamcrest:hamcrest-library:1.3")
 }

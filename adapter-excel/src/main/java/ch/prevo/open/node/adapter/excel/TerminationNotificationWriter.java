@@ -15,22 +15,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
 public class TerminationNotificationWriter implements Closeable {
 
-    private static final String FILE_PROPERTY = "node.adapter.excel.out.file";
-    private static final String FALLBACK_FILE = "retirement-fund-out-data";
-    private static final String FILE_NAME_FORMAT = "%1$s_%2$tY-%2$tm-%2$td-%2$tH:%2$tM:%2$tS.%2$tL.xlsx";
-
+    private final String filename;
     private final Workbook workbook;
     private final Sheet sheet;
     private final CellStyle headingStyle;
     private final CellStyle dateStyle;
 
-    public TerminationNotificationWriter() {
+    public TerminationNotificationWriter(String filename) {
+        this.filename = filename;
         this.workbook = new XSSFWorkbook();
         this.sheet = workbook.createSheet("Eintritte");
         workbook.createSheet("Austritte");
@@ -67,11 +64,10 @@ public class TerminationNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
-        final String filename = String.format(FILE_NAME_FORMAT, System.getProperty(FILE_PROPERTY, FALLBACK_FILE), LocalDateTime.now());
-
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
+        workbook.close();
     }
 
     private void addHeadingRow() {
