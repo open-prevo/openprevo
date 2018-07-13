@@ -1,22 +1,6 @@
-buildscript {
-    ext {
-        shadowPluginVersion = '2.0.4'
-    }
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
-    }
-}
-
 apply plugin: 'com.github.johnrengelman.shadow'
 
 version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 // only create the fat jar
 jar.enabled = false
@@ -25,11 +9,11 @@ build.dependsOn(shadowJar)
 dependencies {
     compile(project(":data-model"))
 
-    compile('org.slf4j:slf4j-api:1.7.25')
-    compile('org.apache.poi:poi:3.17')
-    compile('org.apache.poi:poi-ooxml:3.17')
-    compile('org.apache.poi:poi-ooxml-schemas:3.17')
+    compile('org.slf4j:slf4j-api')
+    compile("org.apache.poi:poi")
+    compile("org.apache.poi:poi-ooxml")
+    compile("org.apache.poi:poi-ooxml-schemas")
 
-    testCompile("junit:junit:4.12")
-    testCompile("org.assertj:assertj-core:3.10.0")
+    testCompile("junit:junit")
+    testCompile("org.assertj:assertj-core")
 }
