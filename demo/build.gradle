@@ -1,3 +1,8 @@
+import org.gradle.jvm.tasks.Jar
+
+
+
+
 task prepareHub(type: Copy) {
     from(project(':hub').jar)
     from("demo-nodes.yml")
