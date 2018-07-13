@@ -1,6 +1,7 @@
 package ch.prevo.open.node.services;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.JobStartProvider;
 import ch.prevo.open.node.data.provider.ProviderFactory;
@@ -18,18 +19,16 @@ import java.util.stream.Collectors;
 public class JobStartService {
 
     private final JobStartProvider jobStartProvider;
-    private final Cryptography cryptography;
 
     @Inject
-    public JobStartService(ServiceListFactoryBean factoryBean, Cryptography cryptography) {
+    public JobStartService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         jobStartProvider = factory != null? factory.getJobStartProvider() : null;
-        this.cryptography = cryptography;
     }
 
 	public Set<InsurantInformation> getAllJobStartData() {
 		return jobStartProvider.getJobStarts().stream()
-				.map(jobEnd -> new InsurantInformation(cryptography.hash(jobEnd.getJobInfo().getOasiNumber()),
+				.map(jobEnd -> new InsurantInformation(Cryptography.hash(jobEnd.getJobInfo().getOasiNumber()),
 						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
 				.collect(Collectors.toSet());
 	}

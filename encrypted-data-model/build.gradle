@@ -2,6 +2,7 @@ version '0.0.1-SNAPSHOT'
 
 dependencies {
     compile('org.apache.commons:commons-lang3')
+    compile('org.slf4j:slf4j-api')
 
     testCompile("junit:junit")
     testCompile("org.assertj:assertj-core")

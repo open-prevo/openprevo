@@ -1,22 +1,20 @@
-package ch.prevo.open.node.services;
+package ch.prevo.open.encrypted.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-@Service
 public class Cryptography {
 
     private static final Logger LOG = LoggerFactory.getLogger(Cryptography.class);
 
-    @PostConstruct
-    public void checkAvailableFunctionality() {
+    private Cryptography() {}
+
+    static {
         try {
             // Check hash-function
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");
@@ -28,7 +26,7 @@ public class Cryptography {
         }
     }
 
-    public String hash(String value) {
+    public static String hash(String value) {
         final String normalizedValue = value.replace(".", "");
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");

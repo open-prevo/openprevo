@@ -6,6 +6,7 @@ import ch.prevo.open.hub.nodes.NodeConfiguration;
 import ch.prevo.open.hub.nodes.NodeRegistry;
 import ch.prevo.open.hub.nodes.NodeService;
 
+import ch.prevo.open.encrypted.services.Cryptography;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -71,10 +72,10 @@ public class HubIntegrationTest {
     @Test
     public void testMatchingService() {
         //given
-        Match expectedMatchFromHelvetiaToBaloise = new Match("756.1234.5678.97",
+        Match expectedMatchFromHelvetiaToBaloise = new Match(Cryptography.hash("756.1234.5678.97"),
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
                 "CHE-109.740.084-Baloise-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloiseToHelvetia = new Match("756.1335.5778.23",
+        Match expectedMatchFromBaloiseToHelvetia = new Match(Cryptography.hash("756.1335.5778.23"),
                 "CHE-109.740.084-Baloise-Sammelstiftung",
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
 

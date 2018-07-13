@@ -8,6 +8,7 @@ import ch.prevo.open.data.api.JobStart;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.JobEndProvider;
 import ch.prevo.open.node.data.provider.JobStartProvider;
@@ -30,16 +31,13 @@ public class MatchNotificationService {
 
     private final JobStartProvider jobStartProvider;
     private final JobEndProvider jobEndProvider;
-    private final Cryptography cryptography;
 
     @Inject
-    public MatchNotificationService(ServiceListFactoryBean factoryBean, Cryptography cryptography) {
+    public MatchNotificationService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.jobStartProvider = factory != null ? factory.getJobStartProvider() : null;
         this.jobEndProvider = factory != null ? factory.getJobEndProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
-
-        this.cryptography = cryptography;
     }
 
     public void handleCommencementMatch(CommencementMatchNotification notification) {
@@ -83,14 +81,14 @@ public class MatchNotificationService {
 
     private boolean isSameAsNotification(JobStart jobStart, TerminationMatchNotification notification) {
         JobInfo jobInfo = jobStart.getJobInfo();
-        return cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+        return Cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getCommencementDate());
     }
 
     private boolean isSameAsNotification(JobEnd jobEnd, CommencementMatchNotification notification) {
         JobInfo jobInfo = jobEnd.getJobInfo();
-        return cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+        return Cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getTerminationDate());
     }
