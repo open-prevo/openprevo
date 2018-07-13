@@ -3,6 +3,7 @@ package ch.prevo.open.encrypted.model;
 import java.time.LocalDate;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Encrypted information to exchange with OpenPrevo Hub.
@@ -86,5 +87,14 @@ public class InsurantInformation implements Comparable<InsurantInformation> {
             return uidComparisonResult;
         }
         return ObjectUtils.compare(date, o.date);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("encryptedOasiNumber", encryptedOasiNumber)
+                .append("retirementFundUid", retirementFundUid)
+                .append("date", date)
+                .toString();
     }
 }
