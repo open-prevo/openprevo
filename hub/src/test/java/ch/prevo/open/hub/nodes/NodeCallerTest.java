@@ -4,11 +4,14 @@ import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.hub.repository.NotificationRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -16,6 +19,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static java.time.LocalDate.of;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +29,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
-@RestClientTest(NodeCaller.class)
+@RestClientTest({ NodeCaller.class, NotificationRepository.class })
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeCallerTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -36,7 +41,8 @@ public class NodeCallerTest {
     private static final String IBAN = "CH53 0077 0016 02222 3334 4";
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
-            = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\", \"date\" : \"2017-12-31\"}]";
+            = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
+            + "\", \"date\" : \"2017-12-31\"}]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
             = "{\"name\" : \"" + RETIREMENT_FUND_NAME + "\", \"iban\" : \"" + IBAN + "\"}";
@@ -87,12 +93,58 @@ public class NodeCallerTest {
         TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller.postCommencementNotification(URL1, terminationMatchNotification);
+        CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, terminationMatchNotification);
 
         // then
         server.verify();
-        assertEquals(RETIREMENT_FUND_NAME, capitalTransferInformation.getName());
-        assertEquals(IBAN, capitalTransferInformation.getIban());
+        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+    }
+
+    @Test
+    public void notifyCommencementMatchOnlyOnce() {
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+
+        TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
+
+        // when
+        CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, terminationMatchNotification);
+        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, terminationMatchNotification);
+
+        // then
+        server.verify();
+        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+        assertThat(secondCallTransferInfo).isNull();
+    }
+
+    @Test
+    public void verifyNotifyCommencementMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
+        server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+
+        TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
+
+        // when
+        CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, terminationMatchNotification);
+        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, terminationMatchNotification);
+
+        // then
+        server.verify();
+        assertThat(capitalTransferInformation).isNull();
+        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
     }
 
     @Test
@@ -110,6 +162,38 @@ public class NodeCallerTest {
         server.verify();
     }
 
+    @Test
+    public void notifyTerminationMatchOnlyOnce() {
+        server.expect(requestTo(URL2))
+                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andRespond(withSuccess());
+
+        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+
+        // when
+        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+
+        // then
+        server.verify();
+    }
+
+    @Test
+    public void verifyNotifyTerminationMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
+        server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+        server.expect(requestTo(URL2))
+                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andRespond(withSuccess());
+
+        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+
+        // when
+        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+
+        // then
+        server.verify();
+    }
 
     @Test
     public void testCommencementNotificationForUnreachableNodes() {
@@ -136,7 +220,8 @@ public class NodeCallerTest {
     }
 
     private CommencementMatchNotification createCommencementMatchNotification() {
-        CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation(RETIREMENT_FUND_NAME, IBAN);
+        CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation(RETIREMENT_FUND_NAME,
+                IBAN);
         CommencementMatchNotification commencementMatchNotification = new CommencementMatchNotification();
         commencementMatchNotification.setEncryptedOasiNumber(OASI1);
         commencementMatchNotification.setNewRetirementFundUid(UID2);

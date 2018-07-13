@@ -1,9 +1,9 @@
 package ch.prevo.open.encrypted.model;
 
+import java.time.LocalDate;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.time.LocalDate;
 
 /**
  * Matching notification sent to an OpenPrevo Node.
@@ -15,6 +15,20 @@ public class TerminationMatchNotification {
     private String previousRetirementFundUid;
     private LocalDate commencementDate;
     private LocalDate terminationDate;
+
+    public TerminationMatchNotification() {}
+
+    public TerminationMatchNotification(String encryptedOasiNumber,
+                                        String retirementFundUid,
+                                        String previousRetirementFundUid,
+                                        LocalDate commencementDate,
+                                        LocalDate terminationDate) {
+        this.encryptedOasiNumber = encryptedOasiNumber;
+        this.retirementFundUid = retirementFundUid;
+        this.previousRetirementFundUid = previousRetirementFundUid;
+        this.commencementDate = commencementDate;
+        this.terminationDate = terminationDate;
+    }
 
     public String getEncryptedOasiNumber() {
         return encryptedOasiNumber;
@@ -65,5 +79,41 @@ public class TerminationMatchNotification {
                 .append("commencementDate", commencementDate)
                 .append("terminationDate", terminationDate)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        TerminationMatchNotification that = (TerminationMatchNotification) o;
+
+        if (encryptedOasiNumber != null ?
+                !encryptedOasiNumber.equals(that.encryptedOasiNumber) :
+                that.encryptedOasiNumber != null)
+            return false;
+        if (retirementFundUid != null ?
+                !retirementFundUid.equals(that.retirementFundUid) :
+                that.retirementFundUid != null)
+            return false;
+        if (previousRetirementFundUid != null ?
+                !previousRetirementFundUid.equals(that.previousRetirementFundUid) :
+                that.previousRetirementFundUid != null)
+            return false;
+        if (commencementDate != null ? !commencementDate.equals(that.commencementDate) : that.commencementDate != null)
+            return false;
+        return terminationDate != null ? terminationDate.equals(that.terminationDate) : that.terminationDate == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = encryptedOasiNumber != null ? encryptedOasiNumber.hashCode() : 0;
+        result = 31 * result + (retirementFundUid != null ? retirementFundUid.hashCode() : 0);
+        result = 31 * result + (previousRetirementFundUid != null ? previousRetirementFundUid.hashCode() : 0);
+        result = 31 * result + (commencementDate != null ? commencementDate.hashCode() : 0);
+        result = 31 * result + (terminationDate != null ? terminationDate.hashCode() : 0);
+        return result;
     }
 }

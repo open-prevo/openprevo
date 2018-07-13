@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeService.class, MatcherService.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
@@ -57,8 +56,6 @@ public class NodeServiceTest {
         node2_old = new NodeConfiguration("https://host2", singletonList(UID2_NEW));
         terminationInsurantInfo = new InsurantInformation(OASI1, UID1_OLD, of(2020, 12, 15));
         commencementInsurantInfo = new InsurantInformation(OASI1, UID2_NEW, of(2021, 2, 1));
-        assertTrue(matcherService.employmentTerminationNotMatched(terminationInsurantInfo));
-        assertTrue(matcherService.employmentCommencementNotMatched(terminationInsurantInfo));
     }
 
     @Test

@@ -42,9 +42,6 @@ public class MatcherServiceTest {
         assertEquals(OASI_1, match.getEncryptedOasiNumber());
         assertEquals(UID_1, match.getPreviousRetirementFundUid());
         assertEquals(UID_2, match.getNewRetirementFundUid());
-
-        assertFalse(matcherService.employmentTerminationNotMatched(new InsurantInformation(OASI_1, UID_1)));
-        assertFalse(matcherService.employmentCommencementNotMatched(new InsurantInformation(OASI_1, UID_2)));
     }
 
     @Test
