@@ -53,8 +53,8 @@ public class NodeServiceTest {
 
     @Before
     public void setUp() {
-        node1_new = new NodeConfiguration("https://host1", singletonList(UID1_OLD));
-        node2_old = new NodeConfiguration("https://host2", singletonList(UID2_NEW));
+        node1_new = new NodeConfiguration("https://host1", UID1_OLD);
+        node2_old = new NodeConfiguration("https://host2", UID2_NEW);
         terminationInsurantInfo = new InsurantInformation(OASI1, UID1_OLD, of(2020, 12, 15));
         commencementInsurantInfo = new InsurantInformation(OASI1, UID2_NEW, of(2021, 2, 1));
         assertTrue(matcherService.employmentTerminationNotMatched(terminationInsurantInfo));

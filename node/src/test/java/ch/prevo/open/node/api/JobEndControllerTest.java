@@ -45,6 +45,10 @@ public class JobEndControllerTest extends RestBaseTest {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.1335.5778.23")))
-                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")));
+                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")))
+                .andExpect(jsonPath("$[1].encryptedOasiNumber", is("756.3412.8844.97")))
+                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.537.488")))
+                .andExpect(jsonPath("$[2].encryptedOasiNumber", is("756.9534.5271.94")))
+                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.740.078")));
     }
 }

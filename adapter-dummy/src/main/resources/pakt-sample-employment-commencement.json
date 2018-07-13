@@ -61,5 +61,26 @@
       "iban": "CH52 0483 5012 3456 7100 0",
       "referenceId": "756.1335.5778.23"
     }
+  },
+  {
+    "techId": "",
+    "jobInfo": {
+      "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung 2",
+      "internalReferenz": "",
+      "oasiNumber": "756.9534.5271.94",
+      "internalPersonId": "",
+      "date": "2018-07-01"
+    },
+    "capitalTransferInfo": {
+      "name": "Helvetia Prisma Sammelstiftung 2",
+      "additionalName": "Helvetia Versicherungen Schweiz 2",
+      "address": {
+        "street": "St. Alban-Anlage 26",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH52 0483 5012 3456 7100 0",
+      "referenceId": "756.9534.5271.94"
+    }
   }
 ]
