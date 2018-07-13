@@ -1,62 +1,61 @@
-
-version = '0.0.1-SNAPSHOT'
-
-dependencies {
-    compile(project(":node"))
-    compile(project(':adapter-excel'))
-    compile(project(':adapter-pakt'))
-    compile(project(':hub'))
-}
-
-//
-// Note: this duplication seems unnecessary and combersome, if you read this and have a better way,
-// please change the code below :)
-//
-
-task prepareNodeBaloiseExcel(dependsOn: [project(":adapter-excel").jar, project(":node").jar], type: Copy) {
-    from(project(':adapter-excel').shadowJar)
-    from(project(':node').jar)
-    from("src/start-node.bat") {
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8851'])
-    }
-    into "${buildDir}/demo/node-baloise-excel"
-}
-task prepareNodeBaloisePakt(dependsOn: [project(":adapter-pakt").jar, project(":node").jar], type: Copy) {
-    from(project(':adapter-pakt').shadowJar)
-    from(project(':node').jar)
-    from("src/start-node.bat") {
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8851'])
-    }
-    into "${buildDir}/demo/node-baloise-pakt"
-}
-
-task prepareNodeHelvetiaExcel(dependsOn: [project(":adapter-excel").jar, project(":node").jar], type: Copy) {
-    from(project(':adapter-excel').shadowJar)
-    from(project(':node').jar)
-    from("src/start-node.bat") {
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8852'])
-    }
-    into "${buildDir}/demo/node-helvetia-excel"
-}
-
-task prepareHub(dependsOn: [project(":hub").jar], type: Copy) {
+task prepareHub(type: Copy) {
     from(project(':hub').jar)
-    from("src/start-hub.bat") {
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [port: '8859'])
+    from("demo-nodes.yml")
+    into "${buildDir}/demo/Hub"
+    doLast {
+        def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
+        new File("${buildDir}/demo/Hub/start-hub.bat").text = javaCmd
+        new File("${buildDir}/demo/Hub/start-hub.sh").text = javaCmd
     }
-    into "${buildDir}/demo/hub"
 }
 
-// does not work:
-task buildDemoZip(type: Zip) {
-    from '${buildDir}/demo'
+prepareHub.dependsOn { project(":hub").bootJar }
+
+task buildDemoZip(dependsOn: prepareHub, type: Zip) {
+    from "${buildDir}/demo"
     include('**/*')
     archiveName 'demo.zip'
-    destinationDir file('${buildDir}/')
+    destinationDir file("${buildDir}/")
 }
-buildDemoZip.dependsOn([
-        prepareHub,
-        prepareNodeHelvetiaExcel,
-        prepareNodeBaloisePakt,
-        prepareNodeBaloiseExcel
-])
+
+// Define Node Configuration Here
+// For each configuration gradle will automatically create a prepare${NodeName} task
+// which copies all files needed into a sub-directory named the same as the node
+
+def nodeConfiguration = [
+        [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
+        [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
+        [name: "NodeHelvetiaExcel", adapter: "adapter-excel", port: "8852"],
+        [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"]
+]
+
+nodeConfiguration.each { node ->
+    task "prepare${node.name}"(type: Copy) {
+
+        dependsOn { project(":${node.adapter}").shadowJar }
+        dependsOn { project(":node").bootJar }
+
+        from(project(":${node.adapter}").shadowJar)
+        from(project(':node').jar)
+        into "${buildDir}/demo/${node.name}"
+
+        doLast {
+            new File("${buildDir}/demo/${node.name}/start-node.bat").text = getJavaCommandLineForNode(node)
+            new File("${buildDir}/demo/${node.name}/start-node.sh").text = getJavaCommandLineForNode(node)
+        }
+    }
+    buildDemoZip.dependsOn("prepare${node.name}")
+}
+
+def getJavaCommandLineForNode(nodeConfiguration) {
+
+    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName} " +
+            "-Dserver.port=${nodeConfiguration.port}"
+
+    if (nodeConfiguration.adapter == "adapter-excel") {
+        cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
+    }
+    cmd += " -jar ${project(":node").bootJar.archiveName}"
+}
+
+build.dependsOn(buildDemoZip)
