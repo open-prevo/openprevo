@@ -1,10 +1,12 @@
-import org.gradle.jvm.tasks.Jar
-
-
-
+task buildDemoZip(type: Zip) {
+    from "${buildDir}/demo"
+    include('**/*')
+    archiveName 'demo.zip'
+    destinationDir file("${buildDir}/")
+}
 
 task prepareHub(type: Copy) {
-    from(project(':hub').jar)
+    from("${project(':hub').buildDir}/libs")
     from("demo-nodes.yml")
     into "${buildDir}/demo/Hub"
     doLast {
@@ -14,14 +16,8 @@ task prepareHub(type: Copy) {
     }
 }
 
+buildDemoZip.dependsOn(prepareHub)
 prepareHub.dependsOn { project(":hub").bootJar }
-
-task buildDemoZip(dependsOn: prepareHub, type: Zip) {
-    from "${buildDir}/demo"
-    include('**/*')
-    archiveName 'demo.zip'
-    destinationDir file("${buildDir}/")
-}
 
 // Define Node Configuration Here
 // For each configuration gradle will automatically create a prepare${NodeName} task
@@ -41,7 +37,8 @@ nodeConfiguration.each { node ->
         dependsOn { project(":node").bootJar }
 
         from(project(":${node.adapter}").shadowJar)
-        from(project(':node').jar)
+        from("${project(':node').buildDir}/libs")
+
         into "${buildDir}/demo/${node.name}"
 
         doLast {
