@@ -27,7 +27,7 @@ public class Cryptography {
     }
 
     public static String hash(String value) {
-        final String normalizedValue = value.replace(".", "");
+        final String normalizedValue = value.trim().replace(".", "");
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");
             final byte[] bytes = digest.digest(normalizedValue.getBytes(StandardCharsets.UTF_8));
