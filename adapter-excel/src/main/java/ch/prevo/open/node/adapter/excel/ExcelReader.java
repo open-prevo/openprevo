@@ -165,7 +165,7 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
             case FORMULA:
                 return "";
             default:
-                return cell.getStringCellValue();
+                return cell.getStringCellValue() != null ? cell.getStringCellValue().trim() : "";
         }
     }
 }

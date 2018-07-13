@@ -3,6 +3,8 @@ package ch.prevo.open.hub.nodes;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 @SuppressWarnings("unused")
 public class NodeConfiguration {
 
@@ -69,5 +71,16 @@ public class NodeConfiguration {
 
     boolean containsRetirementFundUid(String retirementFundUid) {
         return retirementFundUids.stream().anyMatch(s -> Objects.equals(s, retirementFundUid));
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("retirementFundUids", retirementFundUids)
+                .append("jobExitsUrl", jobExitsUrl)
+                .append("jobEntriesUrl", jobEntriesUrl)
+                .append("commencementMatchNotifyUrl", commencementMatchNotifyUrl)
+                .append("terminationMatchNotifyUrl", terminationMatchNotifyUrl)
+                .toString();
     }
 }
