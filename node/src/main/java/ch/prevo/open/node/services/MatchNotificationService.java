@@ -13,6 +13,8 @@ import ch.prevo.open.node.data.provider.JobEndProvider;
 import ch.prevo.open.node.data.provider.JobStartProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
+import ch.prevo.open.node.data.provider.error.NotificationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
@@ -39,7 +41,7 @@ public class MatchNotificationService {
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
     }
 
-    public void handleCommencementMatch(CommencementMatchNotification notification) {
+    public void handleCommencementMatch(CommencementMatchNotification notification) throws NotificationException {
         final Optional<JobEnd> jobEnd = jobEndProvider.getJobEnds().stream()
                 .filter(currentJobEnd -> isSameAsNotification(currentJobEnd, notification))
                 .findAny();
@@ -58,7 +60,8 @@ public class MatchNotificationService {
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(TerminationMatchNotification notification) {
+    public Optional<CapitalTransferInformation> handleTerminationMatch(TerminationMatchNotification notification)
+            throws NotificationException {
         final Optional<JobStart> jobStart = jobStartProvider.getJobStarts().stream()
                 .filter(currentJobStart -> isSameAsNotification(currentJobStart, notification))
                 .findAny();
