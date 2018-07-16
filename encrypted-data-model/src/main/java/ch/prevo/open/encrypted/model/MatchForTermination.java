@@ -8,7 +8,7 @@ import java.time.LocalDate;
 /**
  * Matching notification sent to an OpenPrevo Node.
  */
-public class CommencementMatchNotification {
+public class MatchForTermination {
 
     private String encryptedOasiNumber;
     private String previousRetirementFundUid;
@@ -18,10 +18,10 @@ public class CommencementMatchNotification {
     private CapitalTransferInformation transferInformation;
 
 
-    public CommencementMatchNotification() {
+    public MatchForTermination() {
     }
 
-    public CommencementMatchNotification(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, CapitalTransferInformation transferInformation) {
+    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, CapitalTransferInformation transferInformation) {
         this.encryptedOasiNumber = encryptedOasiNumber;
         this.previousRetirementFundUid = previousRetirementFundUid;
         this.newRetirementFundUid = newRetirementFundUid;
@@ -95,7 +95,7 @@ public class CommencementMatchNotification {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CommencementMatchNotification that = (CommencementMatchNotification) o;
+        MatchForTermination that = (MatchForTermination) o;
 
         if (encryptedOasiNumber != null ? !encryptedOasiNumber.equals(that.encryptedOasiNumber) : that.encryptedOasiNumber != null)
             return false;

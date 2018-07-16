@@ -2,7 +2,7 @@ package ch.prevo.open.hub.nodes;
 
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class NodeCaller {
         }
     }
 
-    void postTerminationNotification(String terminationMatchNotifyUrl, CommencementMatchNotification matchNotification) {
+    void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
             restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
         } catch (Exception e) {

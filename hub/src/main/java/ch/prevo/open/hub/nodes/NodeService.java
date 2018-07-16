@@ -1,7 +1,7 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.match.Match;
@@ -111,7 +111,7 @@ public class NodeService {
 
 
     private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig, Match match, CapitalTransferInformation transferInformation) {
-        CommencementMatchNotification matchNotification = new CommencementMatchNotification();
+        MatchForTermination matchNotification = new MatchForTermination();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
         matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());

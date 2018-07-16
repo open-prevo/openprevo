@@ -1,7 +1,7 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
@@ -136,7 +136,7 @@ public class NodeServiceTest {
                 singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate)));
 
         // then
-        CommencementMatchNotification matchNotification = new CommencementMatchNotification(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
+        MatchForTermination matchNotification = new MatchForTermination(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
         verify(nodeCaller).postTerminationNotification(eq(node1_new.getTerminationMatchNotifyUrl()), eq(matchNotification));
     }
 

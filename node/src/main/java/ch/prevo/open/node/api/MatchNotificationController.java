@@ -1,7 +1,7 @@
 package ch.prevo.open.node.api;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.node.services.MatchNotificationService;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class MatchNotificationController {
     }
 
     @RequestMapping(value = "/termination-match-notification", method = RequestMethod.POST)
-    public ResponseEntity<Void> receiveMatchForCommencement(@RequestBody CommencementMatchNotification matchNotification) {
+    public ResponseEntity<Void> receiveMatchForCommencement(@RequestBody MatchForTermination matchNotification) {
         LOGGER.debug("Receive termination match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
 

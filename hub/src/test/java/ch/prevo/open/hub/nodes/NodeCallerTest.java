@@ -1,7 +1,7 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import org.junit.Test;
@@ -126,7 +126,7 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
                 .andRespond(withSuccess());
 
-        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+        MatchForTermination commencementMatchNotification = createCommencementMatchNotification();
 
         // when
         nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
@@ -160,9 +160,9 @@ public class NodeCallerTest {
         server.verify();
     }
 
-    private CommencementMatchNotification createCommencementMatchNotification() {
+    private MatchForTermination createCommencementMatchNotification() {
         CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation(RETIREMENT_FUND_NAME, IBAN);
-        CommencementMatchNotification commencementMatchNotification = new CommencementMatchNotification();
+        MatchForTermination commencementMatchNotification = new MatchForTermination();
         commencementMatchNotification.setEncryptedOasiNumber(OASI1);
         commencementMatchNotification.setNewRetirementFundUid(UID2);
         commencementMatchNotification.setCommencementDate(of(2018, 7, 1));
