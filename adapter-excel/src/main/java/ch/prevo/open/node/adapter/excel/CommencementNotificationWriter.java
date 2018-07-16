@@ -89,17 +89,17 @@ public class CommencementNotificationWriter implements Closeable {
 
         createHeading(row, "AHV-Nummer");
         createHeading(row, "Austritt");
-        createHeading(row, "UID der eigenen VE");
+        createHeading(row, "UID der eigenen RF");
         createHeading(row, "Eigene Referenz");
         createHeading(row, "Eintritt");
-        createHeading(row, "UID der neuen VE");
-        createHeading(row, "Name der neuen VE");
+        createHeading(row, "UID der neuen RF");
+        createHeading(row, "Name der neuen RF");
         createHeading(row, "Zusatzname");
         createHeading(row, "Strasse / Postfach");
         createHeading(row, "PLZ");
         createHeading(row, "Ort");
         createHeading(row, "IBAN");
-        createHeading(row, "Referenznr. der neuen VE");
+        createHeading(row, "Referenznr. der neuen RF");
     }
 
     private void createHeading(Row row, String label) {

@@ -57,10 +57,10 @@ public class TerminationNotificationWriterTest {
         assertRow(filename, "Eintritte", 0,
                 "AHV-Nummer",
                 "Eintritt",
-                "UID der eigenen VE",
+                "UID der eigenen RF",
                 "Eigene Referenz",
                 "Austritt",
-                "UID der ehemaligen VE"
+                "UID der ehemaligen RF"
         );
 
         assertRow(filename, "Eintritte", 1,

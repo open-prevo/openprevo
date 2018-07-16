@@ -75,10 +75,10 @@ public class TerminationNotificationWriter implements Closeable {
 
         createHeading(row, "AHV-Nummer");
         createHeading(row, "Eintritt");
-        createHeading(row, "UID der eigenen VE");
+        createHeading(row, "UID der eigenen RF");
         createHeading(row, "Eigene Referenz");
         createHeading(row, "Austritt");
-        createHeading(row, "UID der ehemaligen VE");
+        createHeading(row, "UID der ehemaligen RF");
     }
 
     private void createHeading(Row row, String label) {

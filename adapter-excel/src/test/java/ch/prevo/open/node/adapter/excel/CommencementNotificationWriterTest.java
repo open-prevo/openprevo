@@ -57,17 +57,17 @@ public class CommencementNotificationWriterTest {
         assertRow(filename, "Austritte", 0,
                 "AHV-Nummer",
                 "Austritt",
-                "UID der eigenen VE",
+                "UID der eigenen RF",
                 "Eigene Referenz",
                 "Eintritt",
-                "UID der neuen VE",
-                "Name der neuen VE",
+                "UID der neuen RF",
+                "Name der neuen RF",
                 "Zusatzname",
                 "Strasse / Postfach",
                 "PLZ",
                 "Ort",
                 "IBAN",
-                "Referenznr. der neuen VE"
+                "Referenznr. der neuen RF"
         );
 
         assertRow(filename, "Austritte", 1,
