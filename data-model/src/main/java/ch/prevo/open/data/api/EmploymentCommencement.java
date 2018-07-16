@@ -7,13 +7,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class EmploymentCommencement extends AbstractJobEvent {
+public class EmploymentCommencement extends AbstractEmploymentEvent {
 
     private CapitalTransferInformation capitalTransferInfo;
 
     public EmploymentCommencement() {}
 
-    public EmploymentCommencement(String techId, JobInfo jobInfo, CapitalTransferInformation capitalTransferInfo) {
+    public EmploymentCommencement(String techId, EmploymentInfo jobInfo, CapitalTransferInformation capitalTransferInfo) {
 		super(techId, jobInfo);
 		this.capitalTransferInfo = capitalTransferInfo;
 	}

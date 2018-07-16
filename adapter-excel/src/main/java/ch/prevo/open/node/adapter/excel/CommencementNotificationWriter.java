@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.ss.usermodel.Cell;
@@ -50,7 +50,7 @@ public class CommencementNotificationWriter implements Closeable {
     public Workbook append(FullCommencementNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final JobInfo jobInfo = notification.getEmploymentTermination().getJobInfo();
+        final EmploymentInfo jobInfo = notification.getEmploymentTermination().getEmploymentInfo();
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());

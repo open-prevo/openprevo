@@ -2,7 +2,7 @@ package ch.prevo.open.node.data.provider.dummy;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.io.PrintWriter;
@@ -14,7 +14,7 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment commencement: ");
 
-        final JobInfo jobInfo = notification.getEmploymentCommencement().getJobInfo();
+        final EmploymentInfo jobInfo = notification.getEmploymentCommencement().getEmploymentInfo();
         if (jobInfo != null) {
             writer.println("\nMy data (employment commencement)");
             writer.println("OASI number:                  " + jobInfo.getOasiNumber());
@@ -36,7 +36,7 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment termination");
 
-        final JobInfo jobInfo = notification.getEmploymentTermination().getJobInfo();
+        final EmploymentInfo jobInfo = notification.getEmploymentTermination().getEmploymentInfo();
         if (jobInfo != null) {
             writer.println("\nMy data (employment termination)");
             writer.println("OASI number:                 " + jobInfo.getOasiNumber());

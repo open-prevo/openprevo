@@ -2,7 +2,7 @@ package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -31,14 +31,14 @@ public class CommencementNotificationWriterTest {
         transferInformation.setIban("CH52 0483 5012 3456 7100 0");
         transferInformation.setReferenceId("756.1335.5778.23");
 
-        final JobInfo jobInfo = new JobInfo();
+        final EmploymentInfo jobInfo = new EmploymentInfo();
         jobInfo.setRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
         jobInfo.setOasiNumber("756.1335.5778.23");
         jobInfo.setDate(LocalDate.of(2018, 6, 30));
         jobInfo.setInternalReferenz("baloise-1");
 
         final EmploymentTermination jobEnd = new EmploymentTermination();
-        jobEnd.setJobInfo(jobInfo);
+        jobEnd.setEmploymentInfo(jobInfo);
 
         final FullCommencementNotification notification = new FullCommencementNotification();
         notification.setNewRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");

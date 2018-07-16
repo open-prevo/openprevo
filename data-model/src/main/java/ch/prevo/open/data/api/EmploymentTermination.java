@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class EmploymentTermination extends AbstractJobEvent {
+public class EmploymentTermination extends AbstractEmploymentEvent {
 
     public EmploymentTermination() {
     }
 
-    public EmploymentTermination(String techId, JobInfo jobInfo) {
+    public EmploymentTermination(String techId, EmploymentInfo jobInfo) {
         super(techId, jobInfo);
     }
 
@@ -21,11 +21,11 @@ public class EmploymentTermination extends AbstractJobEvent {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractJobEvent that = (AbstractJobEvent) o;
+        AbstractEmploymentEvent that = (AbstractEmploymentEvent) o;
 
         return new EqualsBuilder()
                 .append(getTechId(), that.getTechId())
-                .append(getJobInfo(), that.getJobInfo())
+                .append(getEmploymentInfo(), that.getEmploymentInfo())
                 .isEquals();
     }
 
@@ -33,7 +33,7 @@ public class EmploymentTermination extends AbstractJobEvent {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(getTechId())
-                .append(getJobInfo())
+                .append(getEmploymentInfo())
                 .toHashCode();
     }
 

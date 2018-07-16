@@ -3,7 +3,7 @@ package ch.prevo.open.node.services;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
@@ -80,14 +80,14 @@ public class MatchNotificationService {
     }
 
     private boolean isSameAsNotification(EmploymentCommencement jobStart, TerminationMatchNotification notification) {
-        JobInfo jobInfo = jobStart.getJobInfo();
+        EmploymentInfo jobInfo = jobStart.getEmploymentInfo();
         return Cryptography.digestOasiNumber(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getCommencementDate());
     }
 
     private boolean isSameAsNotification(EmploymentTermination jobEnd, CommencementMatchNotification notification) {
-        JobInfo jobInfo = jobEnd.getJobInfo();
+        EmploymentInfo jobInfo = jobEnd.getEmploymentInfo();
         return Cryptography.digestOasiNumber(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getTerminationDate());

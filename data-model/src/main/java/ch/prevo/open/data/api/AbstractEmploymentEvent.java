@@ -4,15 +4,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-abstract class AbstractJobEvent {
+abstract class AbstractEmploymentEvent {
 
     private String techId;
-    private JobInfo jobInfo;
+    private EmploymentInfo jobInfo;
 
-    AbstractJobEvent() {
+    AbstractEmploymentEvent() {
     }
 
-    AbstractJobEvent(String techId, JobInfo jobInfo) {
+    AbstractEmploymentEvent(String techId, EmploymentInfo jobInfo) {
         this.techId = techId;
         this.jobInfo = jobInfo;
     }
@@ -25,11 +25,11 @@ abstract class AbstractJobEvent {
         this.techId = techId;
     }
 
-    public JobInfo getJobInfo() {
+    public EmploymentInfo getEmploymentInfo() {
         return jobInfo;
     }
 
-    public void setJobInfo(JobInfo jobInfo) {
+    public void setEmploymentInfo(EmploymentInfo jobInfo) {
         this.jobInfo = jobInfo;
     }
 

@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
@@ -105,7 +105,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
     }
 
     private Optional<EmploymentCommencement> mapEmploymentCommencement(Row row) {
-        JobInfo jobInfo = mapJobInfo(row);
+        EmploymentInfo jobInfo = mapEmploymentInfo(row);
         if (jobInfo == null) {
             return Optional.empty();
         }
@@ -125,19 +125,19 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
     }
 
     private Optional<EmploymentTermination> mapEmploymentTermination(Row row) {
-        JobInfo jobInfo = mapJobInfo(row);
+        EmploymentInfo jobInfo = mapEmploymentInfo(row);
         if (jobInfo == null) {
             return Optional.empty();
         }
         return Optional.of(new EmploymentTermination(null, jobInfo));
     }
 
-    private JobInfo mapJobInfo(Row row) {
+    private EmploymentInfo mapEmploymentInfo(Row row) {
         String oasiNumber = getString(row, OASI_COLUMN_INDEX);
         if (oasiNumber.isEmpty()) {
             return null;
         }
-        JobInfo jobInfo = new JobInfo();
+        EmploymentInfo jobInfo = new EmploymentInfo();
         jobInfo.setOasiNumber(oasiNumber);
         jobInfo.setDate(getDate(row, DATE_COLUMN_INDEX));
         jobInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));

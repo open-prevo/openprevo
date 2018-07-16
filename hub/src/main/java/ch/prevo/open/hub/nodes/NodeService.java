@@ -39,7 +39,7 @@ public class NodeService {
     public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
-            List<InsurantInformation> pensionFundExits = nodeCaller.getInsurantInformationList(nodeConfig.getJobExitsUrl());
+            List<InsurantInformation> pensionFundExits = nodeCaller.getInsurantInformationList(nodeConfig.getEmploymentExitsUrl());
             List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
                     pensionFundExits,
                     matcherService::employmentTerminationNotMatched);
@@ -51,7 +51,7 @@ public class NodeService {
     public Set<InsurantInformation> getCurrentEntries() {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
-            List<InsurantInformation> pensionFundEntries = nodeCaller.getInsurantInformationList(nodeConfig.getJobEntriesUrl());
+            List<InsurantInformation> pensionFundEntries = nodeCaller.getInsurantInformationList(nodeConfig.getEmploymentEntriesUrl());
             List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
                     pensionFundEntries,
                     matcherService::employmentCommencementNotMatched);

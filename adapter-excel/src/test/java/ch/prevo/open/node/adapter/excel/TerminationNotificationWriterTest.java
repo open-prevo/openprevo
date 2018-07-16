@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
@@ -31,7 +31,7 @@ public class TerminationNotificationWriterTest {
         transferInformation.setIban("CH52 0483 5012 3456 7100 0");
         transferInformation.setReferenceId("756.1335.5778.23");
 
-        final JobInfo jobInfo = new JobInfo();
+        final EmploymentInfo jobInfo = new EmploymentInfo();
         jobInfo.setRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
         jobInfo.setOasiNumber("756.1335.5778.23");
         jobInfo.setDate(LocalDate.of(2018, 7, 1));
@@ -39,7 +39,7 @@ public class TerminationNotificationWriterTest {
 
         final EmploymentCommencement jobStart = new EmploymentCommencement();
         jobStart.setCapitalTransferInfo(transferInformation);
-        jobStart.setJobInfo(jobInfo);
+        jobStart.setEmploymentInfo(jobInfo);
 
         final FullTerminationNotification notification = new FullTerminationNotification();
         notification.setPreviousRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");

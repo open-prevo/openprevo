@@ -28,8 +28,8 @@ public class EmploymentCommencementService {
 
 	public Set<InsurantInformation> getAllEmploymentCommencementData() {
 		return jobStartProvider.getEmploymentCommencements().stream()
-				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getJobInfo().getOasiNumber()),
-						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
+				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getEmploymentInfo().getOasiNumber()),
+						jobEnd.getEmploymentInfo().getRetirementFundUid(), jobEnd.getEmploymentInfo().getDate()))
 				.collect(Collectors.toSet());
 	}
 }

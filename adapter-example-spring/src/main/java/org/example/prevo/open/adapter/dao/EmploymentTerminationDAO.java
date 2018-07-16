@@ -3,7 +3,7 @@ package org.example.prevo.open.adapter.dao;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import org.example.prevo.open.adapter.dto.EmploymentTerminationDTO;
-import org.example.prevo.open.adapter.dto.JobInfoDTO;
+import org.example.prevo.open.adapter.dto.EmploymentInfoDTO;
 import org.example.prevo.open.adapter.repository.EmploymentTerminationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,13 +24,13 @@ public class EmploymentTerminationDAO implements EmploymentTerminationProvider {
         this.repository = repository;
         this.mapper = new ModelMapper();
 
-        final JobInfoDTO jobInfo = new JobInfoDTO();
+        final EmploymentInfoDTO jobInfo = new EmploymentInfoDTO();
         jobInfo.setOasiNumber("123");
         jobInfo.setDate(LocalDate.now());
         jobInfo.setRetirementFundUid("4711");
 
         final EmploymentTerminationDTO jobEnd = new EmploymentTerminationDTO();
-        jobEnd.setJobInfo(jobInfo);
+        jobEnd.setEmploymentInfo(jobInfo);
 
         repository.save(jobEnd);
         repository.flush();

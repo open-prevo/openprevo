@@ -8,13 +8,13 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
 @MappedSuperclass
-public class AbstractJobEventDTO {
+public class AbstractEmploymentEventDTO {
 
     @Id
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private JobInfoDTO jobInfo;
+    private EmploymentInfoDTO jobInfo;
 
     private String techId;
 
@@ -34,11 +34,11 @@ public class AbstractJobEventDTO {
         this.techId = techId;
     }
 
-    public JobInfoDTO getJobInfo() {
+    public EmploymentInfoDTO getEmploymentInfo() {
         return jobInfo;
     }
 
-    public void setJobInfo(JobInfoDTO jobInfo) {
+    public void setEmploymentInfo(EmploymentInfoDTO jobInfo) {
         this.jobInfo = jobInfo;
     }
 

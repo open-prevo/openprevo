@@ -1,7 +1,7 @@
 package ch.prevo.pakt.provider;
 
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PAKTJobEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
+public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
 
     private final PartnerVermittlungRepository repository;
 
     @Inject
-    public PAKTJobEventProviderImpl(PartnerVermittlungRepository partnerVermittlungRepository) {
+    public PAKTEmploymentEventProviderImpl(PartnerVermittlungRepository partnerVermittlungRepository) {
         this.repository = partnerVermittlungRepository;
     }
 
@@ -40,11 +40,11 @@ public class PAKTJobEventProviderImpl implements EmploymentTerminationProvider, 
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
         // TODO fulfill missing properties
-        return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
+        return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm));
     }
 
-    private JobInfo buildJobInfo(TozsPtverm ptVerm) {
-        JobInfo jobInfo = new JobInfo();
+    private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
+        EmploymentInfo jobInfo = new EmploymentInfo();
         jobInfo.setOasiNumber(ptVerm.getAhv());
         jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
         jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
@@ -122,7 +122,7 @@ public class PAKTJobEventProviderImpl implements EmploymentTerminationProvider, 
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
         // TODO fulfill missing properties
-        return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
+        return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm),
                 buildCapitalTransferInformation(ptVerm));
     }
 

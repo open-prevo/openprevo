@@ -30,19 +30,19 @@ public class NodeConfiguration {
         this.retirementFundUids = Arrays.asList(retirementFundUids);
     }
 
-    String getJobExitsUrl() {
+    String getEmploymentExitsUrl() {
         return jobExitsUrl;
     }
 
-    public void setJobExitsUrl(String jobExitsUrl) {
+    public void setEmploymentExitsUrl(String jobExitsUrl) {
         this.jobExitsUrl = jobExitsUrl;
     }
 
-    String getJobEntriesUrl() {
+    String getEmploymentEntriesUrl() {
         return jobEntriesUrl;
     }
 
-    public void setJobEntriesUrl(String jobEntriesUrl) {
+    public void setEmploymentEntriesUrl(String jobEntriesUrl) {
         this.jobEntriesUrl = jobEntriesUrl;
     }
 

@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -48,7 +48,7 @@ public class TerminationNotificationWriter implements Closeable {
     public void append(FullTerminationNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final JobInfo jobInfo = notification.getEmploymentCommencement().getJobInfo();
+        final EmploymentInfo jobInfo = notification.getEmploymentCommencement().getEmploymentInfo();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());
         final Cell commencementDate = row.createCell(1);
         commencementDate.setCellValue(convert(jobInfo.getDate()));

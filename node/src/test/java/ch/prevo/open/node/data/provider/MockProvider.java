@@ -3,7 +3,7 @@ package ch.prevo.open.node.data.provider;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
@@ -18,9 +18,9 @@ public class MockProvider implements EmploymentTerminationProvider, EmploymentCo
         int i = 0;
         LocalDate endDate = LocalDate.of(2018, 6, 30);
         return Arrays.asList(
-                new EmploymentTermination(Integer.toString(++i), new JobInfo("CHE-109.537.488", "", "756.3412.8844.97", "", endDate)),
-                new EmploymentTermination(Integer.toString(++i), new JobInfo("CHE-109.740.084", "", "756.1335.5778.23", "", endDate)),
-                new EmploymentTermination(Integer.toString(++i), new JobInfo("CHE-109.740.078", "", "756.9534.5271.94", "", endDate)));
+                new EmploymentTermination(Integer.toString(++i), new EmploymentInfo("CHE-109.537.488", "", "756.3412.8844.97", "", endDate)),
+                new EmploymentTermination(Integer.toString(++i), new EmploymentInfo("CHE-109.740.084", "", "756.1335.5778.23", "", endDate)),
+                new EmploymentTermination(Integer.toString(++i), new EmploymentInfo("CHE-109.740.078", "", "756.9534.5271.94", "", endDate)));
     }
 
     @Override
@@ -30,13 +30,13 @@ public class MockProvider implements EmploymentTerminationProvider, EmploymentCo
 
         return Arrays.asList(
                 new EmploymentCommencement(Integer.toString(++i),
-                        new JobInfo("CHE-109.740.084", "", "756.1234.5678.97", "", startDate),
+                        new EmploymentInfo("CHE-109.740.084", "", "756.1234.5678.97", "", startDate),
                         new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")),
                 new EmploymentCommencement(Integer.toString(++i),
-                        new JobInfo("CHE-109.740.078", "", "756.5678.1234.17", "", startDate),
+                        new EmploymentInfo("CHE-109.740.078", "", "756.5678.1234.17", "", startDate),
                         new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")),
                 new EmploymentCommencement(Integer.toString(++i),
-                        new JobInfo("CHE-109.537.488", "", "756.1298.6578.97", "", startDate),
+                        new EmploymentInfo("CHE-109.537.488", "", "756.1298.6578.97", "", startDate),
                         new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")));
     }
 
