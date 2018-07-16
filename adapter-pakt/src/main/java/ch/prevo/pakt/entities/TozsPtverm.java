@@ -1,9 +1,12 @@
 package ch.prevo.pakt.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 /**
@@ -12,7 +15,6 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="TOZS_PTVERM")
-@NamedQuery(name="TozsPtverm.findAll", query="SELECT t FROM TozsPtverm t")
 public class TozsPtverm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,11 +31,9 @@ public class TozsPtverm implements Serializable {
 
 	private short cdstf;
 
-	@Temporal(TemporalType.DATE)
-	private Date dtgeb;
+	private LocalDate dtgeb;
 
-	@Temporal(TemporalType.DATE)
-	private Date dtgueltab;
+	private LocalDate dtgueltab;
 
 	private String idgeschaeftpol;
 
@@ -116,19 +116,19 @@ public class TozsPtverm implements Serializable {
 		this.cdstf = cdstf;
 	}
 
-	public Date getDtgeb() {
+	public LocalDate getDtgeb() {
 		return this.dtgeb;
 	}
 
-	public void setDtgeb(Date dtgeb) {
+	public void setDtgeb(LocalDate dtgeb) {
 		this.dtgeb = dtgeb;
 	}
 
-	public Date getDtgueltab() {
+	public LocalDate getDtgueltab() {
 		return this.dtgueltab;
 	}
 
-	public void setDtgueltab(Date dtgueltab) {
+	public void setDtgueltab(LocalDate dtgueltab) {
 		this.dtgueltab = dtgueltab;
 	}
 
