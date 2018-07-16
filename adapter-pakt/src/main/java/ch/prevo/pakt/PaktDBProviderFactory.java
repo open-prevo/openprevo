@@ -1,7 +1,8 @@
 package ch.prevo.pakt;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import ch.prevo.open.node.data.provider.JobEndProvider;
 import ch.prevo.open.node.data.provider.JobStartProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
@@ -16,9 +17,10 @@ public class PaktDBProviderFactory implements ProviderFactory {
 
 
     public PaktDBProviderFactory() {
-        final ApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);
-        this.jobStartProvider = context.getBean(JobStartProvider.class);
-        this.jobEndProvider = context.getBean(JobEndProvider.class);
+    	try (final ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);) {
+    		this.jobStartProvider = context.getBean(JobStartProvider.class);
+    		this.jobEndProvider = context.getBean(JobEndProvider.class);
+    	}
     }
 
     @Override
