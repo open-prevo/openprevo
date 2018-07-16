@@ -2,15 +2,15 @@
   retirementFundUids:
     - CHE-109.740.084-Baloise-Sammelstiftung
     - CHE-109.740.084-Baloise-Sammelstiftung 2
-  jobExitsUrl:    http://localhost:8881/job-end
-  jobEntriesUrl:  http://localhost:8881/job-start
+  employmentTerminationsUrl:    http://localhost:8881/termination-of-employment
+  employmentCommencementsUrl:  http://localhost:8881/commencement-of-employment
   commencementMatchNotifyUrl: http://localhost:8881/commencement-match-notification
   terminationMatchNotifyUrl: http://localhost:8881/termination-match-notification
 -
   retirementFundUids:
     - CHE-109.537.488-Helvetia-Prisma-Sammelstiftung
     - CHE-109.537.488-Helvetia-Prisma-Sammelstiftung 2
-  jobExitsUrl:   http://localhost:8882/job-end
-  jobEntriesUrl: http://localhost:8882/job-start
+  employmentTerminationsUrl:   http://localhost:8882/termination-of-employment
+  employmentCommencementsUrl: http://localhost:8882/commencement-of-employment
   commencementMatchNotifyUrl: http://localhost:8882/commencement-match-notification
   terminationMatchNotifyUrl: http://localhost:8882/termination-match-notification
