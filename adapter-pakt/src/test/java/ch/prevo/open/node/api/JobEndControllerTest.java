@@ -45,7 +45,7 @@ public class JobEndControllerTest {
 	@Test @Ignore
 	public void getAllJobEndData() throws Exception {
 
-		mockMvc.perform(get("/job-end")).andExpect(status().isOk()).andExpect(content().contentType(contentType))
+		mockMvc.perform(get("/termination-of-employment")).andExpect(status().isOk()).andExpect(content().contentType(contentType))
 				.andExpect(jsonPath("$", hasSize(3)))
 				.andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.3412.8844.97")))
 				.andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.537.488")));

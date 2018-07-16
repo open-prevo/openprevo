@@ -28,7 +28,7 @@ public class Controller {
         return ResponseEntity.ok(jobStartDAO.getJobStarts());
     }
 
-    @RequestMapping("/job-end")
+    @RequestMapping("/termination-of-employment")
     public ResponseEntity<List<JobEnd>> getAllJobEndData() {
         return ResponseEntity.ok(jobEndDAO.getJobEnds());
     }

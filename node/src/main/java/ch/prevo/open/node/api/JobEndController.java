@@ -26,7 +26,7 @@ public class JobEndController {
         this.jobEndService = jobEndService;
     }
 
-    @RequestMapping("/job-end")
+    @RequestMapping("/termination-of-employment")
     public ResponseEntity<SortedSet<InsurantInformation>> getAllJobEndData() {
         try {
             Set<InsurantInformation> allJobEndData = this.jobEndService.getAllJobEndData();
