@@ -2,6 +2,7 @@ package ch.prevo.open.node.api;
 
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
+import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.services.JobStartService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,11 +45,11 @@ public class JobStartControllerTest extends RestBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.1234.5678.97")))
+                .andExpect(jsonPath("$[0].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1234.5678.97"))))
                 .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")))
-                .andExpect(jsonPath("$[1].encryptedOasiNumber", is("756.1298.6578.97")))
-                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.537.488")))
-                .andExpect(jsonPath("$[2].encryptedOasiNumber", is("756.5678.1234.17")))
-                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.740.078")));
+                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.5678.1234.17"))))
+                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.740.078")))
+                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1298.6578.97"))))
+                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.537.488")));
     }
 }

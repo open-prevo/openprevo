@@ -5,6 +5,8 @@ import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.nodes.NodeConfiguration;
 import ch.prevo.open.hub.nodes.NodeRegistry;
 import ch.prevo.open.hub.nodes.NodeService;
+
+import ch.prevo.open.encrypted.services.Cryptography;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -69,22 +71,22 @@ public class HubIntegrationTest {
     @Test
     public void testMatchingService() {
         //given
-        Match expectedMatchFromHelvetia1ToBaloise1 = new Match("756.1234.5678.97",
+        Match expectedMatchFromHelvetia1ToBaloise1 = new Match(Cryptography.digestOasiNumber("756.1234.5678.97"),
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
                 "CHE-109.740.084-Baloise-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromHelvetia1ToBaloise2 = new Match("756.3324.5678.58",
+        Match expectedMatchFromHelvetia1ToBaloise2 = new Match(Cryptography.digestOasiNumber("756.3324.5678.58"),
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
                 "CHE-109.740.084-Baloise-Sammelstiftung 2", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromHelvetia2ToBaloise1 = new Match("756.5678.1234.17",
+        Match expectedMatchFromHelvetia2ToBaloise1 = new Match(Cryptography.digestOasiNumber("756.5678.1234.17"),
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung 2",
                 "CHE-109.740.084-Baloise-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise1ToHelvetia1 = new Match("756.1335.5778.23",
+        Match expectedMatchFromBaloise1ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.1335.5778.23"),
                 "CHE-109.740.084-Baloise-Sammelstiftung",
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise1ToHelvetia2 = new Match("756.9534.5271.94",
+        Match expectedMatchFromBaloise1ToHelvetia2 = new Match(Cryptography.digestOasiNumber("756.9534.5271.94"),
                 "CHE-109.740.084-Baloise-Sammelstiftung",
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung 2", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise2ToHelvetia1 = new Match("756.9874.5778.58",
+        Match expectedMatchFromBaloise2ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.9874.5778.58"),
                 "CHE-109.740.084-Baloise-Sammelstiftung 2",
                 "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
 

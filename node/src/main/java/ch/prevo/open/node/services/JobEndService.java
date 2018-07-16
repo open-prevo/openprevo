@@ -1,6 +1,7 @@
 package ch.prevo.open.node.services;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.JobEndProvider;
 import ch.prevo.open.node.data.provider.ProviderFactory;
@@ -22,12 +23,12 @@ public class JobEndService {
     @Inject
     public JobEndService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
-        jobEndProvider = factory != null? factory.getJobEndProvider() : null;
+        this.jobEndProvider = factory != null? factory.getJobEndProvider() : null;
     }
 
 	public Set<InsurantInformation> getAllJobEndData() {
 		return jobEndProvider.getJobEnds().stream()
-				.map(jobEnd -> new InsurantInformation(jobEnd.getJobInfo().getOasiNumber(),
+				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getJobInfo().getOasiNumber()),
 						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
 				.collect(Collectors.toSet());
 	}
