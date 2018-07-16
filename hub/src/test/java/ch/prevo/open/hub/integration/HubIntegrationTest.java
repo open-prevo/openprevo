@@ -46,8 +46,8 @@ public class HubIntegrationTest {
     @ClassRule
     public static DockerComposeContainer environment =
             new DockerComposeContainer(Paths.get("../docker-compose-nodes.yml").toAbsolutePath().normalize().toFile())
-                    .withExposedService("node_baloise", NODE_PORT, Wait.forHttp("/job-start").forStatusCode(200))
-                    .withExposedService("node_helvetia", NODE_PORT, Wait.forHttp("/job-start").forStatusCode(200))
+                    .withExposedService("node_baloise", NODE_PORT, Wait.forHttp("/commencement-of-employment").forStatusCode(200))
+                    .withExposedService("node_helvetia", NODE_PORT, Wait.forHttp("/commencement-of-employment").forStatusCode(200))
                     .withPull(false);
 
     @Before

@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.ss.usermodel.Cell;
@@ -50,15 +50,15 @@ public class CommencementNotificationWriter implements Closeable {
     public Workbook append(FullCommencementNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final JobInfo jobInfo = notification.getJobEnd().getJobInfo();
+        final EmploymentInfo employmentInfo = notification.getEmploymentTermination().getEmploymentInfo();
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
-        row.createCell(0).setCellValue(jobInfo.getOasiNumber());
+        row.createCell(0).setCellValue(employmentInfo.getOasiNumber());
         final Cell terminationDate = row.createCell(1);
-        terminationDate.setCellValue(convert(jobInfo.getDate()));
+        terminationDate.setCellValue(convert(employmentInfo.getDate()));
         terminationDate.setCellStyle(dateStyle);
-        row.createCell(2).setCellValue(jobInfo.getRetirementFundUid());
-        row.createCell(3).setCellValue(jobInfo.getInternalReferenz());
+        row.createCell(2).setCellValue(employmentInfo.getRetirementFundUid());
+        row.createCell(3).setCellValue(employmentInfo.getInternalReferenz());
         final Cell commencementDate = row.createCell(4);
         commencementDate.setCellValue(convert(notification.getCommencementDate()));
         commencementDate.setCellStyle(dateStyle);
@@ -89,17 +89,17 @@ public class CommencementNotificationWriter implements Closeable {
 
         createHeading(row, "AHV-Nummer");
         createHeading(row, "Austritt");
-        createHeading(row, "UID der eigenen VE");
+        createHeading(row, "UID der eigenen RF");
         createHeading(row, "Eigene Referenz");
         createHeading(row, "Eintritt");
-        createHeading(row, "UID der neuen VE");
-        createHeading(row, "Name der neuen VE");
+        createHeading(row, "UID der neuen RF");
+        createHeading(row, "Name der neuen RF");
         createHeading(row, "Zusatzname");
         createHeading(row, "Strasse / Postfach");
         createHeading(row, "PLZ");
         createHeading(row, "Ort");
         createHeading(row, "IBAN");
-        createHeading(row, "Referenznr. der neuen VE");
+        createHeading(row, "Referenznr. der neuen RF");
     }
 
     private void createHeading(Row row, String label) {

@@ -1,7 +1,7 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
@@ -64,7 +64,7 @@ public class NodeServiceTest {
     @Test
     public void currentEmploymentTerminations() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node1_new));
-        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentExitsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
@@ -78,9 +78,9 @@ public class NodeServiceTest {
         // given
         InsurantInformation invalidInsurant = new InsurantInformation(OASI1, "RandomUID");
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2_old, node1_new));
-        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentExitsUrl()))
                 .thenReturn(singletonList(invalidInsurant));
-        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentExitsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
@@ -96,9 +96,9 @@ public class NodeServiceTest {
     public void tryGetCurrentCurrentEmploymentTerminationsWithUnreachableNode() {
         // given
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node2_old, node1_new));
-        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentExitsUrl()))
                 .thenReturn(emptyList());
-        when(nodeCaller.getInsurantInformationList(node1_new.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentExitsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
@@ -112,7 +112,7 @@ public class NodeServiceTest {
     @Test
     public void currentEmploymentCommencements() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(singletonList(node2_old));
-        when(nodeCaller.getInsurantInformationList(node2_old.getJobEntriesUrl()))
+        when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentEntriesUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
@@ -136,7 +136,7 @@ public class NodeServiceTest {
                 singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate)));
 
         // then
-        CommencementMatchNotification matchNotification = new CommencementMatchNotification(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
+        MatchForTermination matchNotification = new MatchForTermination(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
         verify(nodeCaller).postTerminationNotification(eq(node1_new.getTerminationMatchNotifyUrl()), eq(matchNotification));
     }
 
@@ -146,7 +146,7 @@ public class NodeServiceTest {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
         matcherService.findMatches(singleton(terminationInsurantInfo), singleton(commencementInsurantInfo));
 
-        when(nodeCaller.getInsurantInformationList(node2_old.getJobExitsUrl()))
+        when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentExitsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
@@ -159,7 +159,7 @@ public class NodeServiceTest {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
         matcherService.findMatches(singleton(terminationInsurantInfo), singleton(commencementInsurantInfo));
 
-        when(nodeCaller.getInsurantInformationList(node1_new.getJobEntriesUrl()))
+        when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentEntriesUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
         Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 /**
  * Matching notification sent to an OpenPrevo Node.
  */
-public class TerminationMatchNotification {
+public class MatchForCommencement {
 
     private String encryptedOasiNumber;
     private String retirementFundUid;

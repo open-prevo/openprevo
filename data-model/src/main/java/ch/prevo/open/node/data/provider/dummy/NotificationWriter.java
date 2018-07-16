@@ -2,7 +2,7 @@ package ch.prevo.open.node.data.provider.dummy;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobInfo;
+import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.io.PrintWriter;
@@ -14,13 +14,13 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment commencement: ");
 
-        final JobInfo jobInfo = notification.getJobStart().getJobInfo();
-        if (jobInfo != null) {
+        final EmploymentInfo employmentInfo = notification.getEmploymentCommencement().getEmploymentInfo();
+        if (employmentInfo != null) {
             writer.println("\nMy data (employment commencement)");
-            writer.println("OASI number:                  " + jobInfo.getOasiNumber());
-            writer.println("Employment commencement date: " + jobInfo.getDate());
-            writer.println("Internal Reference:           " + jobInfo.getInternalReferenz());
-            writer.println("Retirement fund:              " + jobInfo.getRetirementFundUid());
+            writer.println("OASI number:                  " + employmentInfo.getOasiNumber());
+            writer.println("Employment commencement date: " + employmentInfo.getDate());
+            writer.println("Internal Reference:           " + employmentInfo.getInternalReferenz());
+            writer.println("Retirement fund:              " + employmentInfo.getRetirementFundUid());
         }
 
         writer.println("\nOther data (employment termination)");
@@ -36,13 +36,13 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment termination");
 
-        final JobInfo jobInfo = notification.getJobEnd().getJobInfo();
-        if (jobInfo != null) {
+        final EmploymentInfo employmentInfo = notification.getEmploymentTermination().getEmploymentInfo();
+        if (employmentInfo != null) {
             writer.println("\nMy data (employment termination)");
-            writer.println("OASI number:                 " + jobInfo.getOasiNumber());
-            writer.println("Employment termination date: " + jobInfo.getDate());
-            writer.println("Internal Reference:          " + jobInfo.getInternalReferenz());
-            writer.println("Retirement fund:             " + jobInfo.getRetirementFundUid());
+            writer.println("OASI number:                 " + employmentInfo.getOasiNumber());
+            writer.println("Employment termination date: " + employmentInfo.getDate());
+            writer.println("Internal Reference:          " + employmentInfo.getInternalReferenz());
+            writer.println("Retirement fund:             " + employmentInfo.getRetirementFundUid());
         }
 
         writer.println("\nOther data (employment commencement)");

@@ -3,7 +3,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.node.services.JobEndService;
+import ch.prevo.open.node.services.EmploymentTerminationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -25,23 +25,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { NodeApplication.class, JobEndControllerTest.Config.class })
+@SpringBootTest(classes = { NodeApplication.class, EmploymentTerminationControllerTest.Config.class })
 @WebAppConfiguration
-public class JobEndControllerTest extends RestBaseTest {
+public class EmploymentTerminationControllerTest extends RestBaseTest {
 
     @TestConfiguration
     static class Config {
         @Bean
-        public JobEndService jobEndService() throws Exception {
+        public EmploymentTerminationService employmentTerminationService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new JobEndService(factory);
+            return new EmploymentTerminationService(factory);
         }
     }
 
     @Test
-    public void getAllJobEndData() throws Exception {
-        mockMvc.perform(get("/job-end"))
+    public void getAllEmploymentTerminationData() throws Exception {
+        mockMvc.perform(get("/termination-of-employment"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))

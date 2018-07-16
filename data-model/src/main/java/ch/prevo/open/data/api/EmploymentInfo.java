@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.time.LocalDate;
 
 @SuppressWarnings("unused")
-public class JobInfo {
+public class EmploymentInfo {
 
     private String retirementFundUid;
     private String internalReferenz;
@@ -16,15 +16,15 @@ public class JobInfo {
     private String internalPersonId;
     private LocalDate date;
 
-    public JobInfo() {
+    public EmploymentInfo() {
     }
 
-    public JobInfo(String retirementFundUid, String oasiNumber) {
+    public EmploymentInfo(String retirementFundUid, String oasiNumber) {
         this.retirementFundUid = retirementFundUid;
         this.oasiNumber = oasiNumber;
     }
 
-    public JobInfo(String retirementFundUid, String internalReferenz, String oasiNumber, String internalPersonId, LocalDate date) {
+    public EmploymentInfo(String retirementFundUid, String internalReferenz, String oasiNumber, String internalPersonId, LocalDate date) {
         this.retirementFundUid = retirementFundUid;
         this.internalReferenz = internalReferenz;
         this.oasiNumber = oasiNumber;
@@ -78,14 +78,14 @@ public class JobInfo {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        JobInfo jobInfo = (JobInfo) o;
+        EmploymentInfo employmentInfo = (EmploymentInfo) o;
 
         return new EqualsBuilder()
-                .append(retirementFundUid, jobInfo.retirementFundUid)
-                .append(internalReferenz, jobInfo.internalReferenz)
-                .append(oasiNumber, jobInfo.oasiNumber)
-                .append(internalPersonId, jobInfo.internalPersonId)
-                .append(date, jobInfo.date)
+                .append(retirementFundUid, employmentInfo.retirementFundUid)
+                .append(internalReferenz, employmentInfo.internalReferenz)
+                .append(oasiNumber, employmentInfo.oasiNumber)
+                .append(internalPersonId, employmentInfo.internalPersonId)
+                .append(date, employmentInfo.date)
                 .isEquals();
     }
 
