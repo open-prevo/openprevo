@@ -1,5 +1,8 @@
 package ch.prevo.open.hub.nodes;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +22,12 @@ public class NodeConfiguration {
 
     public NodeConfiguration() {}
 
-    public NodeConfiguration(String baseUrl, List<String> retirementFundUids) {
+    public NodeConfiguration(String baseUrl, String... retirementFundUids) {
         this.jobEntriesUrl = baseUrl + JOB_START_ENDPOINT;
         this.jobExitsUrl = baseUrl + JOB_END_ENDPOINT;
         this.commencementMatchNotifyUrl = baseUrl + COMMENCEMENT_MATCH_NOTIFICATION_ENDPOINT;
         this.terminationMatchNotifyUrl = baseUrl + TERMINATION_MATCH_NOTIFICATION_ENDPOINT;
-        this.retirementFundUids = retirementFundUids;
+        this.retirementFundUids = Arrays.asList(retirementFundUids);
     }
 
     String getJobExitsUrl() {
@@ -69,5 +72,16 @@ public class NodeConfiguration {
 
     boolean containsRetirementFundUid(String retirementFundUid) {
         return retirementFundUids.stream().anyMatch(s -> Objects.equals(s, retirementFundUid));
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("retirementFundUids", retirementFundUids)
+                .append("jobExitsUrl", jobExitsUrl)
+                .append("jobEntriesUrl", jobEntriesUrl)
+                .append("commencementMatchNotifyUrl", commencementMatchNotifyUrl)
+                .append("terminationMatchNotifyUrl", terminationMatchNotifyUrl)
+                .toString();
     }
 }

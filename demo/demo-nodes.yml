@@ -1,0 +1,24 @@
+-
+  retirementFundUids:
+    - CHE-109.740.084
+    - CHE-223.471.073
+  jobExitsUrl:    http://localhost:8851/job-end
+  jobEntriesUrl:  http://localhost:8851/job-start
+  commencementMatchNotifyUrl: http://localhost:8851/commencement-match-notification
+  terminationMatchNotifyUrl: http://localhost:8851/termination-match-notification
+
+-
+  retirementFundUids:
+    - CHE-109.537.519
+    - CHE-109.633.927
+  jobExitsUrl:   http://localhost:8852/job-end
+  jobEntriesUrl: http://localhost:8852/job-start
+  commencementMatchNotifyUrl: http://localhost:8852/commencement-match-notification
+  terminationMatchNotifyUrl: http://localhost:8852/termination-match-notification
+-
+  retirementFundUids:
+    - CHE-110.227.899
+  jobExitsUrl:   http://localhost:8853/job-end
+  jobEntriesUrl: http://localhost:8853/job-start
+  commencementMatchNotifyUrl: http://localhost:8853/commencement-match-notification
+  terminationMatchNotifyUrl: http://localhost:8853/termination-match-notification

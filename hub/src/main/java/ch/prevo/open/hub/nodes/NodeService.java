@@ -78,7 +78,7 @@ public class NodeService {
                 .collect(toList());
 
         if (invalidInsurants.size() > 0) {
-            LOGGER.error("Invalid data received from node {} the following insurants have an invalid retirement fund",
+            LOGGER.error("Invalid data received from node {} the following insurants have an invalid retirement fund {}",
                     nodeConfig, invalidInsurants);
         }
         return invalidInsurants;

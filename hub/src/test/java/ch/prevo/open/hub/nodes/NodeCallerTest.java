@@ -29,6 +29,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class NodeCallerTest {
 
     private static final String OASI1 = "756.1234.5678.97";
+    private static final String OASI2 = "756.1335.5778.23";
     private static final String UID1 = "CHE-223.471.073";
     private static final String UID2 = "CHE-109.723.097";
 
@@ -37,6 +38,12 @@ public class NodeCallerTest {
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\", \"date\" : \"2017-12-31\"}]";
+
+    private static final String INSURANT_INFORMATION_JSON_ARRAY_WITH_MULTIPLE_FUNDS
+            = "[" +
+            "{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\", \"date\" : \"2017-12-31\"}," +
+            "{\"encryptedOasiNumber\" : \"" + OASI2 + "\", \"retirementFundUid\" : \"" + UID2 + "\", \"date\" : \"2017-12-31\"}" +
+            "]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
             = "{\"name\" : \"" + RETIREMENT_FUND_NAME + "\", \"iban\" : \"" + IBAN + "\"}";
@@ -60,6 +67,24 @@ public class NodeCallerTest {
         assertEquals(1, insurantInformationList.size());
         assertEquals(UID1, insurantInformationList.get(0).getRetirementFundUid());
         assertEquals(OASI1, insurantInformationList.get(0).getEncryptedOasiNumber());
+        assertEquals(of(2017, 12, 31), insurantInformationList.get(0).getDate());
+        server.verify();
+    }
+
+    @Test
+    public void getInsurantInformationListWithMultipleRetirementFunds() {
+        // given
+        server.expect(requestTo(URL1))
+                .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY_WITH_MULTIPLE_FUNDS, MediaType.APPLICATION_JSON));
+
+        List<InsurantInformation> insurantInformationList = nodeCaller.getInsurantInformationList(URL1);
+
+        assertEquals(2, insurantInformationList.size());
+        assertEquals(UID1, insurantInformationList.get(0).getRetirementFundUid());
+        assertEquals(OASI1, insurantInformationList.get(0).getEncryptedOasiNumber());
+        assertEquals(of(2017, 12, 31), insurantInformationList.get(0).getDate());
+        assertEquals(UID2, insurantInformationList.get(1).getRetirementFundUid());
+        assertEquals(OASI2, insurantInformationList.get(1).getEncryptedOasiNumber());
         assertEquals(of(2017, 12, 31), insurantInformationList.get(0).getDate());
         server.verify();
     }
