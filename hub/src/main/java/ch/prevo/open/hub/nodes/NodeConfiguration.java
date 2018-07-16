@@ -9,7 +9,7 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class NodeConfiguration {
 
-    private static final String JOB_START_ENDPOINT = "/job-start";
+    private static final String JOB_START_ENDPOINT = "/commencement-of-employment";
     private static final String JOB_END_ENDPOINT = "/termination-of-employment";
     private static final String COMMENCEMENT_MATCH_NOTIFICATION_ENDPOINT = "/commencement-match-notification";
     private static final String TERMINATION_MATCH_NOTIFICATION_ENDPOINT = "/termination-match-notification";

@@ -26,7 +26,7 @@ class JobStartController {
         this.jobStartService = jobStartService;
     }
 
-    @RequestMapping("/job-start")
+    @RequestMapping("/commencement-of-employment")
     public ResponseEntity<SortedSet<InsurantInformation>> getAllJobStartData() {
         try {
             Set<InsurantInformation> jobStartData = this.jobStartService.getAllJobStartData();

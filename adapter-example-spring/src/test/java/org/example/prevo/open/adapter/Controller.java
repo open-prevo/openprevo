@@ -23,7 +23,7 @@ public class Controller {
         this.jobEndDAO = jobEndDAO;
     }
 
-    @RequestMapping("/job-start")
+    @RequestMapping("/commencement-of-employment")
     public ResponseEntity<List<JobStart>> getAllJobStartData() {
         return ResponseEntity.ok(jobStartDAO.getJobStarts());
     }

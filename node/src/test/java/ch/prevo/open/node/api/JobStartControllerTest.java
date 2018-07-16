@@ -41,7 +41,7 @@ public class JobStartControllerTest extends RestBaseTest {
 
     @Test
     public void getAllJobStartData() throws Exception {
-        mockMvc.perform(get("/job-start"))
+        mockMvc.perform(get("/commencement-of-employment"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))
