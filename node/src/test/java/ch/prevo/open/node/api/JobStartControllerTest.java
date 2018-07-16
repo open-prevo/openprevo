@@ -47,9 +47,9 @@ public class JobStartControllerTest extends RestBaseTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].encryptedOasiNumber", is(Cryptography.hash("756.1234.5678.97"))))
                 .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")))
-                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.hash("756.1298.6578.97"))))
-                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.537.488")))
-                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.hash("756.5678.1234.17"))))
-                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.740.078")));
+                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.hash("756.5678.1234.17"))))
+                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.740.078")))
+                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.hash("756.1298.6578.97"))))
+                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.537.488")));
     }
 }
