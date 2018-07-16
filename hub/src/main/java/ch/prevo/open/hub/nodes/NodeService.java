@@ -3,7 +3,7 @@ package ch.prevo.open.hub.nodes;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
 import org.slf4j.Logger;
@@ -100,7 +100,7 @@ public class NodeService {
     }
 
     private CapitalTransferInformation tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
-        TerminationMatchNotification matchNotification = new TerminationMatchNotification();
+        MatchForCommencement matchNotification = new MatchForCommencement();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());

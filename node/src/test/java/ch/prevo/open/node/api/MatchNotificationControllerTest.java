@@ -1,6 +1,6 @@
 package ch.prevo.open.node.api;
 
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.encrypted.services.Cryptography;
@@ -43,7 +43,7 @@ public class MatchNotificationControllerTest extends RestBaseTest {
     @Test
     public void sendCommencementNotificationToPreviousRetirementFund() throws Exception {
         // given
-        TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
+        MatchForCommencement commencementMatchNotification = new MatchForCommencement();
         commencementMatchNotification.setEncryptedOasiNumber(Cryptography.digestOasiNumber("756.1234.5678.97"));
         commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
         commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));

@@ -7,7 +7,7 @@ import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
@@ -59,7 +59,7 @@ public class MatchNotificationService {
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(TerminationMatchNotification notification) {
+    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification) {
         final Optional<EmploymentCommencement> employmentCommencement = employmentCommencementProvider.getEmploymentCommencements().stream()
                 .filter(currentEmploymentCommencement -> isSameAsNotification(currentEmploymentCommencement, notification))
                 .findAny();
@@ -79,7 +79,7 @@ public class MatchNotificationService {
         return employmentCommencement.map(EmploymentCommencement::getCapitalTransferInfo);
     }
 
-    private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, TerminationMatchNotification notification) {
+    private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
         EmploymentInfo employmentInfo = employmentCommencement.getEmploymentInfo();
         return Cryptography.digestOasiNumber(employmentInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 employmentInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&

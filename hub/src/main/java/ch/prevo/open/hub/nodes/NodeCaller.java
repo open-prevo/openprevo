@@ -4,7 +4,7 @@ package ch.prevo.open.hub.nodes;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.CommencementMatchNotification;
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -39,7 +39,7 @@ public class NodeCaller {
         }
     }
 
-    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, TerminationMatchNotification matchNotification) {
+    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             return restTemplate.postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
         } catch (Exception e) {
