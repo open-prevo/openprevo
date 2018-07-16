@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.EmploymentCommencement;
 
 public class JsonAdapterTest {
 
@@ -20,14 +20,14 @@ public class JsonAdapterTest {
     }
 
     @Test
-    public void getJobStartInformation() {
-        List<JobStart> jobEndInformation = jsonAdapter.getJobStarts();
+    public void getEmploymentCommencementInformation() {
+        List<EmploymentCommencement> jobEndInformation = jsonAdapter.getEmploymentCommencements();
         assertThat(jobEndInformation).hasSize(3);
     }
 
     @Test
-    public void getJobEndInformation() {
-        List<JobEnd> jobEndInformation = jsonAdapter.getJobEnds();
+    public void getEmploymentTerminationInformation() {
+        List<EmploymentTermination> jobEndInformation = jsonAdapter.getEmploymentTerminations();
         assertThat(jobEndInformation).hasSize(3);
     }
 }

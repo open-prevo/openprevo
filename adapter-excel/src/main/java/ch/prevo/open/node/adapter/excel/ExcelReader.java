@@ -1,12 +1,12 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class ExcelReader implements JobStartProvider, JobEndProvider {
+public class ExcelReader implements EmploymentCommencementProvider, EmploymentTerminationProvider {
 
     private static Logger LOG = LoggerFactory.getLogger(ExcelReader.class);
 
@@ -52,11 +52,11 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
     private static final String FALLBACK_FILE = "retirement-fund-test-data_de.xlsx";
 
     @Override
-    public List<JobEnd> getJobEnds() {
-        List<JobEnd> jobEnds = Collections.emptyList();
+    public List<EmploymentTermination> getEmploymentTerminations() {
+        List<EmploymentTermination> jobEnds = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                jobEnds = mapRows(wb.getSheetAt(0), this::mapJobEnd);
+                jobEnds = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment terminations", e);
@@ -65,11 +65,11 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
     }
 
     @Override
-    public List<JobStart> getJobStarts() {
-        List<JobStart> jobStarts = Collections.emptyList();
+    public List<EmploymentCommencement> getEmploymentCommencements() {
+        List<EmploymentCommencement> jobStarts = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                jobStarts = mapRows(wb.getSheetAt(1), this::mapJobStart);
+                jobStarts = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment commencements", e);
@@ -104,7 +104,7 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
         return result;
     }
 
-    private Optional<JobStart> mapJobStart(Row row) {
+    private Optional<EmploymentCommencement> mapEmploymentCommencement(Row row) {
         JobInfo jobInfo = mapJobInfo(row);
         if (jobInfo == null) {
             return Optional.empty();
@@ -121,15 +121,15 @@ public class ExcelReader implements JobStartProvider, JobEndProvider {
         capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
         capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
 
-        return Optional.of(new JobStart(null, jobInfo, capititalTransferInfo));
+        return Optional.of(new EmploymentCommencement(null, jobInfo, capititalTransferInfo));
     }
 
-    private Optional<JobEnd> mapJobEnd(Row row) {
+    private Optional<EmploymentTermination> mapEmploymentTermination(Row row) {
         JobInfo jobInfo = mapJobInfo(row);
         if (jobInfo == null) {
             return Optional.empty();
         }
-        return Optional.of(new JobEnd(null, jobInfo));
+        return Optional.of(new EmploymentTermination(null, jobInfo));
     }
 
     private JobInfo mapJobInfo(Row row) {

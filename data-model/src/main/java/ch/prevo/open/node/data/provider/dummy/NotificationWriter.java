@@ -14,7 +14,7 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment commencement: ");
 
-        final JobInfo jobInfo = notification.getJobStart().getJobInfo();
+        final JobInfo jobInfo = notification.getEmploymentCommencement().getJobInfo();
         if (jobInfo != null) {
             writer.println("\nMy data (employment commencement)");
             writer.println("OASI number:                  " + jobInfo.getOasiNumber());
@@ -36,7 +36,7 @@ class NotificationWriter {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment termination");
 
-        final JobInfo jobInfo = notification.getJobEnd().getJobInfo();
+        final JobInfo jobInfo = notification.getEmploymentTermination().getJobInfo();
         if (jobInfo != null) {
             writer.println("\nMy data (employment termination)");
             writer.println("OASI number:                 " + jobInfo.getOasiNumber());

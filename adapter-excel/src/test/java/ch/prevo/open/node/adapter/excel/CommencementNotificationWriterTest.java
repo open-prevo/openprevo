@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.JobInfo;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
@@ -37,14 +37,14 @@ public class CommencementNotificationWriterTest {
         jobInfo.setDate(LocalDate.of(2018, 6, 30));
         jobInfo.setInternalReferenz("baloise-1");
 
-        final JobEnd jobEnd = new JobEnd();
+        final EmploymentTermination jobEnd = new EmploymentTermination();
         jobEnd.setJobInfo(jobInfo);
 
         final FullCommencementNotification notification = new FullCommencementNotification();
         notification.setNewRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
         notification.setCommencementDate(LocalDate.of(2018, 7, 1));
         notification.setTransferInformation(transferInformation);
-        notification.setJobEnd(jobEnd);
+        notification.setEmploymentTermination(jobEnd);
 
         final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
 

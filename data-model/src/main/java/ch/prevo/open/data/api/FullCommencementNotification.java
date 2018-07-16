@@ -11,7 +11,7 @@ public class FullCommencementNotification {
     private LocalDate commencementDate;
     private CapitalTransferInformation transferInformation;
 
-    private JobEnd jobEnd;
+    private EmploymentTermination jobEnd;
 
     public String getNewRetirementFundUid() {
         return newRetirementFundUid;
@@ -37,11 +37,11 @@ public class FullCommencementNotification {
         this.transferInformation = transferInformation;
     }
 
-    public JobEnd getJobEnd() {
+    public EmploymentTermination getEmploymentTermination() {
         return jobEnd;
     }
 
-    public void setJobEnd(JobEnd jobEnd) {
+    public void setEmploymentTermination(EmploymentTermination jobEnd) {
         this.jobEnd = jobEnd;
     }
 

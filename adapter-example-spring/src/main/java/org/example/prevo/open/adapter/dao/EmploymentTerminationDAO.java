@@ -1,10 +1,10 @@
 package org.example.prevo.open.adapter.dao;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import org.example.prevo.open.adapter.dto.JobEndDTO;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import org.example.prevo.open.adapter.dto.EmploymentTerminationDTO;
 import org.example.prevo.open.adapter.dto.JobInfoDTO;
-import org.example.prevo.open.adapter.repository.JobEndRepository;
+import org.example.prevo.open.adapter.repository.EmploymentTerminationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class JobEndDAO implements JobEndProvider {
+public class EmploymentTerminationDAO implements EmploymentTerminationProvider {
 
-    private final JobEndRepository repository;
+    private final EmploymentTerminationRepository repository;
     private final ModelMapper mapper;
 
     @Inject
-    public JobEndDAO(JobEndRepository repository) {
+    public EmploymentTerminationDAO(EmploymentTerminationRepository repository) {
         this.repository = repository;
         this.mapper = new ModelMapper();
 
@@ -29,7 +29,7 @@ public class JobEndDAO implements JobEndProvider {
         jobInfo.setDate(LocalDate.now());
         jobInfo.setRetirementFundUid("4711");
 
-        final JobEndDTO jobEnd = new JobEndDTO();
+        final EmploymentTerminationDTO jobEnd = new EmploymentTerminationDTO();
         jobEnd.setJobInfo(jobInfo);
 
         repository.save(jobEnd);
@@ -37,9 +37,9 @@ public class JobEndDAO implements JobEndProvider {
     }
 
     @Override
-    public List<JobEnd> getJobEnds() {
+    public List<EmploymentTermination> getEmploymentTerminations() {
         return repository.findAll().stream()
-                .map(dto -> mapper.map(dto, JobEnd.class))
+                .map(dto -> mapper.map(dto, EmploymentTermination.class))
                 .collect(Collectors.toList());
     }
 }

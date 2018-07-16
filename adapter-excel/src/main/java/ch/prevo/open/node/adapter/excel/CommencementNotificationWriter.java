@@ -50,7 +50,7 @@ public class CommencementNotificationWriter implements Closeable {
     public Workbook append(FullCommencementNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final JobInfo jobInfo = notification.getJobEnd().getJobInfo();
+        final JobInfo jobInfo = notification.getEmploymentTermination().getJobInfo();
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());

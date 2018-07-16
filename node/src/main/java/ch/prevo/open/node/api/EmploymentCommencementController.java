@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.node.services.JobStartService;
+import ch.prevo.open.node.services.EmploymentCommencementService;
 
 @RestController
-class JobStartController {
+class EmploymentCommencementController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(JobStartController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(EmploymentCommencementController.class);
 
-    private JobStartService jobStartService;
+    private EmploymentCommencementService jobStartService;
 
     @Inject
-    public JobStartController(JobStartService jobStartService) {
+    public EmploymentCommencementController(EmploymentCommencementService jobStartService) {
         this.jobStartService = jobStartService;
     }
 
     @RequestMapping("/commencement-of-employment")
-    public ResponseEntity<SortedSet<InsurantInformation>> getAllJobStartData() {
+    public ResponseEntity<SortedSet<InsurantInformation>> getAllEmploymentCommencementData() {
         try {
-            Set<InsurantInformation> jobStartData = this.jobStartService.getAllJobStartData();
+            Set<InsurantInformation> jobStartData = this.jobStartService.getAllEmploymentCommencementData();
             return ResponseEntity.ok(new TreeSet<>(jobStartData));
         } catch (Exception e) {
             LOGGER.error("Could not load job start data", e);

@@ -3,7 +3,7 @@ package ch.prevo.open.node.services;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.ProviderFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
 import org.springframework.stereotype.Service;
@@ -16,18 +16,18 @@ import java.util.stream.Collectors;
  * Service implementation to retrieve encrypted information about an insurant.
  */
 @Service
-public class JobStartService {
+public class EmploymentCommencementService {
 
-    private final JobStartProvider jobStartProvider;
+    private final EmploymentCommencementProvider jobStartProvider;
 
     @Inject
-    public JobStartService(ServiceListFactoryBean factoryBean) {
+    public EmploymentCommencementService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
-        jobStartProvider = factory != null? factory.getJobStartProvider() : null;
+        jobStartProvider = factory != null? factory.getEmploymentCommencementProvider() : null;
     }
 
-	public Set<InsurantInformation> getAllJobStartData() {
-		return jobStartProvider.getJobStarts().stream()
+	public Set<InsurantInformation> getAllEmploymentCommencementData() {
+		return jobStartProvider.getEmploymentCommencements().stream()
 				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getJobInfo().getOasiNumber()),
 						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
 				.collect(Collectors.toSet());

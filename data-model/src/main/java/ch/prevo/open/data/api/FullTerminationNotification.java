@@ -9,7 +9,7 @@ public class FullTerminationNotification {
     private String previousRetirementFundUid;
     private LocalDate terminationDate;
 
-    private JobStart jobStart;
+    private EmploymentCommencement jobStart;
 
     public String getPreviousRetirementFundUid() {
         return previousRetirementFundUid;
@@ -27,11 +27,11 @@ public class FullTerminationNotification {
         this.terminationDate = terminationDate;
     }
 
-    public JobStart getJobStart() {
+    public EmploymentCommencement getEmploymentCommencement() {
         return jobStart;
     }
 
-    public void setJobStart(JobStart jobStart) {
+    public void setEmploymentCommencement(EmploymentCommencement jobStart) {
         this.jobStart = jobStart;
     }
 

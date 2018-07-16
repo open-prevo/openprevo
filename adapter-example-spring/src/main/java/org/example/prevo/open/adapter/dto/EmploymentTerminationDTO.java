@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.Entity;
 
 @Entity
-public class JobEndDTO extends AbstractJobEventDTO {
+public class EmploymentTerminationDTO extends AbstractJobEventDTO {
 
     @Override
     public String toString() {

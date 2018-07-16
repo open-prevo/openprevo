@@ -28,7 +28,7 @@ import ch.prevo.pakt.PaktAdapterConfig;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PaktAdapterConfig.class)
 @WebAppConfiguration
-public class JobStartControllerTest {
+public class EmploymentCommencementControllerTest {
 
     private MockMvc mockMvc;
 
@@ -45,7 +45,7 @@ public class JobStartControllerTest {
     }
 
     @Test @Ignore
-    public void getAllJobStartData() throws Exception {
+    public void getAllEmploymentCommencementData() throws Exception {
         mockMvc.perform(get("/commencement-of-employment"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))

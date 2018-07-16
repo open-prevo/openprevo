@@ -2,7 +2,7 @@ package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -37,14 +37,14 @@ public class TerminationNotificationWriterTest {
         jobInfo.setDate(LocalDate.of(2018, 7, 1));
         jobInfo.setInternalReferenz("helvetia-1");
 
-        final JobStart jobStart = new JobStart();
+        final EmploymentCommencement jobStart = new EmploymentCommencement();
         jobStart.setCapitalTransferInfo(transferInformation);
         jobStart.setJobInfo(jobInfo);
 
         final FullTerminationNotification notification = new FullTerminationNotification();
         notification.setPreviousRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
         notification.setTerminationDate(LocalDate.of(2018, 6, 30));
-        notification.setJobStart(jobStart);
+        notification.setEmploymentCommencement(jobStart);
 
         final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
 

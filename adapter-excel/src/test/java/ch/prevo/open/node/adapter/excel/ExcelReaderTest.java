@@ -1,8 +1,8 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class ExcelReaderTest {
 
     @Test
     public void readEmploymentTerminations() throws Exception {
-        List<JobEnd> employmentTerminations = getExcelReader().getJobEnds();
+        List<EmploymentTermination> employmentTerminations = getExcelReader().getEmploymentTerminations();
         assertEquals(2, employmentTerminations.size());
 
         JobInfo jobInfo = employmentTerminations.get(1).getJobInfo();
@@ -31,7 +31,7 @@ public class ExcelReaderTest {
 
     @Test
     public void readEmploymentCommencements() throws Exception {
-        List<JobStart> employmentCommencements = getExcelReader().getJobStarts();
+        List<EmploymentCommencement> employmentCommencements = getExcelReader().getEmploymentCommencements();
 
         assertEquals(2, employmentCommencements.size());
 

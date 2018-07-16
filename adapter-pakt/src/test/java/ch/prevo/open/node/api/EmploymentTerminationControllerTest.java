@@ -27,7 +27,7 @@ import ch.prevo.pakt.PaktAdapterConfig;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PaktAdapterConfig.class)
 @WebAppConfiguration
-public class JobEndControllerTest {
+public class EmploymentTerminationControllerTest {
 
 	private MockMvc mockMvc;
 
@@ -43,7 +43,7 @@ public class JobEndControllerTest {
 	}
 
 	@Test @Ignore
-	public void getAllJobEndData() throws Exception {
+	public void getAllEmploymentTerminationData() throws Exception {
 
 		mockMvc.perform(get("/termination-of-employment")).andExpect(status().isOk()).andExpect(content().contentType(contentType))
 				.andExpect(jsonPath("$", hasSize(3)))

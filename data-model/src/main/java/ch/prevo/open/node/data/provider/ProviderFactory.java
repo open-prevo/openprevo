@@ -2,9 +2,9 @@ package ch.prevo.open.node.data.provider;
 
 public interface ProviderFactory {
 
-    JobStartProvider getJobStartProvider();
+    EmploymentCommencementProvider getEmploymentCommencementProvider();
 
-    JobEndProvider getJobEndProvider();
+    EmploymentTerminationProvider getEmploymentTerminationProvider();
 
     MatchNotificationListener getMatchNotificationListener();
 }

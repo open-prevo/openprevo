@@ -48,7 +48,7 @@ public class TerminationNotificationWriter implements Closeable {
     public void append(FullTerminationNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final JobInfo jobInfo = notification.getJobStart().getJobInfo();
+        final JobInfo jobInfo = notification.getEmploymentCommencement().getJobInfo();
         row.createCell(0).setCellValue(jobInfo.getOasiNumber());
         final Cell commencementDate = row.createCell(1);
         commencementDate.setCellValue(convert(jobInfo.getDate()));

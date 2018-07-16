@@ -1,12 +1,12 @@
 package ch.prevo.pakt.provider;
 
-import ch.prevo.open.data.api.JobEnd;
+import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {
+public class PAKTJobEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
 
     private final PartnerVermittlungRepository repository;
 
@@ -27,20 +27,20 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
     }
 
     @Override
-    public List<JobEnd> getJobEnds() {
-        final List<JobEnd> jobEnds = new ArrayList<>();
+    public List<EmploymentTermination> getEmploymentTerminations() {
+        final List<EmploymentTermination> jobEnds = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.DADURCHF.getCode() == ptVerm.getCdmeld()) {
-                jobEnds.add(buildJobEnd(ptVerm));
+                jobEnds.add(buildEmploymentTermination(ptVerm));
             }
         });
         return jobEnds;
     }
 
-    private JobEnd buildJobEnd(TozsPtverm ptVerm) {
+    private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
         // TODO fulfill missing properties
-        return new JobEnd(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
+        return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
     }
 
     private JobInfo buildJobInfo(TozsPtverm ptVerm) {
@@ -109,20 +109,20 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
     }
 
     @Override
-    public List<JobStart> getJobStarts() {
-        final List<JobStart> jobStarts = new ArrayList<>();
+    public List<EmploymentCommencement> getEmploymentCommencements() {
+        final List<EmploymentCommencement> jobStarts = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.NEUEINTRERF.getCode() == ptVerm.getCdmeld()) {
-                jobStarts.add(buildJobStart(ptVerm));
+                jobStarts.add(buildEmploymentCommencement(ptVerm));
             }
         });
         return jobStarts;
     }
 
-    private JobStart buildJobStart(TozsPtverm ptVerm) {
+    private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
         // TODO fulfill missing properties
-        return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
+        return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
                 buildCapitalTransferInformation(ptVerm));
     }
 

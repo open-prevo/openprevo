@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class JobEnd extends AbstractJobEvent {
+public class EmploymentTermination extends AbstractJobEvent {
 
-    public JobEnd() {
+    public EmploymentTermination() {
     }
 
-    public JobEnd(String techId, JobInfo jobInfo) {
+    public EmploymentTermination(String techId, JobInfo jobInfo) {
         super(techId, jobInfo);
     }
 

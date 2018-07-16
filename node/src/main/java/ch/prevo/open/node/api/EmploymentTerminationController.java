@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.node.services.JobEndService;
+import ch.prevo.open.node.services.EmploymentTerminationService;
 
 @RestController
-public class JobEndController {
+public class EmploymentTerminationController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(JobEndController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(EmploymentTerminationController.class);
 
-    private JobEndService jobEndService;
+    private EmploymentTerminationService jobEndService;
 
     @Inject
-    public JobEndController(JobEndService jobEndService) {
+    public EmploymentTerminationController(EmploymentTerminationService jobEndService) {
         this.jobEndService = jobEndService;
     }
 
     @RequestMapping("/termination-of-employment")
-    public ResponseEntity<SortedSet<InsurantInformation>> getAllJobEndData() {
+    public ResponseEntity<SortedSet<InsurantInformation>> getAllEmploymentTerminationData() {
         try {
-            Set<InsurantInformation> allJobEndData = this.jobEndService.getAllJobEndData();
-            return ResponseEntity.ok(new TreeSet<>(allJobEndData));
+            Set<InsurantInformation> allEmploymentTerminationData = this.jobEndService.getAllEmploymentTerminationData();
+            return ResponseEntity.ok(new TreeSet<>(allEmploymentTerminationData));
         } catch (Exception e) {
             LOGGER.error("Could not load job end data", e);
             return ResponseEntity.notFound().build();

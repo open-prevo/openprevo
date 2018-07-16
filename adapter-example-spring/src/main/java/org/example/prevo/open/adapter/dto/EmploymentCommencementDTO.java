@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public class JobStartDTO extends AbstractJobEventDTO {
+public class EmploymentCommencementDTO extends AbstractJobEventDTO {
 
     @OneToOne(cascade = CascadeType.ALL)
     private CapitalTransferInformationDTO capitalTransferInfo;
