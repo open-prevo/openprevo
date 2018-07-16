@@ -14,8 +14,8 @@ public class CryptographyTest {
         final String oasiNumber2 = "7563412884497";
 
         // when
-        final String hash1 = Cryptography.hash(oasiNumber1);
-        final String hash2 = Cryptography.hash(oasiNumber2);
+        final String hash1 = Cryptography.digestOasiNumber(oasiNumber1);
+        final String hash2 = Cryptography.digestOasiNumber(oasiNumber2);
 
         // then
         assertThat(hash1).isEqualTo(hash2);

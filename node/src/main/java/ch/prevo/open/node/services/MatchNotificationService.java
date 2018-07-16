@@ -81,14 +81,14 @@ public class MatchNotificationService {
 
     private boolean isSameAsNotification(JobStart jobStart, TerminationMatchNotification notification) {
         JobInfo jobInfo = jobStart.getJobInfo();
-        return Cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+        return Cryptography.digestOasiNumber(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getCommencementDate());
     }
 
     private boolean isSameAsNotification(JobEnd jobEnd, CommencementMatchNotification notification) {
         JobInfo jobInfo = jobEnd.getJobInfo();
-        return Cryptography.hash(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+        return Cryptography.digestOasiNumber(jobInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
                 jobInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
                 jobInfo.getDate().equals(notification.getTerminationDate());
     }

@@ -28,7 +28,7 @@ public class JobStartService {
 
 	public Set<InsurantInformation> getAllJobStartData() {
 		return jobStartProvider.getJobStarts().stream()
-				.map(jobEnd -> new InsurantInformation(Cryptography.hash(jobEnd.getJobInfo().getOasiNumber()),
+				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getJobInfo().getOasiNumber()),
 						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
 				.collect(Collectors.toSet());
 	}

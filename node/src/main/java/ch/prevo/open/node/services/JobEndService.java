@@ -28,7 +28,7 @@ public class JobEndService {
 
 	public Set<InsurantInformation> getAllJobEndData() {
 		return jobEndProvider.getJobEnds().stream()
-				.map(jobEnd -> new InsurantInformation(Cryptography.hash(jobEnd.getJobInfo().getOasiNumber()),
+				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getJobInfo().getOasiNumber()),
 						jobEnd.getJobInfo().getRetirementFundUid(), jobEnd.getJobInfo().getDate()))
 				.collect(Collectors.toSet());
 	}

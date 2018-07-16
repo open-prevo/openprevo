@@ -44,7 +44,7 @@ public class MatchNotificationControllerTest extends RestBaseTest {
     public void sendCommencementNotificationToPreviousRetirementFund() throws Exception {
         // given
         TerminationMatchNotification commencementMatchNotification = new TerminationMatchNotification();
-        commencementMatchNotification.setEncryptedOasiNumber(Cryptography.hash("756.1234.5678.97"));
+        commencementMatchNotification.setEncryptedOasiNumber(Cryptography.digestOasiNumber("756.1234.5678.97"));
         commencementMatchNotification.setRetirementFundUid("CHE-109.740.084");
         commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));
         commencementMatchNotification.setTerminationDate(LocalDate.of(2018, 6, 30));

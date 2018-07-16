@@ -16,7 +16,7 @@ public class Cryptography {
 
     static {
         try {
-            // Check hash-function
+            // Check digestOasiNumber-function
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");
             digest.digest("Hello World".getBytes(StandardCharsets.UTF_8));
 
@@ -26,7 +26,7 @@ public class Cryptography {
         }
     }
 
-    public static String hash(String value) {
+    public static String digestOasiNumber(String value) {
         final String normalizedValue = value.trim().replace(".", "");
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");
