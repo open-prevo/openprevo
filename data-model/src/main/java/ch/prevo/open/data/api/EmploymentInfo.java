@@ -78,14 +78,14 @@ public class EmploymentInfo {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        EmploymentInfo jobInfo = (EmploymentInfo) o;
+        EmploymentInfo employmentInfo = (EmploymentInfo) o;
 
         return new EqualsBuilder()
-                .append(retirementFundUid, jobInfo.retirementFundUid)
-                .append(internalReferenz, jobInfo.internalReferenz)
-                .append(oasiNumber, jobInfo.oasiNumber)
-                .append(internalPersonId, jobInfo.internalPersonId)
-                .append(date, jobInfo.date)
+                .append(retirementFundUid, employmentInfo.retirementFundUid)
+                .append(internalReferenz, employmentInfo.internalReferenz)
+                .append(oasiNumber, employmentInfo.oasiNumber)
+                .append(internalPersonId, employmentInfo.internalPersonId)
+                .append(date, employmentInfo.date)
                 .isEquals();
     }
 

@@ -24,15 +24,15 @@ public class EmploymentTerminationDAO implements EmploymentTerminationProvider {
         this.repository = repository;
         this.mapper = new ModelMapper();
 
-        final EmploymentInfoDTO jobInfo = new EmploymentInfoDTO();
-        jobInfo.setOasiNumber("123");
-        jobInfo.setDate(LocalDate.now());
-        jobInfo.setRetirementFundUid("4711");
+        final EmploymentInfoDTO employmentInfo = new EmploymentInfoDTO();
+        employmentInfo.setOasiNumber("123");
+        employmentInfo.setDate(LocalDate.now());
+        employmentInfo.setRetirementFundUid("4711");
 
-        final EmploymentTerminationDTO jobEnd = new EmploymentTerminationDTO();
-        jobEnd.setEmploymentInfo(jobInfo);
+        final EmploymentTerminationDTO employmentEnd = new EmploymentTerminationDTO();
+        employmentEnd.setEmploymentInfo(employmentInfo);
 
-        repository.save(jobEnd);
+        repository.save(employmentEnd);
         repository.flush();
     }
 

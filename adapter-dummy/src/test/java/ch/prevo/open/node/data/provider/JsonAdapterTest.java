@@ -21,13 +21,13 @@ public class JsonAdapterTest {
 
     @Test
     public void getEmploymentCommencementInformation() {
-        List<EmploymentCommencement> jobEndInformation = jsonAdapter.getEmploymentCommencements();
-        assertThat(jobEndInformation).hasSize(3);
+        List<EmploymentCommencement> employmentEndInformation = jsonAdapter.getEmploymentCommencements();
+        assertThat(employmentEndInformation).hasSize(3);
     }
 
     @Test
     public void getEmploymentTerminationInformation() {
-        List<EmploymentTermination> jobEndInformation = jsonAdapter.getEmploymentTerminations();
-        assertThat(jobEndInformation).hasSize(3);
+        List<EmploymentTermination> employmentEndInformation = jsonAdapter.getEmploymentTerminations();
+        assertThat(employmentEndInformation).hasSize(3);
     }
 }

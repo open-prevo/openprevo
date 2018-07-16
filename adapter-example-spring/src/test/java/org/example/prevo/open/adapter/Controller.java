@@ -14,22 +14,22 @@ import java.util.List;
 @RestController
 public class Controller {
 
-    private final EmploymentCommencementDAO jobStartDAO;
-    private final EmploymentTerminationDAO jobEndDAO;
+    private final EmploymentCommencementDAO employmentStartDAO;
+    private final EmploymentTerminationDAO employmentEndDAO;
 
     @Inject
-    public Controller(EmploymentCommencementDAO jobStartDAO, EmploymentTerminationDAO jobEndDAO) {
-        this.jobStartDAO = jobStartDAO;
-        this.jobEndDAO = jobEndDAO;
+    public Controller(EmploymentCommencementDAO employmentStartDAO, EmploymentTerminationDAO employmentEndDAO) {
+        this.employmentStartDAO = employmentStartDAO;
+        this.employmentEndDAO = employmentEndDAO;
     }
 
     @RequestMapping("/commencement-of-employment")
     public ResponseEntity<List<EmploymentCommencement>> getAllEmploymentCommencementData() {
-        return ResponseEntity.ok(jobStartDAO.getEmploymentCommencements());
+        return ResponseEntity.ok(employmentStartDAO.getEmploymentCommencements());
     }
 
     @RequestMapping("/termination-of-employment")
     public ResponseEntity<List<EmploymentTermination>> getAllEmploymentTerminationData() {
-        return ResponseEntity.ok(jobEndDAO.getEmploymentTerminations());
+        return ResponseEntity.ok(employmentEndDAO.getEmploymentTerminations());
     }
 }

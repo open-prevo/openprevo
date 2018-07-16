@@ -10,25 +10,25 @@ import ch.prevo.open.node.data.provider.dummy.DefaultMatchNotificationListener;
 
 public class PaktDBProviderFactory implements ProviderFactory {
 
-    private final EmploymentCommencementProvider jobStartProvider;
-    private final EmploymentTerminationProvider jobEndProvider;
+    private final EmploymentCommencementProvider employmentStartProvider;
+    private final EmploymentTerminationProvider employmentEndProvider;
     private final MatchNotificationListener matchNotificationListener = new DefaultMatchNotificationListener();
 
 
     public PaktDBProviderFactory() {
         final ApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);
-        this.jobStartProvider = context.getBean(EmploymentCommencementProvider.class);
-        this.jobEndProvider = context.getBean(EmploymentTerminationProvider.class);
+        this.employmentStartProvider = context.getBean(EmploymentCommencementProvider.class);
+        this.employmentEndProvider = context.getBean(EmploymentTerminationProvider.class);
     }
 
     @Override
     public EmploymentCommencementProvider getEmploymentCommencementProvider() {
-        return jobStartProvider;
+        return employmentStartProvider;
     }
 
     @Override
     public EmploymentTerminationProvider getEmploymentTerminationProvider() {
-        return jobEndProvider;
+        return employmentEndProvider;
     }
 
     @Override

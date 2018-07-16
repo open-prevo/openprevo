@@ -14,7 +14,7 @@ public class AbstractEmploymentEventDTO {
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private EmploymentInfoDTO jobInfo;
+    private EmploymentInfoDTO employmentInfo;
 
     private String techId;
 
@@ -35,11 +35,11 @@ public class AbstractEmploymentEventDTO {
     }
 
     public EmploymentInfoDTO getEmploymentInfo() {
-        return jobInfo;
+        return employmentInfo;
     }
 
-    public void setEmploymentInfo(EmploymentInfoDTO jobInfo) {
-        this.jobInfo = jobInfo;
+    public void setEmploymentInfo(EmploymentInfoDTO employmentInfo) {
+        this.employmentInfo = employmentInfo;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AbstractEmploymentEventDTO {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("techId", techId)
-                .append("jobInfo", jobInfo)
+                .append("employmentInfo", employmentInfo)
                 .toString();
     }
 }

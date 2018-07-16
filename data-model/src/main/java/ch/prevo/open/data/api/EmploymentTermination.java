@@ -11,8 +11,8 @@ public class EmploymentTermination extends AbstractEmploymentEvent {
     public EmploymentTermination() {
     }
 
-    public EmploymentTermination(String techId, EmploymentInfo jobInfo) {
-        super(techId, jobInfo);
+    public EmploymentTermination(String techId, EmploymentInfo employmentInfo) {
+        super(techId, employmentInfo);
     }
 
     @Override

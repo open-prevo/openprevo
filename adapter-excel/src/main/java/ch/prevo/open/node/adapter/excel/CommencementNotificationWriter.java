@@ -50,15 +50,15 @@ public class CommencementNotificationWriter implements Closeable {
     public Workbook append(FullCommencementNotification notification) {
         final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
-        final EmploymentInfo jobInfo = notification.getEmploymentTermination().getEmploymentInfo();
+        final EmploymentInfo employmentInfo = notification.getEmploymentTermination().getEmploymentInfo();
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
-        row.createCell(0).setCellValue(jobInfo.getOasiNumber());
+        row.createCell(0).setCellValue(employmentInfo.getOasiNumber());
         final Cell terminationDate = row.createCell(1);
-        terminationDate.setCellValue(convert(jobInfo.getDate()));
+        terminationDate.setCellValue(convert(employmentInfo.getDate()));
         terminationDate.setCellStyle(dateStyle);
-        row.createCell(2).setCellValue(jobInfo.getRetirementFundUid());
-        row.createCell(3).setCellValue(jobInfo.getInternalReferenz());
+        row.createCell(2).setCellValue(employmentInfo.getRetirementFundUid());
+        row.createCell(3).setCellValue(employmentInfo.getInternalReferenz());
         final Cell commencementDate = row.createCell(4);
         commencementDate.setCellValue(convert(notification.getCommencementDate()));
         commencementDate.setCellStyle(dateStyle);

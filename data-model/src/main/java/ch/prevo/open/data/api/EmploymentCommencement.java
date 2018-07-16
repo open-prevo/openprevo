@@ -13,8 +13,8 @@ public class EmploymentCommencement extends AbstractEmploymentEvent {
 
     public EmploymentCommencement() {}
 
-    public EmploymentCommencement(String techId, EmploymentInfo jobInfo, CapitalTransferInformation capitalTransferInfo) {
-		super(techId, jobInfo);
+    public EmploymentCommencement(String techId, EmploymentInfo employmentInfo, CapitalTransferInformation capitalTransferInfo) {
+		super(techId, employmentInfo);
 		this.capitalTransferInfo = capitalTransferInfo;
 	}
 
@@ -32,11 +32,11 @@ public class EmploymentCommencement extends AbstractEmploymentEvent {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        EmploymentCommencement jobStart = (EmploymentCommencement) o;
+        EmploymentCommencement employmentStart = (EmploymentCommencement) o;
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(capitalTransferInfo, jobStart.capitalTransferInfo)
+                .append(capitalTransferInfo, employmentStart.capitalTransferInfo)
                 .isEquals();
     }
 

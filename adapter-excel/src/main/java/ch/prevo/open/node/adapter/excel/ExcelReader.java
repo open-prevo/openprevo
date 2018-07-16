@@ -53,28 +53,28 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
-        List<EmploymentTermination> jobEnds = Collections.emptyList();
+        List<EmploymentTermination> employmentEnds = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                jobEnds = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
+                employmentEnds = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment terminations", e);
         }
-        return jobEnds;
+        return employmentEnds;
     }
 
     @Override
     public List<EmploymentCommencement> getEmploymentCommencements() {
-        List<EmploymentCommencement> jobStarts = Collections.emptyList();
+        List<EmploymentCommencement> employmentStarts = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                jobStarts = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
+                employmentStarts = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment commencements", e);
         }
-        return jobStarts;
+        return employmentStarts;
     }
 
     private Workbook getWorkbook() {
@@ -105,8 +105,8 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
     }
 
     private Optional<EmploymentCommencement> mapEmploymentCommencement(Row row) {
-        EmploymentInfo jobInfo = mapEmploymentInfo(row);
-        if (jobInfo == null) {
+        EmploymentInfo employmentInfo = mapEmploymentInfo(row);
+        if (employmentInfo == null) {
             return Optional.empty();
         }
 
@@ -121,15 +121,15 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
         capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
 
-        return Optional.of(new EmploymentCommencement(null, jobInfo, capititalTransferInfo));
+        return Optional.of(new EmploymentCommencement(null, employmentInfo, capititalTransferInfo));
     }
 
     private Optional<EmploymentTermination> mapEmploymentTermination(Row row) {
-        EmploymentInfo jobInfo = mapEmploymentInfo(row);
-        if (jobInfo == null) {
+        EmploymentInfo employmentInfo = mapEmploymentInfo(row);
+        if (employmentInfo == null) {
             return Optional.empty();
         }
-        return Optional.of(new EmploymentTermination(null, jobInfo));
+        return Optional.of(new EmploymentTermination(null, employmentInfo));
     }
 
     private EmploymentInfo mapEmploymentInfo(Row row) {
@@ -137,12 +137,12 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         if (oasiNumber.isEmpty()) {
             return null;
         }
-        EmploymentInfo jobInfo = new EmploymentInfo();
-        jobInfo.setOasiNumber(oasiNumber);
-        jobInfo.setDate(getDate(row, DATE_COLUMN_INDEX));
-        jobInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));
-        jobInfo.setInternalReferenz(getString(row, REFERENCE_COLUMN_INDEX));
-        return jobInfo;
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setOasiNumber(oasiNumber);
+        employmentInfo.setDate(getDate(row, DATE_COLUMN_INDEX));
+        employmentInfo.setRetirementFundUid(getString(row, RETIREMENT_FUND_UID_COLUMN_INDEX));
+        employmentInfo.setInternalReferenz(getString(row, REFERENCE_COLUMN_INDEX));
+        return employmentInfo;
     }
 
     private LocalDate getDate(Row row, int i) {

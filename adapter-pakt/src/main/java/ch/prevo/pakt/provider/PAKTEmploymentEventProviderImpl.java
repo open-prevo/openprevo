@@ -28,14 +28,14 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
-        final List<EmploymentTermination> jobEnds = new ArrayList<>();
+        final List<EmploymentTermination> employmentEnds = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.DADURCHF.getCode() == ptVerm.getCdmeld()) {
-                jobEnds.add(buildEmploymentTermination(ptVerm));
+                employmentEnds.add(buildEmploymentTermination(ptVerm));
             }
         });
-        return jobEnds;
+        return employmentEnds;
     }
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
@@ -44,13 +44,13 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
     }
 
     private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
-        EmploymentInfo jobInfo = new EmploymentInfo();
-        jobInfo.setOasiNumber(ptVerm.getAhv());
-        jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
-        jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
-        jobInfo.setInternalReferenz(ptVerm.getNameve());
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setOasiNumber(ptVerm.getAhv());
+        employmentInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
+        employmentInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
+        employmentInfo.setInternalReferenz(ptVerm.getNameve());
         // TODO fulfill missing properties
-        return jobInfo;
+        return employmentInfo;
 
     }
 
@@ -110,14 +110,14 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     @Override
     public List<EmploymentCommencement> getEmploymentCommencements() {
-        final List<EmploymentCommencement> jobStarts = new ArrayList<>();
+        final List<EmploymentCommencement> employmentStarts = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.NEUEINTRERF.getCode() == ptVerm.getCdmeld()) {
-                jobStarts.add(buildEmploymentCommencement(ptVerm));
+                employmentStarts.add(buildEmploymentCommencement(ptVerm));
             }
         });
-        return jobStarts;
+        return employmentStarts;
     }
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {

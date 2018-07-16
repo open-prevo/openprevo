@@ -31,20 +31,20 @@ public class CommencementNotificationWriterTest {
         transferInformation.setIban("CH52 0483 5012 3456 7100 0");
         transferInformation.setReferenceId("756.1335.5778.23");
 
-        final EmploymentInfo jobInfo = new EmploymentInfo();
-        jobInfo.setRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
-        jobInfo.setOasiNumber("756.1335.5778.23");
-        jobInfo.setDate(LocalDate.of(2018, 6, 30));
-        jobInfo.setInternalReferenz("baloise-1");
+        final EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
+        employmentInfo.setOasiNumber("756.1335.5778.23");
+        employmentInfo.setDate(LocalDate.of(2018, 6, 30));
+        employmentInfo.setInternalReferenz("baloise-1");
 
-        final EmploymentTermination jobEnd = new EmploymentTermination();
-        jobEnd.setEmploymentInfo(jobInfo);
+        final EmploymentTermination employmentEnd = new EmploymentTermination();
+        employmentEnd.setEmploymentInfo(employmentInfo);
 
         final FullCommencementNotification notification = new FullCommencementNotification();
         notification.setNewRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
         notification.setCommencementDate(LocalDate.of(2018, 7, 1));
         notification.setTransferInformation(transferInformation);
-        notification.setEmploymentTermination(jobEnd);
+        notification.setEmploymentTermination(employmentEnd);
 
         final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
 
@@ -71,10 +71,10 @@ public class CommencementNotificationWriterTest {
         );
 
         assertRow(filename, "Austritte", 1,
-                jobInfo.getOasiNumber(),
-                jobInfo.getDate(),
-                jobInfo.getRetirementFundUid(),
-                jobInfo.getInternalReferenz(),
+                employmentInfo.getOasiNumber(),
+                employmentInfo.getDate(),
+                employmentInfo.getRetirementFundUid(),
+                employmentInfo.getInternalReferenz(),
                 notification.getCommencementDate(),
                 notification.getNewRetirementFundUid(),
                 transferInformation.getName(),

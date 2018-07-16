@@ -18,18 +18,18 @@ import java.util.stream.Collectors;
 @Service
 public class EmploymentCommencementService {
 
-    private final EmploymentCommencementProvider jobStartProvider;
+    private final EmploymentCommencementProvider employmentStartProvider;
 
     @Inject
     public EmploymentCommencementService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
-        jobStartProvider = factory != null? factory.getEmploymentCommencementProvider() : null;
+        employmentStartProvider = factory != null? factory.getEmploymentCommencementProvider() : null;
     }
 
 	public Set<InsurantInformation> getAllEmploymentCommencementData() {
-		return jobStartProvider.getEmploymentCommencements().stream()
-				.map(jobEnd -> new InsurantInformation(Cryptography.digestOasiNumber(jobEnd.getEmploymentInfo().getOasiNumber()),
-						jobEnd.getEmploymentInfo().getRetirementFundUid(), jobEnd.getEmploymentInfo().getDate()))
+		return employmentStartProvider.getEmploymentCommencements().stream()
+				.map(employmentEnd -> new InsurantInformation(Cryptography.digestOasiNumber(employmentEnd.getEmploymentInfo().getOasiNumber()),
+						employmentEnd.getEmploymentInfo().getRetirementFundUid(), employmentEnd.getEmploymentInfo().getDate()))
 				.collect(Collectors.toSet());
 	}
 }

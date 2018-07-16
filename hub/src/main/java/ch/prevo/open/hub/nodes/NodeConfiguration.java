@@ -15,35 +15,35 @@ public class NodeConfiguration {
     private static final String TERMINATION_MATCH_NOTIFICATION_ENDPOINT = "/termination-match-notification";
 
     private List<String> retirementFundUids;
-    private String jobExitsUrl;
-    private String jobEntriesUrl;
+    private String employmentExitsUrl;
+    private String employmentEntriesUrl;
     private String commencementMatchNotifyUrl;
     private String terminationMatchNotifyUrl;
 
     public NodeConfiguration() {}
 
     public NodeConfiguration(String baseUrl, String... retirementFundUids) {
-        this.jobEntriesUrl = baseUrl + JOB_START_ENDPOINT;
-        this.jobExitsUrl = baseUrl + JOB_END_ENDPOINT;
+        this.employmentEntriesUrl = baseUrl + JOB_START_ENDPOINT;
+        this.employmentExitsUrl = baseUrl + JOB_END_ENDPOINT;
         this.commencementMatchNotifyUrl = baseUrl + COMMENCEMENT_MATCH_NOTIFICATION_ENDPOINT;
         this.terminationMatchNotifyUrl = baseUrl + TERMINATION_MATCH_NOTIFICATION_ENDPOINT;
         this.retirementFundUids = Arrays.asList(retirementFundUids);
     }
 
     String getEmploymentExitsUrl() {
-        return jobExitsUrl;
+        return employmentExitsUrl;
     }
 
-    public void setEmploymentExitsUrl(String jobExitsUrl) {
-        this.jobExitsUrl = jobExitsUrl;
+    public void setEmploymentExitsUrl(String employmentExitsUrl) {
+        this.employmentExitsUrl = employmentExitsUrl;
     }
 
     String getEmploymentEntriesUrl() {
-        return jobEntriesUrl;
+        return employmentEntriesUrl;
     }
 
-    public void setEmploymentEntriesUrl(String jobEntriesUrl) {
-        this.jobEntriesUrl = jobEntriesUrl;
+    public void setEmploymentEntriesUrl(String employmentEntriesUrl) {
+        this.employmentEntriesUrl = employmentEntriesUrl;
     }
 
     List<String> getRetirementFundUids() {
@@ -78,8 +78,8 @@ public class NodeConfiguration {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("retirementFundUids", retirementFundUids)
-                .append("jobExitsUrl", jobExitsUrl)
-                .append("jobEntriesUrl", jobEntriesUrl)
+                .append("employmentExitsUrl", employmentExitsUrl)
+                .append("employmentEntriesUrl", employmentEntriesUrl)
                 .append("commencementMatchNotifyUrl", commencementMatchNotifyUrl)
                 .append("terminationMatchNotifyUrl", terminationMatchNotifyUrl)
                 .toString();

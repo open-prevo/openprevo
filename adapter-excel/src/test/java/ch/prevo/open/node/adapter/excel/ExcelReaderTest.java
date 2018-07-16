@@ -23,10 +23,10 @@ public class ExcelReaderTest {
         List<EmploymentTermination> employmentTerminations = getExcelReader().getEmploymentTerminations();
         assertEquals(2, employmentTerminations.size());
 
-        EmploymentInfo jobInfo = employmentTerminations.get(1).getEmploymentInfo();
-        assertEquals("7568152139908", jobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 8, 16), jobInfo.getDate());
-        assertEquals("CHE-223.471.073", jobInfo.getRetirementFundUid());
+        EmploymentInfo employmentInfo = employmentTerminations.get(1).getEmploymentInfo();
+        assertEquals("7568152139908", employmentInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 8, 16), employmentInfo.getDate());
+        assertEquals("CHE-223.471.073", employmentInfo.getRetirementFundUid());
     }
 
     @Test
@@ -36,10 +36,10 @@ public class ExcelReaderTest {
         assertEquals(2, employmentCommencements.size());
 
 
-        EmploymentInfo jobInfo = employmentCommencements.get(0).getEmploymentInfo();
-        assertEquals("7566374437536", jobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 1, 1), jobInfo.getDate());
-        assertEquals("CHE-109.740.084", jobInfo.getRetirementFundUid());
+        EmploymentInfo employmentInfo = employmentCommencements.get(0).getEmploymentInfo();
+        assertEquals("7566374437536", employmentInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 1, 1), employmentInfo.getDate());
+        assertEquals("CHE-109.740.084", employmentInfo.getRetirementFundUid());
     }
 
     private ExcelReader getExcelReader() throws Exception {

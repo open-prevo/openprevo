@@ -7,14 +7,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 abstract class AbstractEmploymentEvent {
 
     private String techId;
-    private EmploymentInfo jobInfo;
+    private EmploymentInfo employmentInfo;
 
     AbstractEmploymentEvent() {
     }
 
-    AbstractEmploymentEvent(String techId, EmploymentInfo jobInfo) {
+    AbstractEmploymentEvent(String techId, EmploymentInfo employmentInfo) {
         this.techId = techId;
-        this.jobInfo = jobInfo;
+        this.employmentInfo = employmentInfo;
     }
 
     public String getTechId() {
@@ -26,18 +26,18 @@ abstract class AbstractEmploymentEvent {
     }
 
     public EmploymentInfo getEmploymentInfo() {
-        return jobInfo;
+        return employmentInfo;
     }
 
-    public void setEmploymentInfo(EmploymentInfo jobInfo) {
-        this.jobInfo = jobInfo;
+    public void setEmploymentInfo(EmploymentInfo employmentInfo) {
+        this.employmentInfo = employmentInfo;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("techId", techId)
-                .append("jobInfo", jobInfo)
+                .append("employmentInfo", employmentInfo)
                 .toString();
     }
 }
