@@ -37,14 +37,14 @@ public class TerminationNotificationWriterTest {
         employmentInfo.setDate(LocalDate.of(2018, 7, 1));
         employmentInfo.setInternalReferenz("helvetia-1");
 
-        final EmploymentCommencement employmentStart = new EmploymentCommencement();
-        employmentStart.setCapitalTransferInfo(transferInformation);
-        employmentStart.setEmploymentInfo(employmentInfo);
+        final EmploymentCommencement employmentCommencement = new EmploymentCommencement();
+        employmentCommencement.setCapitalTransferInfo(transferInformation);
+        employmentCommencement.setEmploymentInfo(employmentInfo);
 
         final FullTerminationNotification notification = new FullTerminationNotification();
         notification.setPreviousRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
         notification.setTerminationDate(LocalDate.of(2018, 6, 30));
-        notification.setEmploymentCommencement(employmentStart);
+        notification.setEmploymentCommencement(employmentCommencement);
 
         final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
 

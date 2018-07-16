@@ -10,25 +10,25 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class DBProviderFactory implements ProviderFactory {
 
-    private final EmploymentCommencementProvider employmentStartProvider;
-    private final EmploymentTerminationProvider employmentEndProvider;
+    private final EmploymentCommencementProvider employmentCommencementProvider;
+    private final EmploymentTerminationProvider employmentTerminationProvider;
     private final MatchNotificationListener matchNotificationListener = new DefaultMatchNotificationListener();
 
 
     public DBProviderFactory() {
         final ApplicationContext context = new AnnotationConfigApplicationContext("org.example.prevo.open.adapter");
-        this.employmentStartProvider = context.getBean(EmploymentCommencementProvider.class);
-        this.employmentEndProvider = context.getBean(EmploymentTerminationProvider.class);
+        this.employmentCommencementProvider = context.getBean(EmploymentCommencementProvider.class);
+        this.employmentTerminationProvider = context.getBean(EmploymentTerminationProvider.class);
     }
 
     @Override
     public EmploymentCommencementProvider getEmploymentCommencementProvider() {
-        return employmentStartProvider;
+        return employmentCommencementProvider;
     }
 
     @Override
     public EmploymentTerminationProvider getEmploymentTerminationProvider() {
-        return employmentEndProvider;
+        return employmentTerminationProvider;
     }
 
     @Override

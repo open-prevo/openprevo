@@ -53,28 +53,28 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
-        List<EmploymentTermination> employmentEnds = Collections.emptyList();
+        List<EmploymentTermination> employmentTerminations = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                employmentEnds = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
+                employmentTerminations = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment terminations", e);
         }
-        return employmentEnds;
+        return employmentTerminations;
     }
 
     @Override
     public List<EmploymentCommencement> getEmploymentCommencements() {
-        List<EmploymentCommencement> employmentStarts = Collections.emptyList();
+        List<EmploymentCommencement> employmentCommencements = Collections.emptyList();
         try (final Workbook wb = getWorkbook()) {
             if (wb != null) {
-                employmentStarts = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
+                employmentCommencements = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
             }
         } catch (IOException e) {
             LOG.error("An exception occurred while trying to read the employment commencements", e);
         }
-        return employmentStarts;
+        return employmentCommencements;
     }
 
     private Workbook getWorkbook() {

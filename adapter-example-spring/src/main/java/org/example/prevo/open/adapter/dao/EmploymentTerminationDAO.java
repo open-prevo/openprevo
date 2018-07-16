@@ -29,10 +29,10 @@ public class EmploymentTerminationDAO implements EmploymentTerminationProvider {
         employmentInfo.setDate(LocalDate.now());
         employmentInfo.setRetirementFundUid("4711");
 
-        final EmploymentTerminationDTO employmentEnd = new EmploymentTerminationDTO();
-        employmentEnd.setEmploymentInfo(employmentInfo);
+        final EmploymentTerminationDTO employmentTermination = new EmploymentTerminationDTO();
+        employmentTermination.setEmploymentInfo(employmentInfo);
 
-        repository.save(employmentEnd);
+        repository.save(employmentTermination);
         repository.flush();
     }
 

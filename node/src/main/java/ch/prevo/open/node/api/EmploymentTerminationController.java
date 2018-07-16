@@ -19,17 +19,17 @@ public class EmploymentTerminationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(EmploymentTerminationController.class);
 
-    private EmploymentTerminationService employmentEndService;
+    private EmploymentTerminationService employmentTerminationService;
 
     @Inject
-    public EmploymentTerminationController(EmploymentTerminationService employmentEndService) {
-        this.employmentEndService = employmentEndService;
+    public EmploymentTerminationController(EmploymentTerminationService employmentTerminationService) {
+        this.employmentTerminationService = employmentTerminationService;
     }
 
     @RequestMapping("/termination-of-employment")
     public ResponseEntity<SortedSet<InsurantInformation>> getAllEmploymentTerminationData() {
         try {
-            Set<InsurantInformation> allEmploymentTerminationData = this.employmentEndService.getAllEmploymentTerminationData();
+            Set<InsurantInformation> allEmploymentTerminationData = this.employmentTerminationService.getAllEmploymentTerminationData();
             return ResponseEntity.ok(new TreeSet<>(allEmploymentTerminationData));
         } catch (Exception e) {
             LOGGER.error("Could not load employment end data", e);

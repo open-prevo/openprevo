@@ -32,7 +32,7 @@ public class EmploymentTerminationControllerTest extends RestBaseTest {
     @TestConfiguration
     static class Config {
         @Bean
-        public EmploymentTerminationService employmentEndService() throws Exception {
+        public EmploymentTerminationService employmentTerminationService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
             return new EmploymentTerminationService(factory);

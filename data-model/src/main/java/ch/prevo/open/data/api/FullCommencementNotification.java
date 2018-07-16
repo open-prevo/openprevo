@@ -11,7 +11,7 @@ public class FullCommencementNotification {
     private LocalDate commencementDate;
     private CapitalTransferInformation transferInformation;
 
-    private EmploymentTermination employmentEnd;
+    private EmploymentTermination employmentTermination;
 
     public String getNewRetirementFundUid() {
         return newRetirementFundUid;
@@ -38,11 +38,11 @@ public class FullCommencementNotification {
     }
 
     public EmploymentTermination getEmploymentTermination() {
-        return employmentEnd;
+        return employmentTermination;
     }
 
-    public void setEmploymentTermination(EmploymentTermination employmentEnd) {
-        this.employmentEnd = employmentEnd;
+    public void setEmploymentTermination(EmploymentTermination employmentTermination) {
+        this.employmentTermination = employmentTermination;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FullCommencementNotification {
                 .append("newRetirementFundUid", newRetirementFundUid)
                 .append("commencementDate", commencementDate)
                 .append("transferInformation", transferInformation)
-                .append("employmentEnd", employmentEnd)
+                .append("employmentTermination", employmentTermination)
                 .toString();
     }
 }

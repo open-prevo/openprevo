@@ -19,18 +19,18 @@ class EmploymentCommencementController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(EmploymentCommencementController.class);
 
-    private EmploymentCommencementService employmentStartService;
+    private EmploymentCommencementService employmentCommencementService;
 
     @Inject
-    public EmploymentCommencementController(EmploymentCommencementService employmentStartService) {
-        this.employmentStartService = employmentStartService;
+    public EmploymentCommencementController(EmploymentCommencementService employmentCommencementService) {
+        this.employmentCommencementService = employmentCommencementService;
     }
 
     @RequestMapping("/commencement-of-employment")
     public ResponseEntity<SortedSet<InsurantInformation>> getAllEmploymentCommencementData() {
         try {
-            Set<InsurantInformation> employmentStartData = this.employmentStartService.getAllEmploymentCommencementData();
-            return ResponseEntity.ok(new TreeSet<>(employmentStartData));
+            Set<InsurantInformation> employmentCommencementData = this.employmentCommencementService.getAllEmploymentCommencementData();
+            return ResponseEntity.ok(new TreeSet<>(employmentCommencementData));
         } catch (Exception e) {
             LOGGER.error("Could not load employment start data", e);
             return ResponseEntity.notFound().build();

@@ -28,14 +28,14 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
-        final List<EmploymentTermination> employmentEnds = new ArrayList<>();
+        final List<EmploymentTermination> employmentTerminations = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.DADURCHF.getCode() == ptVerm.getCdmeld()) {
-                employmentEnds.add(buildEmploymentTermination(ptVerm));
+                employmentTerminations.add(buildEmploymentTermination(ptVerm));
             }
         });
-        return employmentEnds;
+        return employmentTerminations;
     }
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
@@ -110,14 +110,14 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     @Override
     public List<EmploymentCommencement> getEmploymentCommencements() {
-        final List<EmploymentCommencement> employmentStarts = new ArrayList<>();
+        final List<EmploymentCommencement> employmentCommencements = new ArrayList<>();
 
         repository.findAll().forEach(ptVerm -> {
             if (CdMeld.NEUEINTRERF.getCode() == ptVerm.getCdmeld()) {
-                employmentStarts.add(buildEmploymentCommencement(ptVerm));
+                employmentCommencements.add(buildEmploymentCommencement(ptVerm));
             }
         });
-        return employmentStarts;
+        return employmentCommencements;
     }
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
