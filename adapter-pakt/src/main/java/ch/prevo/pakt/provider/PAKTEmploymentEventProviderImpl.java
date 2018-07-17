@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
@@ -21,6 +22,7 @@ import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
 
+@Service
 public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
 
     private static Logger LOG = LoggerFactory.getLogger(PAKTEmploymentEventProviderImpl.class);
