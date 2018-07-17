@@ -11,8 +11,12 @@ task prepareHub(type: Copy) {
     into "${buildDir}/demo/Hub"
     doLast {
         def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
-        new File("${buildDir}/demo/Hub/start-hub.bat").text = javaCmd
-        new File("${buildDir}/demo/Hub/start-hub.sh").text = javaCmd
+        def batFile = new File("${buildDir}/demo/Hub/start-hub.bat")
+        batFile.text = javaCmd
+        batFile.executable = true
+        def shFile = new File("${buildDir}/demo/Hub/start-hub.sh")
+        shFile.text = javaCmd
+        shFile.executable = true
     }
 }
 
@@ -42,8 +46,12 @@ nodeConfiguration.each { node ->
         into "${buildDir}/demo/${node.name}"
 
         doLast {
-            new File("${buildDir}/demo/${node.name}/start-node.bat").text = getJavaCommandLineForNode(node)
-            new File("${buildDir}/demo/${node.name}/start-node.sh").text = getJavaCommandLineForNode(node)
+            def batFile = new File("${buildDir}/demo/${node.name}/start-node.bat")
+            batFile.text = getJavaCommandLineForNode(node)
+            batFile.executable = true
+            def shFile = new File("${buildDir}/demo/${node.name}/start-node.sh")
+            shFile.text = getJavaCommandLineForNode(node)
+            shFile.executable = true
         }
     }
     buildDemoZip.dependsOn("prepare${node.name}")
