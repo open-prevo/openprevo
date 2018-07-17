@@ -6,6 +6,6 @@ services:
     build: ../node/
     environment:
       SPRING_APPLICATION_JSON: '{"open.prevo.json.adapter.files":{
-                                    "jobstart":"classpath:pakt-sample-job-start-data.json",
-                                    "jobend":"classpath:pakt-sample-job-end-data.json"}
+                                    "jobstart":"classpath:pakt-sample-commencement-of-employment-data.json",
+                                    "jobend":"classpath:pakt-sample-termination-of-employment-data.json"}
                                 }'

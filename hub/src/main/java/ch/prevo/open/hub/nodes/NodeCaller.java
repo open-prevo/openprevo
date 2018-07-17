@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.repository.NotificationRepository;
 
 @Service
@@ -44,15 +44,14 @@ public class NodeCaller {
         }
     }
 
-    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl,
-                                                            TerminationMatchNotification matchNotification) {
+    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
-            if (!notificationRepository.isTerminationMatchAlreadyNotified(matchNotification)) {
+            if (!notificationRepository.isMatchForCommencementAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send termination match notification for match: {}", matchNotification);
                 CapitalTransferInformation capitalTransferInformation = restTemplate
                         .postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
 
-                notificationRepository.saveTerminationMatchNotification(matchNotification);
+                notificationRepository.saveMatchForCommencement(matchNotification);
 
                 return capitalTransferInformation;
             }
@@ -64,12 +63,12 @@ public class NodeCaller {
         return null;
     }
 
-    void postTerminationNotification(String terminationMatchNotifyUrl, CommencementMatchNotification matchNotification) {
+    void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
-            if (!notificationRepository.isCommencementMatchAlreadyNotified(matchNotification)) {
+            if (!notificationRepository.isMatchForTerminationAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send commencement match notification for match: {}", matchNotification);
                 restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
-                notificationRepository.saveCommencementMatchNotification(matchNotification);
+                notificationRepository.saveMatchForTermination(matchNotification);
             }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later

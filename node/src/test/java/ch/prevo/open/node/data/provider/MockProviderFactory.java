@@ -5,12 +5,12 @@ public class MockProviderFactory implements ProviderFactory {
     private final MockProvider provider = new MockProvider();
 
     @Override
-    public JobStartProvider getJobStartProvider() {
+    public EmploymentCommencementProvider getEmploymentCommencementProvider() {
         return provider;
     }
 
     @Override
-    public JobEndProvider getJobEndProvider() {
+    public EmploymentTerminationProvider getEmploymentTerminationProvider() {
         return provider;
     }
 

@@ -8,13 +8,13 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
 @MappedSuperclass
-public class AbstractJobEventDTO {
+public class AbstractEmploymentEventDTO {
 
     @Id
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private JobInfoDTO jobInfo;
+    private EmploymentInfoDTO employmentInfo;
 
     private String techId;
 
@@ -34,12 +34,12 @@ public class AbstractJobEventDTO {
         this.techId = techId;
     }
 
-    public JobInfoDTO getJobInfo() {
-        return jobInfo;
+    public EmploymentInfoDTO getEmploymentInfo() {
+        return employmentInfo;
     }
 
-    public void setJobInfo(JobInfoDTO jobInfo) {
-        this.jobInfo = jobInfo;
+    public void setEmploymentInfo(EmploymentInfoDTO employmentInfo) {
+        this.employmentInfo = employmentInfo;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AbstractJobEventDTO {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("techId", techId)
-                .append("jobInfo", jobInfo)
+                .append("employmentInfo", employmentInfo)
                 .toString();
     }
 }

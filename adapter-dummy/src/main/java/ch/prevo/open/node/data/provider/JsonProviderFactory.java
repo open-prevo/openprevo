@@ -9,12 +9,12 @@ public class JsonProviderFactory implements ProviderFactory {
     private final JsonAdapter jsonAdapter = new JsonAdapter();
 
     @Override
-    public JobStartProvider getJobStartProvider() {
+    public EmploymentCommencementProvider getEmploymentCommencementProvider() {
         return this.jsonAdapter;
     }
 
     @Override
-    public JobEndProvider getJobEndProvider() {
+    public EmploymentTerminationProvider getEmploymentTerminationProvider() {
         return this.jsonAdapter;
     }
 

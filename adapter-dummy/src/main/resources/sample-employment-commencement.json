@@ -1,7 +1,7 @@
 [
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.1234.5678.97",
@@ -22,7 +22,7 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.1298.6578.97",
@@ -43,7 +43,7 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.5678.1234.17",
@@ -60,6 +60,26 @@
       },
       "iban": "CH53 0077 0016 02222 3334 4",
       "referenceId": "756.5678.1234.17"
+    }  },
+  {
+    "techId": "",
+    "employmentInfo": {
+      "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung 2",
+      "internalReferenz": "",
+      "oasiNumber": "756.3324.5678.58",
+      "internalPersonId": "",
+      "date": "2018-07-01"
+    },
+    "capitalTransferInfo": {
+      "name": "Perspectiva Sammelstiftung für berufliche Vorsorge 2",
+      "additionalName": "Basler Leben AG 2",
+      "address": {
+        "street": "Aeschengraben 21, Postfach",
+        "postalCode": "4002",
+        "city": "Basel"
+      },
+      "iban": "CH53 0077 0016 02222 3334 4",
+      "referenceId": "756.3324.5678.58"
     }
   }
 ]

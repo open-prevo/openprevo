@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.match.Match;
 
 @Service
@@ -37,7 +37,7 @@ public class NodeService {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = nodeCaller
-                    .getInsurantInformationList(nodeConfig.getJobExitsUrl());
+                    .getInsurantInformationList(nodeConfig.getEmploymentExitsUrl());
             List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundExits);
             exits.addAll(filteredInformation);
@@ -49,7 +49,7 @@ public class NodeService {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = nodeCaller
-                    .getInsurantInformationList(nodeConfig.getJobEntriesUrl());
+                    .getInsurantInformationList(nodeConfig.getEmploymentEntriesUrl());
             List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundEntries);
             entries.addAll(filteredInformation);
@@ -101,7 +101,7 @@ public class NodeService {
     }
 
     private CapitalTransferInformation tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
-        TerminationMatchNotification matchNotification = new TerminationMatchNotification();
+        MatchForCommencement matchNotification = new MatchForCommencement();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
@@ -113,7 +113,7 @@ public class NodeService {
     private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig,
                                                                       Match match,
                                                                       CapitalTransferInformation transferInformation) {
-        CommencementMatchNotification matchNotification = new CommencementMatchNotification();
+        MatchForTermination matchNotification = new MatchForTermination();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
         matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());

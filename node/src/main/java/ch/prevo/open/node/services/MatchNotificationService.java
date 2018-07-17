@@ -2,15 +2,16 @@ package ch.prevo.open.node.services;
 
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
 import ch.prevo.open.node.data.provider.error.NotificationException;
@@ -30,24 +31,24 @@ public class MatchNotificationService {
 
     private final MatchNotificationListener listener;
 
-    private final JobStartProvider jobStartProvider;
-    private final JobEndProvider jobEndProvider;
+    private final EmploymentCommencementProvider employmentCommencementProvider;
+    private final EmploymentTerminationProvider employmentTerminationProvider;
 
     @Inject
     public MatchNotificationService(ServiceListFactoryBean factoryBean) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
-        this.jobStartProvider = factory != null ? factory.getJobStartProvider() : null;
-        this.jobEndProvider = factory != null ? factory.getJobEndProvider() : null;
+        this.employmentCommencementProvider = factory != null ? factory.getEmploymentCommencementProvider() : null;
+        this.employmentTerminationProvider = factory != null ? factory.getEmploymentTerminationProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
     }
 
-    public void handleCommencementMatch(CommencementMatchNotification notification) throws NotificationException {
-        final Optional<JobEnd> jobEnd = jobEndProvider.getJobEnds().stream()
-                .filter(currentJobEnd -> isSameAsNotification(currentJobEnd, notification))
+    public void handleCommencementMatch(MatchForTermination notification) throws NotificationException {
+        final Optional<EmploymentTermination> employmentTermination = employmentTerminationProvider.getEmploymentTerminations().stream()
+                .filter(currentEmploymentTermination -> isSameAsNotification(currentEmploymentTermination, notification))
                 .findAny();
 
-        if (!jobEnd.isPresent()) {
-            LOG.warn("Termination notification received which does not correlate with any job start: " + notification);
+        if (!employmentTermination.isPresent()) {
+            LOG.warn("Termination notification received which does not correlate with any employment start: " + notification);
             return;
         }
 
@@ -55,43 +56,43 @@ public class MatchNotificationService {
         fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
         fullNotification.setCommencementDate(notification.getCommencementDate());
         fullNotification.setTransferInformation(notification.getTransferInformation());
-        fullNotification.setJobEnd(jobEnd.get());
+        fullNotification.setEmploymentTermination(employmentTermination.get());
 
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(TerminationMatchNotification notification)
+    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification)
             throws NotificationException {
-        final Optional<JobStart> jobStart = jobStartProvider.getJobStarts().stream()
-                .filter(currentJobStart -> isSameAsNotification(currentJobStart, notification))
+        final Optional<EmploymentCommencement> employmentCommencement = employmentCommencementProvider.getEmploymentCommencements().stream()
+                .filter(currentEmploymentCommencement -> isSameAsNotification(currentEmploymentCommencement, notification))
                 .findAny();
 
-        if (!jobStart.isPresent()) {
-            LOG.warn("Termination notification received which does not correlate with any job start: " + notification);
+        if (!employmentCommencement.isPresent()) {
+            LOG.warn("Termination notification received which does not correlate with any employment start: " + notification);
             return Optional.empty();
         }
 
         final FullTerminationNotification fullNotification = new FullTerminationNotification();
         fullNotification.setPreviousRetirementFundUid(notification.getPreviousRetirementFundUid());
         fullNotification.setTerminationDate(notification.getTerminationDate());
-        fullNotification.setJobStart(jobStart.get());
+        fullNotification.setEmploymentCommencement(employmentCommencement.get());
 
         listener.handleTerminationMatch(fullNotification);
 
-        return jobStart.map(JobStart::getCapitalTransferInfo);
+        return employmentCommencement.map(EmploymentCommencement::getCapitalTransferInfo);
     }
 
-    private boolean isSameAsNotification(JobStart jobStart, TerminationMatchNotification notification) {
-        JobInfo jobInfo = jobStart.getJobInfo();
-        return jobInfo.getOasiNumber().equals(notification.getEncryptedOasiNumber()) &&
-                jobInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
-                jobInfo.getDate().equals(notification.getCommencementDate());
+    private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
+        EmploymentInfo employmentInfo = employmentCommencement.getEmploymentInfo();
+        return Cryptography.digestOasiNumber(employmentInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+                employmentInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
+                employmentInfo.getDate().equals(notification.getCommencementDate());
     }
 
-    private boolean isSameAsNotification(JobEnd jobEnd, CommencementMatchNotification notification) {
-        JobInfo jobInfo = jobEnd.getJobInfo();
-        return jobInfo.getOasiNumber().equals(notification.getEncryptedOasiNumber()) &&
-                jobInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
-                jobInfo.getDate().equals(notification.getTerminationDate());
+    private boolean isSameAsNotification(EmploymentTermination employmentTermination, MatchForTermination notification) {
+        EmploymentInfo employmentInfo = employmentTermination.getEmploymentInfo();
+        return Cryptography.digestOasiNumber(employmentInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
+                employmentInfo.getRetirementFundUid().equals(notification.getPreviousRetirementFundUid()) &&
+                employmentInfo.getDate().equals(notification.getTerminationDate());
     }
 }

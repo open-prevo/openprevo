@@ -1,36 +1,35 @@
 package ch.prevo.open.hub.repository;
 
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
-
 @Repository
 public class NotificationRepository {
 
-    private final List<CommencementMatchNotification> matchedEmploymentCommencements = Collections
+    private final List<MatchForTermination> matchesForTerminations = Collections
             .synchronizedList(new ArrayList<>());
 
-    private final List<TerminationMatchNotification> matchedEmploymentTerminations = Collections
+    private final List<MatchForCommencement> matchesForCommencements = Collections
             .synchronizedList(new ArrayList<>());
 
-    public void saveCommencementMatchNotification(CommencementMatchNotification notification) {
-        this.matchedEmploymentCommencements.add(notification);
+    public void saveMatchForTermination(MatchForTermination notification) {
+        this.matchesForTerminations.add(notification);
     }
 
-    public void saveTerminationMatchNotification(TerminationMatchNotification notification) {
-        this.matchedEmploymentTerminations.add(notification);
+    public void saveMatchForCommencement(MatchForCommencement notification) {
+        this.matchesForCommencements.add(notification);
     }
 
-    public boolean isCommencementMatchAlreadyNotified(CommencementMatchNotification notification) {
-        return matchedEmploymentCommencements.contains(notification);
+    public boolean isMatchForTerminationAlreadyNotified(MatchForTermination notification) {
+        return matchesForTerminations.contains(notification);
     }
 
-    public boolean isTerminationMatchAlreadyNotified(TerminationMatchNotification notification) {
-        return matchedEmploymentTerminations.contains(notification);
+    public boolean isMatchForCommencementAlreadyNotified(MatchForCommencement notification) {
+        return matchesForCommencements.contains(notification);
     }
 }

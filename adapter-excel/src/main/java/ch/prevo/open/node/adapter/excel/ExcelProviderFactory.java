@@ -1,7 +1,7 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
 
@@ -11,12 +11,12 @@ public class ExcelProviderFactory implements ProviderFactory {
     final ExcelMatchNotificationListener listener = new ExcelMatchNotificationListener();
 
     @Override
-    public JobStartProvider getJobStartProvider() {
+    public EmploymentCommencementProvider getEmploymentCommencementProvider() {
         return excelReader;
     }
 
     @Override
-    public JobEndProvider getJobEndProvider() {
+    public EmploymentTerminationProvider getEmploymentTerminationProvider() {
         return excelReader;
     }
 

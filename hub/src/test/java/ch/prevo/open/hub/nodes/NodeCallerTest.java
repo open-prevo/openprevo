@@ -1,11 +1,10 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.repository.NotificationRepository;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -34,6 +33,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class NodeCallerTest {
 
     private static final String OASI1 = "756.1234.5678.97";
+    private static final String OASI2 = "756.1335.5778.23";
     private static final String UID1 = "CHE-223.471.073";
     private static final String UID2 = "CHE-109.723.097";
 
@@ -43,6 +43,12 @@ public class NodeCallerTest {
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
             + "\", \"date\" : \"2017-12-31\"}]";
+
+    private static final String INSURANT_INFORMATION_JSON_ARRAY_WITH_MULTIPLE_FUNDS
+            = "[" +
+            "{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1 + "\", \"date\" : \"2017-12-31\"}," +
+            "{\"encryptedOasiNumber\" : \"" + OASI2 + "\", \"retirementFundUid\" : \"" + UID2 + "\", \"date\" : \"2017-12-31\"}" +
+            "]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
             = "{\"name\" : \"" + RETIREMENT_FUND_NAME + "\", \"iban\" : \"" + IBAN + "\"}";
@@ -71,6 +77,24 @@ public class NodeCallerTest {
     }
 
     @Test
+    public void getInsurantInformationListWithMultipleRetirementFunds() {
+        // given
+        server.expect(requestTo(URL1))
+                .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY_WITH_MULTIPLE_FUNDS, MediaType.APPLICATION_JSON));
+
+        List<InsurantInformation> insurantInformationList = nodeCaller.getInsurantInformationList(URL1);
+
+        assertEquals(2, insurantInformationList.size());
+        assertEquals(UID1, insurantInformationList.get(0).getRetirementFundUid());
+        assertEquals(OASI1, insurantInformationList.get(0).getEncryptedOasiNumber());
+        assertEquals(of(2017, 12, 31), insurantInformationList.get(0).getDate());
+        assertEquals(UID2, insurantInformationList.get(1).getRetirementFundUid());
+        assertEquals(OASI2, insurantInformationList.get(1).getEncryptedOasiNumber());
+        assertEquals(of(2017, 12, 31), insurantInformationList.get(0).getDate());
+        server.verify();
+    }
+
+    @Test
     public void tryGetInsurantInformationListWithUnreachableNode() {
         // given
         server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.NOT_FOUND));
@@ -90,11 +114,11 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
-        TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
+        MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
         CapitalTransferInformation capitalTransferInformation = nodeCaller
-                .postCommencementNotification(URL1, terminationMatchNotification);
+                .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
         server.verify();
@@ -109,13 +133,13 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
-        TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
+        MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
         CapitalTransferInformation capitalTransferInformation = nodeCaller
-                .postCommencementNotification(URL1, terminationMatchNotification);
+                .postCommencementNotification(URL1, MatchForCommencement);
         CapitalTransferInformation secondCallTransferInfo = nodeCaller
-                .postCommencementNotification(URL1, terminationMatchNotification);
+                .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
         server.verify();
@@ -132,13 +156,13 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
-        TerminationMatchNotification terminationMatchNotification = createTerminationMatchNotification();
+        MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
         CapitalTransferInformation capitalTransferInformation = nodeCaller
-                .postCommencementNotification(URL1, terminationMatchNotification);
+                .postCommencementNotification(URL1, MatchForCommencement);
         CapitalTransferInformation secondCallTransferInfo = nodeCaller
-                .postCommencementNotification(URL1, terminationMatchNotification);
+                .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
         server.verify();
@@ -153,10 +177,10 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
                 .andRespond(withSuccess());
 
-        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+        MatchForTermination MatchForTermination = createMatchForTermination();
 
         // when
-        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
 
         // then
         server.verify();
@@ -168,11 +192,11 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
                 .andRespond(withSuccess());
 
-        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+        MatchForTermination MatchForTermination = createMatchForTermination();
 
         // when
-        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
-        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
+        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
 
         // then
         server.verify();
@@ -185,11 +209,11 @@ public class NodeCallerTest {
                 .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
                 .andRespond(withSuccess());
 
-        CommencementMatchNotification commencementMatchNotification = createCommencementMatchNotification();
+        MatchForTermination MatchForTermination = createMatchForTermination();
 
         // when
-        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
-        nodeCaller.postTerminationNotification(URL2, commencementMatchNotification);
+        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
+        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
 
         // then
         server.verify();
@@ -201,7 +225,7 @@ public class NodeCallerTest {
         server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         // when
-        nodeCaller.postCommencementNotification(URL1, createTerminationMatchNotification());
+        nodeCaller.postCommencementNotification(URL1, createMatchForCommencement());
 
         // then
         server.verify();
@@ -213,32 +237,32 @@ public class NodeCallerTest {
         server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         // when
-        nodeCaller.postTerminationNotification(URL2, createCommencementMatchNotification());
+        nodeCaller.postTerminationNotification(URL2, createMatchForTermination());
 
         // then
         server.verify();
     }
 
-    private CommencementMatchNotification createCommencementMatchNotification() {
+    private MatchForTermination createMatchForTermination() {
         CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation(RETIREMENT_FUND_NAME,
                 IBAN);
-        CommencementMatchNotification commencementMatchNotification = new CommencementMatchNotification();
-        commencementMatchNotification.setEncryptedOasiNumber(OASI1);
-        commencementMatchNotification.setNewRetirementFundUid(UID2);
-        commencementMatchNotification.setCommencementDate(of(2018, 7, 1));
-        commencementMatchNotification.setTerminationDate(of(2018, 6, 30));
-        commencementMatchNotification.setTransferInformation(capitalTransferInformation);
-        return commencementMatchNotification;
+        MatchForTermination MatchForTermination = new MatchForTermination();
+        MatchForTermination.setEncryptedOasiNumber(OASI1);
+        MatchForTermination.setNewRetirementFundUid(UID2);
+        MatchForTermination.setCommencementDate(of(2018, 7, 1));
+        MatchForTermination.setTerminationDate(of(2018, 6, 30));
+        MatchForTermination.setTransferInformation(capitalTransferInformation);
+        return MatchForTermination;
     }
 
-    private TerminationMatchNotification createTerminationMatchNotification() {
-        TerminationMatchNotification terminationMatchNotification = new TerminationMatchNotification();
-        terminationMatchNotification.setEncryptedOasiNumber(OASI1);
-        terminationMatchNotification.setCommencementDate(of(2018, 7, 1));
-        terminationMatchNotification.setTerminationDate(of(2018, 6, 30));
-        terminationMatchNotification.setPreviousRetirementFundUid(UID1);
-        terminationMatchNotification.setRetirementFundUid(UID2);
-        return terminationMatchNotification;
+    private MatchForCommencement createMatchForCommencement() {
+        MatchForCommencement MatchForCommencement = new MatchForCommencement();
+        MatchForCommencement.setEncryptedOasiNumber(OASI1);
+        MatchForCommencement.setCommencementDate(of(2018, 7, 1));
+        MatchForCommencement.setTerminationDate(of(2018, 6, 30));
+        MatchForCommencement.setPreviousRetirementFundUid(UID1);
+        MatchForCommencement.setRetirementFundUid(UID2);
+        return MatchForCommencement;
     }
 
 }

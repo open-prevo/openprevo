@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 
 public class NotificationRepositoryTest {
 
@@ -31,21 +31,21 @@ public class NotificationRepositoryTest {
     public void isCommencementMatchAlreadyNotified() {
 
         // given
-        CommencementMatchNotification commencementMatch = getCommencementMatch();
-        CommencementMatchNotification duplicateCommencementMatch = getCommencementMatch();
+        MatchForTermination commencementMatch = getMatchForTermination();
+        MatchForTermination duplicateCommencementMatch = getMatchForTermination();
 
         // when
         notificationRepository = new NotificationRepository();
         boolean initiallyNotMatched = notificationRepository
-                .isCommencementMatchAlreadyNotified(commencementMatch);
+                .isMatchForTerminationAlreadyNotified(commencementMatch);
 
-        notificationRepository.saveCommencementMatchNotification(commencementMatch);
+        notificationRepository.saveMatchForTermination(commencementMatch);
 
         boolean commencementMatchAlreadyNotified = notificationRepository
-                .isCommencementMatchAlreadyNotified(commencementMatch);
+                .isMatchForTerminationAlreadyNotified(commencementMatch);
 
         boolean duplicateIsAlreadyNotified = notificationRepository
-                .isCommencementMatchAlreadyNotified(duplicateCommencementMatch);
+                .isMatchForTerminationAlreadyNotified(duplicateCommencementMatch);
 
         // then
         assertThat(initiallyNotMatched).isFalse();
@@ -54,12 +54,12 @@ public class NotificationRepositoryTest {
 
     }
 
-    private CommencementMatchNotification getCommencementMatch() {
+    private MatchForTermination getMatchForTermination() {
         Address address = new Address("Baslerstrasse", "4000", "Basel");
         CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation("BKB", "Basler Kantonalbank",
                 address, "CH53 0077 0016 02222 3334 4");
 
-        return new CommencementMatchNotification(OASI, previousRetirementFundUID, newRetirementFundUID,
+        return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,
                 commencementDate, terminationDate,
                 capitalTransferInformation);
     }
@@ -68,21 +68,21 @@ public class NotificationRepositoryTest {
     public void isTerminationMatchAlreadyNotified() {
 
         // given
-        TerminationMatchNotification terminationMatch = getTerminationMatch();
-        TerminationMatchNotification duplicateTerminationMatch = getTerminationMatch();
+        MatchForCommencement terminationMatch = getMatchForCommencement();
+        MatchForCommencement duplicateTerminationMatch = getMatchForCommencement();
 
         // when
         notificationRepository = new NotificationRepository();
         boolean initiallyNotMatched = notificationRepository
-                .isTerminationMatchAlreadyNotified(terminationMatch);
+                .isMatchForCommencementAlreadyNotified(terminationMatch);
 
-        notificationRepository.saveTerminationMatchNotification(terminationMatch);
+        notificationRepository.saveMatchForCommencement(terminationMatch);
 
         boolean commencementMatchAlreadyNotified = notificationRepository
-                .isTerminationMatchAlreadyNotified(terminationMatch);
+                .isMatchForCommencementAlreadyNotified(terminationMatch);
 
         boolean duplicateIsAlreadyNotified = notificationRepository
-                .isTerminationMatchAlreadyNotified(duplicateTerminationMatch);
+                .isMatchForCommencementAlreadyNotified(duplicateTerminationMatch);
 
         // then
         assertThat(initiallyNotMatched).isFalse();
@@ -90,8 +90,8 @@ public class NotificationRepositoryTest {
         assertThat(duplicateIsAlreadyNotified).isTrue();
     }
 
-    private TerminationMatchNotification getTerminationMatch() {
-        return new TerminationMatchNotification(OASI, newRetirementFundUID, previousRetirementFundUID,
+    private MatchForCommencement getMatchForCommencement() {
+        return new MatchForCommencement(OASI, newRetirementFundUID, previousRetirementFundUID,
                 commencementDate, terminationDate);
     }
 }

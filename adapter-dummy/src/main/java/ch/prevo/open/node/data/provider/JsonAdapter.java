@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.EmploymentCommencement;
 
 /**
  * Sample json dummy adapter to provide hardcoded test data.
  */
-public class JsonAdapter implements JobStartProvider, JobEndProvider {
+public class JsonAdapter implements EmploymentCommencementProvider, EmploymentTerminationProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonAdapter.class);
 
@@ -27,8 +27,8 @@ public class JsonAdapter implements JobStartProvider, JobEndProvider {
     private ResourceLoader resourceLoader;
     private String employmentCommencementJsonFile;
     private String employmentTerminationJsonFile;
-    private List<JobStart> employmentCommencementInformation;
-    private List<JobEnd> employmentTerminationInformation;
+    private List<EmploymentCommencement> employmentCommencementInformation;
+    private List<EmploymentTermination> employmentTerminationInformation;
 
     public JsonAdapter() {
         this(getEmploymentCommencementJsonFile(), getEmploymentTerminationJsonFile());
@@ -45,9 +45,9 @@ public class JsonAdapter implements JobStartProvider, JobEndProvider {
 
     private void readJsonFiles() {
         this.employmentCommencementInformation = new ArrayList<>(
-                readJsonFile(employmentCommencementJsonFile, JobStart.class));
+                readJsonFile(employmentCommencementJsonFile, EmploymentCommencement.class));
         this.employmentTerminationInformation = new ArrayList<>(
-                readJsonFile(employmentTerminationJsonFile, JobEnd.class));
+                readJsonFile(employmentTerminationJsonFile, EmploymentTermination.class));
     }
 
     private <T> List<T> readJsonFile(String filePath, Class<T> clazz) {
@@ -64,12 +64,12 @@ public class JsonAdapter implements JobStartProvider, JobEndProvider {
     }
 
     @Override
-    public List<JobStart> getJobStarts() {
+    public List<EmploymentCommencement> getEmploymentCommencements() {
         return employmentCommencementInformation;
     }
 
     @Override
-    public List<JobEnd> getJobEnds() {
+    public List<EmploymentTermination> getEmploymentTerminations() {
         return employmentTerminationInformation;
     }
 

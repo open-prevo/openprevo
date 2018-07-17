@@ -1,7 +1,7 @@
 [
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.1234.5678.97",
@@ -22,7 +22,7 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.1298.6578.97",
@@ -43,7 +43,7 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.740.084-Baloise-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.5678.1234.17",

@@ -1,8 +1,8 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -31,20 +31,20 @@ public class TerminationNotificationWriterTest {
         transferInformation.setIban("CH52 0483 5012 3456 7100 0");
         transferInformation.setReferenceId("756.1335.5778.23");
 
-        final JobInfo jobInfo = new JobInfo();
-        jobInfo.setRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
-        jobInfo.setOasiNumber("756.1335.5778.23");
-        jobInfo.setDate(LocalDate.of(2018, 7, 1));
-        jobInfo.setInternalReferenz("helvetia-1");
+        final EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
+        employmentInfo.setOasiNumber("756.1335.5778.23");
+        employmentInfo.setDate(LocalDate.of(2018, 7, 1));
+        employmentInfo.setInternalReferenz("helvetia-1");
 
-        final JobStart jobStart = new JobStart();
-        jobStart.setCapitalTransferInfo(transferInformation);
-        jobStart.setJobInfo(jobInfo);
+        final EmploymentCommencement employmentCommencement = new EmploymentCommencement();
+        employmentCommencement.setCapitalTransferInfo(transferInformation);
+        employmentCommencement.setEmploymentInfo(employmentInfo);
 
         final FullTerminationNotification notification = new FullTerminationNotification();
         notification.setPreviousRetirementFundUid("CHE-109.740.084-Baloise-Sammelstiftung");
         notification.setTerminationDate(LocalDate.of(2018, 6, 30));
-        notification.setJobStart(jobStart);
+        notification.setEmploymentCommencement(employmentCommencement);
 
         final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
 
@@ -57,17 +57,17 @@ public class TerminationNotificationWriterTest {
         assertRow(filename, "Eintritte", 0,
                 "AHV-Nummer",
                 "Eintritt",
-                "UID der eigenen VE",
+                "UID der eigenen RF",
                 "Eigene Referenz",
                 "Austritt",
-                "UID der ehemaligen VE"
+                "UID der ehemaligen RF"
         );
 
         assertRow(filename, "Eintritte", 1,
-                jobInfo.getOasiNumber(),
-                jobInfo.getDate(),
-                jobInfo.getRetirementFundUid(),
-                jobInfo.getInternalReferenz(),
+                employmentInfo.getOasiNumber(),
+                employmentInfo.getDate(),
+                employmentInfo.getRetirementFundUid(),
+                employmentInfo.getInternalReferenz(),
                 notification.getTerminationDate(),
                 notification.getPreviousRetirementFundUid()
         );

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.CommencementMatchNotification;
-import ch.prevo.open.encrypted.model.TerminationMatchNotification;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.node.data.provider.error.NotificationException;
 import ch.prevo.open.node.services.MatchNotificationService;
 
@@ -31,7 +31,7 @@ public class MatchNotificationController {
     }
 
     @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
-    public ResponseEntity<CapitalTransferInformation> receiveCommencementMatchNotification(@RequestBody TerminationMatchNotification matchNotification) {
+    public ResponseEntity<CapitalTransferInformation> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
         LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getRetirementFundUid());
 
@@ -50,7 +50,7 @@ public class MatchNotificationController {
     }
 
     @RequestMapping(value = "/termination-match-notification", method = RequestMethod.POST)
-    public ResponseEntity<Void> receiveTerminationMatchNotification(@RequestBody CommencementMatchNotification matchNotification) {
+    public ResponseEntity<Void> receiveMatchForCommencement(@RequestBody MatchForTermination matchNotification) {
         LOGGER.debug("Receive termination match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
 
