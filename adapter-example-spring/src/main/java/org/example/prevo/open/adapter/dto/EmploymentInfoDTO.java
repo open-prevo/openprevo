@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class JobInfoDTO {
+public class EmploymentInfoDTO {
 
     @Id
     private long id;

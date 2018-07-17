@@ -1,8 +1,8 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentCommencement;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,26 +20,26 @@ public class ExcelReaderTest {
 
     @Test
     public void readEmploymentTerminations() throws Exception {
-        List<JobEnd> employmentTerminations = getExcelReader().getJobEnds();
+        List<EmploymentTermination> employmentTerminations = getExcelReader().getEmploymentTerminations();
         assertEquals(2, employmentTerminations.size());
 
-        JobInfo jobInfo = employmentTerminations.get(1).getJobInfo();
-        assertEquals("7568152139908", jobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 8, 16), jobInfo.getDate());
-        assertEquals("CHE-223.471.073", jobInfo.getRetirementFundUid());
+        EmploymentInfo employmentInfo = employmentTerminations.get(1).getEmploymentInfo();
+        assertEquals("7568152139908", employmentInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 8, 16), employmentInfo.getDate());
+        assertEquals("CHE-223.471.073", employmentInfo.getRetirementFundUid());
     }
 
     @Test
     public void readEmploymentCommencements() throws Exception {
-        List<JobStart> employmentCommencements = getExcelReader().getJobStarts();
+        List<EmploymentCommencement> employmentCommencements = getExcelReader().getEmploymentCommencements();
 
         assertEquals(2, employmentCommencements.size());
 
 
-        JobInfo jobInfo = employmentCommencements.get(0).getJobInfo();
-        assertEquals("7566374437536", jobInfo.getOasiNumber());
-        assertEquals(LocalDate.of(2018, 1, 1), jobInfo.getDate());
-        assertEquals("CHE-109.740.084", jobInfo.getRetirementFundUid());
+        EmploymentInfo employmentInfo = employmentCommencements.get(0).getEmploymentInfo();
+        assertEquals("7566374437536", employmentInfo.getOasiNumber());
+        assertEquals(LocalDate.of(2018, 1, 1), employmentInfo.getDate());
+        assertEquals("CHE-109.740.084", employmentInfo.getRetirementFundUid());
     }
 
     private ExcelReader getExcelReader() throws Exception {

@@ -2,7 +2,8 @@ package ch.prevo.open.node.api;
 
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
-import ch.prevo.open.node.services.JobStartService;
+import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.services.EmploymentCommencementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -24,27 +25,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { NodeApplication.class, JobStartControllerTest.Config.class })
+@SpringBootTest(classes = { NodeApplication.class, EmploymentCommencementControllerTest.Config.class })
 @WebAppConfiguration
-public class JobStartControllerTest extends RestBaseTest {
+public class EmploymentCommencementControllerTest extends RestBaseTest {
 
     @TestConfiguration
     static class Config {
         @Bean
-        public JobStartService jobStartService() throws Exception {
+        public EmploymentCommencementService employmentCommencementService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new JobStartService(factory);
+            return new EmploymentCommencementService(factory);
         }
     }
 
     @Test
-    public void getAllJobStartData() throws Exception {
-        mockMvc.perform(get("/job-start"))
+    public void getAllEmploymentCommencementData() throws Exception {
+        mockMvc.perform(get("/commencement-of-employment"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.1234.5678.97")))
-                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")));
+                .andExpect(jsonPath("$[0].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1234.5678.97"))))
+                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")))
+                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.5678.1234.17"))))
+                .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.740.078")))
+                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1298.6578.97"))))
+                .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.537.488")));
     }
 }

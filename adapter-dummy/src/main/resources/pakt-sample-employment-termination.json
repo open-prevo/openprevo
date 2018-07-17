@@ -1,7 +1,7 @@
 [
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.1234.5678.97",
@@ -11,7 +11,7 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.3421.5678.97",
@@ -21,10 +21,20 @@
   },
   {
     "techId": "",
-    "jobInfo": {
+    "employmentInfo": {
       "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung",
       "internalReferenz": "",
       "oasiNumber": "756.3324.5678.58",
+      "internalPersonId": "",
+      "date": "2018-06-30"
+    }
+  },
+  {
+    "techId": "",
+    "employmentInfo": {
+      "retirementFundUid": "CHE-109.537.488-Helvetia-Prisma-Sammelstiftung 2",
+      "internalReferenz": "",
+      "oasiNumber": "756.5678.1234.17",
       "internalPersonId": "",
       "date": "2018-06-30"
     }

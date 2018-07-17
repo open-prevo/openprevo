@@ -7,58 +7,56 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
-import ch.prevo.open.data.api.JobEnd;
-import ch.prevo.open.data.api.JobInfo;
-import ch.prevo.open.data.api.JobStart;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.node.data.provider.JobEndProvider;
-import ch.prevo.open.node.data.provider.JobStartProvider;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.pakt.PaktAdapterConfig;
 import ch.prevo.pakt.RetirementFund;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
 
-@Service
-public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvider {
+public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
 
-    private static Logger LOG = LoggerFactory.getLogger(PAKTJobEventProviderImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(PAKTEmploymentEventProviderImpl.class);
 	
     private final PartnerVermittlungRepository repository;
 
     private final PaktAdapterConfig config;
     
 	@Inject
-    public PAKTJobEventProviderImpl(PaktAdapterConfig config, PartnerVermittlungRepository partnerVermittlungRepository) {
+    public PAKTEmploymentEventProviderImpl(PaktAdapterConfig config, PartnerVermittlungRepository partnerVermittlungRepository) {
         this.repository = partnerVermittlungRepository;
         this.config = config;
     }
 
     @Override
-    public List<JobEnd> getJobEnds() {
-        final List<JobEnd> jobEnds = new ArrayList<>();
+    public List<EmploymentTermination> getEmploymentTerminations() {
+        final List<EmploymentTermination> employmentTerminations = new ArrayList<>();
 
 		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).forEach(ptVerm -> {
-			jobEnds.add(buildJobEnd(ptVerm));
+			 employmentTerminations.add(buildEmploymentTermination(ptVerm));
 		});
-        return jobEnds;
+		return employmentTerminations;
     }
 
-    private JobEnd buildJobEnd(TozsPtverm ptVerm) {
-        return new JobEnd(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm));
+    private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
+        return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm));
     }
 
-    private JobInfo buildJobInfo(TozsPtverm ptVerm) {
-        JobInfo jobInfo = new JobInfo();
-        jobInfo.setOasiNumber(ptVerm.getAhv());
-        jobInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
-        jobInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
-        jobInfo.setInternalReferenz(ptVerm.getNameve());
-        jobInfo.setDate(ptVerm.getDtgueltab());
-        return jobInfo;
+    private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
+    	EmploymentInfo employmentInfo = new EmploymentInfo();
+    	employmentInfo.setOasiNumber(ptVerm.getAhv());
+    	employmentInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
+    	employmentInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
+    	employmentInfo.setInternalReferenz(ptVerm.getNameve());
+    	employmentInfo.setDate(ptVerm.getDtgueltab());
+        return employmentInfo;
 
     }
 
@@ -67,17 +65,17 @@ public class PAKTJobEventProviderImpl implements JobEndProvider, JobStartProvide
     }
 
     @Override
-    public List<JobStart> getJobStarts() {
-        final List<JobStart> jobStarts = new ArrayList<>();
+    public List<EmploymentCommencement> getEmploymentCommencements() {
+        final List<EmploymentCommencement> employmentCommencements = new ArrayList<>();
 
 		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.NEUEINTRERF.getCode()).forEach(ptVerm -> {
-			jobStarts.add(buildJobStart(ptVerm));
+			employmentCommencements.add(buildEmploymentCommencement(ptVerm));
 		});
-        return jobStarts;
+        return employmentCommencements;
     }
 
-    private JobStart buildJobStart(TozsPtverm ptVerm) {
-        return new JobStart(Integer.toString(ptVerm.getId().getId()), buildJobInfo(ptVerm),
+    private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
+        return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm),
                 buildCapitalTransferInformation(ptVerm));
     }
 

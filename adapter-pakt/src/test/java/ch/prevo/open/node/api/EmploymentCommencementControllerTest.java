@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.nio.charset.Charset;
+
 import javax.inject.Inject;
 
 import org.junit.Before;
@@ -27,28 +28,29 @@ import ch.prevo.pakt.PaktAdapterConfig;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PaktAdapterConfig.class)
 @WebAppConfiguration
-public class JobEndControllerTest {
+public class EmploymentCommencementControllerTest {
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(),
+            Charset.forName("utf8"));
 
-	@Inject
-	private WebApplicationContext webApplicationContext;
+    @Inject
+    private WebApplicationContext webApplicationContext;
 
-	@Before
-	public final void setUp() {
-		this.mockMvc = webAppContextSetup(webApplicationContext).build();
-	}
+    @Before
+    public final void setUp(){
+        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+    }
 
-	@Test @Ignore
-	public void getAllJobEndData() throws Exception {
-
-		mockMvc.perform(get("/job-end")).andExpect(status().isOk()).andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("$", hasSize(3)))
-				.andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.3412.8844.97")))
-				.andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.537.488")));
-
-	}
+    @Test @Ignore
+    public void getAllEmploymentCommencementData() throws Exception {
+        mockMvc.perform(get("/commencement-of-employment"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].encryptedOasiNumber", is("756.1234.5678.97")))
+                .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")));
+    }
 }

@@ -78,9 +78,9 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 			listFzlVerwendungen.getFzlVerwendung().add(buildFzlVerwendung(notification));
 			final String idAuftrag = "";
 			
-			LOG.info("Aufruf vom PAKT Service submitFZLVerwendung fuer den DA {}...", notification.getJobEnd().getJobInfo().getOasiNumber());
-			meldungUpdate.getMeldungUpdatePort().submitFZLVerwendung(core, notification.getJobEnd().getJobInfo().getInternalPersonId(), nrMeld, slFZLDatenChecked, listFzlVerwendungen, idAuftrag, message);
-			LOG.info("Die Meldung {} fuer den DA {} wurde in PAKT angelegt.", nrMeld.value, notification.getJobEnd().getJobInfo().getOasiNumber());
+			LOG.info("Aufruf vom PAKT Service submitFZLVerwendung fuer den DA {}...", notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
+			meldungUpdate.getMeldungUpdatePort().submitFZLVerwendung(core, notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId(), nrMeld, slFZLDatenChecked, listFzlVerwendungen, idAuftrag, message);
+			LOG.info("Die Meldung {} fuer den DA {} wurde in PAKT angelegt.", nrMeld.value, notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
 			
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
@@ -111,7 +111,7 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 		fzlVerwendung.setCdWhg(Short.parseShort("1"));
 		fzlVerwendung.setCdGrdAusz(Short.parseShort("0"));
 		fzlVerwendung.setDtUnterVoll(date);
-		fzlVerwendung.setTxtUebw(notification.getJobEnd().getJobInfo().getInternalPersonId());
+		fzlVerwendung.setTxtUebw(notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId());
 		fzlVerwendung.setCdAntFzl(Short.parseShort("3"));
 		
 		return fzlVerwendung;

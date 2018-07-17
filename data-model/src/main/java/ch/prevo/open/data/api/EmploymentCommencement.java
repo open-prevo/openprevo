@@ -7,14 +7,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class JobStart extends AbstractJobEvent {
+public class EmploymentCommencement extends AbstractEmploymentEvent {
 
     private CapitalTransferInformation capitalTransferInfo;
 
-    public JobStart() {}
+    public EmploymentCommencement() {}
 
-    public JobStart(String techId, JobInfo jobInfo, CapitalTransferInformation capitalTransferInfo) {
-		super(techId, jobInfo);
+    public EmploymentCommencement(String techId, EmploymentInfo employmentInfo, CapitalTransferInformation capitalTransferInfo) {
+		super(techId, employmentInfo);
 		this.capitalTransferInfo = capitalTransferInfo;
 	}
 
@@ -32,11 +32,11 @@ public class JobStart extends AbstractJobEvent {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        JobStart jobStart = (JobStart) o;
+        EmploymentCommencement employmentCommencement = (EmploymentCommencement) o;
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(capitalTransferInfo, jobStart.capitalTransferInfo)
+                .append(capitalTransferInfo, employmentCommencement.capitalTransferInfo)
                 .isEquals();
     }
 

@@ -6,13 +6,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class JobEnd extends AbstractJobEvent {
+public class EmploymentTermination extends AbstractEmploymentEvent {
 
-    public JobEnd() {
+    public EmploymentTermination() {
     }
 
-    public JobEnd(String techId, JobInfo jobInfo) {
-        super(techId, jobInfo);
+    public EmploymentTermination(String techId, EmploymentInfo employmentInfo) {
+        super(techId, employmentInfo);
     }
 
     @Override
@@ -21,11 +21,11 @@ public class JobEnd extends AbstractJobEvent {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractJobEvent that = (AbstractJobEvent) o;
+        AbstractEmploymentEvent that = (AbstractEmploymentEvent) o;
 
         return new EqualsBuilder()
                 .append(getTechId(), that.getTechId())
-                .append(getJobInfo(), that.getJobInfo())
+                .append(getEmploymentInfo(), that.getEmploymentInfo())
                 .isEquals();
     }
 
@@ -33,7 +33,7 @@ public class JobEnd extends AbstractJobEvent {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(getTechId())
-                .append(getJobInfo())
+                .append(getEmploymentInfo())
                 .toHashCode();
     }
 
