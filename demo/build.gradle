@@ -71,4 +71,4 @@ def getJavaCommandLineForNode(nodeConfiguration) {
     cmd += " -jar ${project(":node").bootJar.archiveName}"
 }
 
-build.dependsOn(buildDemoZip)
+assemble.dependsOn(buildDemoZip)
