@@ -42,6 +42,9 @@ nodeConfiguration.each { node ->
 
         from(project(":${node.adapter}").shadowJar)
         from("${project(':node').buildDir}/libs")
+        if (node.adapter == "adapter-excel") {
+            from("src/data/${node.name}-Input.xlsx")
+        }
 
         into "${buildDir}/demo/${node.name}"
 
