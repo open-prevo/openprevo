@@ -38,7 +38,7 @@ public class NodeService {
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = nodeCaller
                     .getInsurantInformationList(nodeConfig.getJobExitsUrl());
-            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
+            List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundExits);
             exits.addAll(filteredInformation);
         }
@@ -50,14 +50,14 @@ public class NodeService {
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = nodeCaller
                     .getInsurantInformationList(nodeConfig.getJobEntriesUrl());
-            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
+            List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundEntries);
             entries.addAll(filteredInformation);
         }
         return entries;
     }
 
-    private List<InsurantInformation> filterInvalidAndAlreadyMatchedEntries(NodeConfiguration nodeConfiguration,
+    private List<InsurantInformation> filterInvalidInsurantInformation(NodeConfiguration nodeConfiguration,
                                                                             List<InsurantInformation> insurantInformation) {
         List<InsurantInformation> invalidMatches = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfiguration,
                 insurantInformation);
