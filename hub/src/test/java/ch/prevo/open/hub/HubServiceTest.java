@@ -44,5 +44,4 @@ public class HubServiceTest {
         assertEquals(exit.getRetirementFundUid(), notifiedMatches.get(0).getPreviousRetirementFundUid());
         assertEquals(entry.getRetirementFundUid(), notifiedMatches.get(0).getNewRetirementFundUid());
     }
-
 }
