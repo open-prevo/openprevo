@@ -83,8 +83,6 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 	}
 
 	private FzlVerwendung buildFzlVerwendung(FullCommencementNotification notification) {
-		LOG.info(notification.toString());
-		
 		ObjectFactory factory = new ObjectFactory();
 		FzlVerwendung fzlVerwendung = factory.createFzlVerwendung();
 		
