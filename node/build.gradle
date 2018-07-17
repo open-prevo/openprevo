@@ -16,6 +16,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("javax.inject:javax.inject")
     compile("commons-io:commons-io")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
