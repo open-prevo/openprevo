@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
-import ch.prevo.pakt.PaktAdapterConfig;
+import ch.prevo.pakt.PaktEnvironment;
 import ch.prevo.pakt.RetirementFund;
 import ch.prevo.service.common.extern.generate.ServiceCore;
 import ch.prevo.service.common.extern.generate.ServiceMessage;
@@ -33,7 +33,7 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
     private static Logger LOG = LoggerFactory.getLogger(PAKTMatchNotificationListenerImpl.class);
     
     @Inject
-    private PaktAdapterConfig config;
+    private PaktEnvironment config;
     
 	@Override
 	public void handleTerminationMatch(FullTerminationNotification notification) {

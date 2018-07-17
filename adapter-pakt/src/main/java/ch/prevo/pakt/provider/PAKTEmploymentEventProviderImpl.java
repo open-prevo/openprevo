@@ -16,7 +16,7 @@ import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
-import ch.prevo.pakt.PaktAdapterConfig;
+import ch.prevo.pakt.PaktEnvironment;
 import ch.prevo.pakt.RetirementFund;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
@@ -29,10 +29,10 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 	
     private final PartnerVermittlungRepository repository;
 
-    private final PaktAdapterConfig config;
+    private final PaktEnvironment config;
     
 	@Inject
-    public PAKTEmploymentEventProviderImpl(PaktAdapterConfig config, PartnerVermittlungRepository partnerVermittlungRepository) {
+    public PAKTEmploymentEventProviderImpl(PaktEnvironment config, PartnerVermittlungRepository partnerVermittlungRepository) {
         this.repository = partnerVermittlungRepository;
         this.config = config;
     }
