@@ -56,9 +56,9 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 		MeldungUpdate_Service meldungUpdate;
 		ServiceCore core = new ServiceCore();
 		core.setCdMandant(this.getCdMandant());
-		core.setCdProfil(Short.parseShort("1"));
-		core.setCdSchicht(Short.parseShort("1"));
-		core.setCdSprache(Short.parseShort("1"));
+		core.setCdProfil((short)1);
+		core.setCdSchicht((short)1);
+		core.setCdSprache((short)1);
 		core.setIdUser(this.getUserId());
 
 		try {
@@ -68,15 +68,13 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 
 			final Holder<ServiceMessage> message = new Holder<ServiceMessage>();
 			final Holder<Long> nrMeld = new Holder<>();
-			nrMeld.value = Long.parseLong("0");
+			nrMeld.value = 0L;
 			final boolean slFZLDatenChecked = true;
 			final ListFZLVerwendung listFzlVerwendungen = new ListFZLVerwendung();
 			listFzlVerwendungen.getFzlVerwendung().add(buildFzlVerwendung(notification));
 			final String idAuftrag = "";
 			
-			LOG.info("Aufruf vom PAKT Service submitFZLVerwendung fuer den DA {}...", notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
 			meldungUpdate.getMeldungUpdatePort().submitFZLVerwendung(core, notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId(), nrMeld, slFZLDatenChecked, listFzlVerwendungen, idAuftrag, message);
-			LOG.info("Die Meldung {} fuer den DA {} wurde in PAKT angelegt.", nrMeld.value, notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
 			
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
@@ -101,14 +99,14 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 		}
 		
 		fzlVerwendung.setIdPartner(RetirementFund.getById(notification.getNewRetirementFundUid()).getIdPartner());
-		fzlVerwendung.setCdZweck(Short.parseShort("1"));
+		fzlVerwendung.setCdZweck((short)1);
 		fzlVerwendung.setIdGeschaeft("");
 		fzlVerwendung.setSlPartnerChecked(true);
-		fzlVerwendung.setCdWhg(Short.parseShort("1"));
-		fzlVerwendung.setCdGrdAusz(Short.parseShort("0"));
+		fzlVerwendung.setCdWhg((short)1);
+		fzlVerwendung.setCdGrdAusz((short)0);
 		fzlVerwendung.setDtUnterVoll(date);
 		fzlVerwendung.setTxtUebw(notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId());
-		fzlVerwendung.setCdAntFzl(Short.parseShort("3"));
+		fzlVerwendung.setCdAntFzl((short)3);
 		
 		return fzlVerwendung;
 	}
