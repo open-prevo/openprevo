@@ -35,10 +35,6 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
     @Inject
     private PaktAdapterConfig config;
     
-	public PaktAdapterConfig getConfig() {
-		return config;
-	}
-
 	@Override
 	public void handleTerminationMatch(FullTerminationNotification notification) {
 		// TODO Auto-generated method stub
@@ -66,7 +62,7 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 		core.setIdUser(this.getUserId());
 
 		try {
-			meldungUpdate = new MeldungUpdate_Service(new URL(getConfig().getServiceBaseUrl()+"MeldungUpdate?wsdl"), new QName(
+			meldungUpdate = new MeldungUpdate_Service(new URL(config.getServiceBaseUrl()+"MeldungUpdate?wsdl"), new QName(
 					"http://generate.extern.update.meldung.service.prevo.ch",
 					"MeldungUpdate"));
 
@@ -118,7 +114,7 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 	}
 
 	private String getUserId() {
-		return "luessie";
+		return config.getIdUser();
 	}
 
 	private short getCdMandant() {
