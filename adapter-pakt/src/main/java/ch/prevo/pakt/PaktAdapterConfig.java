@@ -25,7 +25,7 @@ import org.springframework.validation.annotation.Validated;
 		"ch.prevo.pakt.repository" })
 @PropertySource("classpath:pakt-application.properties")
 @EnableAutoConfiguration
-@ConfigurationProperties(prefix = "pakt.env")
+@ConfigurationProperties(prefix = "pakt")
 @Validated
 public class PaktAdapterConfig {
 
@@ -49,7 +49,6 @@ public class PaktAdapterConfig {
 			@Qualifier("paktDataSource") DataSource dataSource) {
 		return builder.dataSource(dataSource).packages("ch.prevo.pakt").persistenceUnit("pakt").build();
 	}
-
 	
 	public Short getCdMandant() {
 		return cdMandant;
