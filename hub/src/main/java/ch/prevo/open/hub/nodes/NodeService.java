@@ -37,7 +37,7 @@ public class NodeService {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = nodeCaller
-                    .getInsurantInformationList(nodeConfig.getEmploymentExitsUrl());
+                    .getInsurantInformationList(nodeConfig.getEmploymentTerminationsUrl());
             List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundExits);
             exits.addAll(filteredInformation);
@@ -49,7 +49,7 @@ public class NodeService {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = nodeCaller
-                    .getInsurantInformationList(nodeConfig.getEmploymentEntriesUrl());
+                    .getInsurantInformationList(nodeConfig.getEmploymentCommencementsUrl());
             List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
                     pensionFundEntries);
             entries.addAll(filteredInformation);
