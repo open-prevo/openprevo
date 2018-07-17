@@ -42,8 +42,11 @@ nodeConfiguration.each { node ->
 
         from(project(":${node.adapter}").shadowJar)
         from("${project(':node').buildDir}/libs")
+
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
+        } else if (node.adapter == "adapter-pakt") {
+            from("src/config/pakt.properties")
         }
 
         into "${buildDir}/demo/${node.name}"
@@ -69,6 +72,12 @@ def getJavaCommandLineForNode(nodeConfiguration) {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
     }
     cmd += " -jar ${project(":node").bootJar.archiveName}"
+
+    if (nodeConfiguration.adapter == "adapter-pakt") {
+        cmd += " --spring.config.location=file:pakt.properties"
+    }
+
+    return cmd
 }
 
 build.dependsOn(buildDemoZip)
