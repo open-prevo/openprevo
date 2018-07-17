@@ -72,6 +72,7 @@ subprojects { project ->
             dependency("javax.inject:javax.inject:1")
             dependency("org.modelmapper:modelmapper:2.1.0")
             dependency("org.testcontainers:testcontainers:1.8.0")
+            dependency("org.hibernate:hibernate-validator:6.0.10.Final")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")
