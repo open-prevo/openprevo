@@ -151,6 +151,35 @@ public class NodeCallerTest {
     }
 
     @Test
+    public void notifySingleCommencementMatchForSeveralTerminationMatches() {
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID3)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+
+        MatchForCommencement matchForCommencement_node2 = createMatchForCommencement();
+        MatchForCommencement matchForCommencement_node3 = createMatchForCommencement();
+        matchForCommencement_node3.setRetirementFundUid(UID3);
+
+        // when
+        CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement_node2);
+        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement_node3);
+
+        // then
+        server.verify();
+        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
+    }
+
+    @Test
     public void verifyNotifyCommencementMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
         server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL1))
