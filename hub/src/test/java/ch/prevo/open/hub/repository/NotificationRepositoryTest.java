@@ -53,9 +53,12 @@ public class NotificationRepositoryTest {
     }
 
     private MatchForTermination getMatchForTermination() {
+        EncryptedCapitalTransferInfo transferInformation = new EncryptedCapitalTransferInfo();
+        transferInformation.setEncryptedSymmetricKeyBase64("Key_" + Math.random());
+        transferInformation.setEncryptedDataBase64("Data_" + Math.random());
         return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,
                 commencementDate, terminationDate,
-                new EncryptedCapitalTransferInfo());
+                transferInformation);
     }
 
     @Test
