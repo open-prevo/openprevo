@@ -29,12 +29,11 @@ prepareHub.dependsOn { project(":hub").bootJar }
 
 def nodeConfiguration = [
         [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
-        [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
         [name: "NodeHelvetiaExcel", adapter: "adapter-excel", port: "8852"],
         [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"]
 ]
 
-nodeConfiguration.each { node ->
+def createTask(node) {
     task "prepare${node.name}"(type: Copy) {
 
         dependsOn { project(":${node.adapter}").shadowJar }
@@ -63,6 +62,20 @@ nodeConfiguration.each { node ->
     buildDemoZip.dependsOn("prepare${node.name}")
 }
 
+nodeConfiguration.each { node ->
+    createTask(node)
+}
+
+if (hasProperty("PREVO")) {
+    def nodeConfigurationPrevo = [
+            [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
+    ]
+
+    nodeConfigurationPrevo.each { node ->
+        createTask(node)
+    }
+}
+
 def getJavaCommandLineForNode(nodeConfiguration) {
 
     def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName} " +
@@ -80,4 +93,4 @@ def getJavaCommandLineForNode(nodeConfiguration) {
     return cmd
 }
 
-build.dependsOn(buildDemoZip)
+assemble.dependsOn(buildDemoZip)

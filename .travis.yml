@@ -1,5 +1,13 @@
 language: java
-
 sudo: required
 services:
   - docker
+deploy:
+  provider: releases
+  api_key:
+    secure: m+FfZqoZKI9Ydj5injhpOt1P6fswAPkebLf38FozdGzWhlFjV1qCR2pwYlj0xS2SByIgZXhsVaChgklmy7a4uN4z0AEOxppWIpCTV+q9xhN1aPFGkSMrnNLymdSo9z9DXMsJag0iVIpz8fhhRZD0Asw+KaiOn9vdi1bnvxAIgkJmMgpbGnknJLCBYB2rVz+n8wikbg7VCo7sJPRedXmlVClnsHc6D6Cf5vo6brj18kkwDdyzhf+JYW5tU35YSbuPUZr3g48rjKdbqRyaYbt5c14BYJF9doxQz89kNSbbVjuoPtRT7ybQCu2W5LApjXhQxNRfZllF93m+CKdqlxaRRghp9nTtdmuM8/Gozg52SKIrx8KocZ0Jm/wTaKzYN6QggPUjIPZCptdQb23/TbzqNc2Q/4M1b8WjxfV6Mc3O48arzbNGvw9HlneTeHYEwB5qtu8G0ykKFVoua8W+9ssWkn6bUXSQvPyaCewkrpDcWH56uxG5c0fMZfAPe8DtBXwCmkk/MVQmZzfHYD2b64gEvSSF4YxaSJaOG6fB+RbGI00FbIlWcp7/SHfm5K+FC5h41AmORDUr32dpm6wFrOMnMt1/qsVtdSVjjgen7NPpAf0zlHPxOMtC1hr538fUjk5LSgi8ermsylpXzEoPj10oUdxnQXMI5QBflXbKx0zFTm8=
+  file: "demo/build/demo.zip"
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: open-prevo/openprevo

@@ -19,12 +19,15 @@ dependencies {
 
     compile('javax.inject:javax.inject')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.hibernate:hibernate-validator")
 
     runtime("com.ibm.db2.jcc:db2jcc4:10.1")
 
     // TODO think of how to write tests with adapters
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.boot:spring-boot-starter-web')
+    
+    compile("ch.prevo.service:ServiceClientMeldungUpdate:3.3.0.0.1-SNAPSHOT")
 }
 
 test {
