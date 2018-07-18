@@ -5,8 +5,6 @@ import ch.prevo.open.encrypted.model.EncryptedData;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +40,7 @@ public class CapitalTransferInfoEncrypterTest {
     }
 
     @Test
-    public void inputIsNull() throws GeneralSecurityException, IOException {
+    public void inputIsNull() {
         CapitalTransferInfoEncrypter capitalTransferInfoEncrypter = new CapitalTransferInfoEncrypter();
         EncryptedData encryptedData = capitalTransferInfoEncrypter.encrypt(null, keys.getPublic());
 
