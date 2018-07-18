@@ -35,25 +35,29 @@ def nodeConfiguration = [
 
 def createTask(node) {
     task "prepare${node.name}"(type: Copy) {
-    
-            dependsOn { project(":${node.adapter}").shadowJar }
-            dependsOn { project(":node").bootJar }
-    
-            from(project(":${node.adapter}").shadowJar)
-            from("${project(':node').buildDir}/libs")
-    
-            into "${buildDir}/demo/${node.name}"
-    
-            doLast {
-                def batFile = new File("${buildDir}/demo/${node.name}/start-node.bat")
-                batFile.text = getJavaCommandLineForNode(node)
-                batFile.executable = true
-                def shFile = new File("${buildDir}/demo/${node.name}/start-node.sh")
-                shFile.text = getJavaCommandLineForNode(node)
-                shFile.executable = true
-            }
+
+        dependsOn { project(":${node.adapter}").shadowJar }
+        dependsOn { project(":node").bootJar }
+
+        from(project(":${node.adapter}").shadowJar)
+        from("${project(':node').buildDir}/libs")
+
+        if (node.adapter == "adapter-excel") {
+            from("src/data/${node.name}-Input.xlsx")
         }
-        buildDemoZip.dependsOn("prepare${node.name}")
+
+        into "${buildDir}/demo/${node.name}"
+
+        doLast {
+            def batFile = new File("${buildDir}/demo/${node.name}/start-node.bat")
+            batFile.text = getJavaCommandLineForNode(node)
+            batFile.executable = true
+            def shFile = new File("${buildDir}/demo/${node.name}/start-node.sh")
+            shFile.text = getJavaCommandLineForNode(node)
+            shFile.executable = true
+        }
+    }
+    buildDemoZip.dependsOn("prepare${node.name}")
 }
 
 nodeConfiguration.each { node ->
@@ -64,7 +68,7 @@ if (hasProperty("PREVO")) {
     def nodeConfigurationPrevo = [
             [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
     ]
-    
+
     nodeConfigurationPrevo.each { node ->
         createTask(node)
     }
