@@ -3,7 +3,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.NodeApplication;
-import ch.prevo.open.node.config.NodeConfiguration;
+import ch.prevo.open.node.config.NodeConfigurationService;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.node.services.MatchNotificationService;
 import org.junit.Test;
@@ -33,13 +33,13 @@ public class MatchNotificationControllerTest extends RestBaseTest {
     @TestConfiguration
     static class Config {
         @Inject
-        private NodeConfiguration nodeConfiguration;
+        private NodeConfigurationService nodeConfigService;
 
         @Bean
         public MatchNotificationService matchNotificationService() throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new MatchNotificationService(factory, nodeConfiguration);
+            return new MatchNotificationService(factory, nodeConfigService);
         }
     }
 

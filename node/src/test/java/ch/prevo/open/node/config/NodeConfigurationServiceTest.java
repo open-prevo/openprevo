@@ -12,20 +12,20 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class NodeConfigurationTest {
+public class NodeConfigurationServiceTest {
 
     @Inject
-    private NodeConfiguration nodeConfiguration;
+    private NodeConfigurationService nodeConfigService;
 
     @Test
     public void readConfig() {
-        assertNotNull(nodeConfiguration.getPrivateKey("CHE-109.537.519"));
-        assertNotNull(nodeConfiguration.getPublicKey("CHE-109.740.084"));
+        assertNotNull(nodeConfigService.getPrivateKey("CHE-109.537.519"));
+        assertNotNull(nodeConfigService.getPublicKey("CHE-109.740.084"));
     }
 
     @Test(expected = IllegalStateException.class)
     public void attemptReadConfigForUnknownUID() {
-        assertNull(nodeConfiguration.getPublicKey("12345"));
+        assertNull(nodeConfigService.getPublicKey("12345"));
     }
 
 }

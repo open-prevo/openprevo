@@ -1,6 +1,6 @@
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.node.config.NodeConfiguration;
+import ch.prevo.open.node.config.NodeConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -14,20 +14,20 @@ public class NodeConfigVerifier implements ApplicationListener<ApplicationReadyE
     private static final Logger LOG = LoggerFactory.getLogger(NodeConfigVerifier.class);
 
     @Inject
-    private NodeConfiguration nodeConfiguration;
+    private NodeConfigurationService nodeConfigService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        for (String uid : nodeConfiguration.getOwnRetirementFundUids()) {
+        for (String uid : nodeConfigService.getOwnRetirementFundUids()) {
             try {
-                nodeConfiguration.getPrivateKey(uid);
+                nodeConfigService.getPrivateKey(uid);
             } catch (Exception e) {
                 LOG.error("Configuration error: cannot read private key for UID " + uid);
             }
         }
-        for (String uid : nodeConfiguration.getOtherRetirementFundUids()) {
+        for (String uid : nodeConfigService.getOtherRetirementFundUids()) {
             try {
-                nodeConfiguration.getPublicKey(uid);
+                nodeConfigService.getPublicKey(uid);
             } catch (Exception e) {
                 LOG.error("Configuration error: cannot read public key for UID " + uid);
             }

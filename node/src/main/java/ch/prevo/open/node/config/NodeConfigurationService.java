@@ -24,9 +24,9 @@ import java.util.*;
 import static ch.prevo.open.encrypted.services.EncryptedData.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 @Service
-public class NodeConfiguration {
+public class NodeConfigurationService {
 
-    private static Logger LOG = LoggerFactory.getLogger(NodeConfiguration.class);
+    private static Logger LOG = LoggerFactory.getLogger(NodeConfigurationService.class);
 
     private final ResourceLoader loader;
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -36,7 +36,7 @@ public class NodeConfiguration {
     private NodeConfigurationData config;
 
     @Inject
-    public NodeConfiguration(ResourceLoader loader) {
+    public NodeConfigurationService(ResourceLoader loader) {
         this.loader = loader;
     }
 

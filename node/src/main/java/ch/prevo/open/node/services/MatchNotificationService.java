@@ -11,7 +11,7 @@ import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
-import ch.prevo.open.node.config.NodeConfiguration;
+import ch.prevo.open.node.config.NodeConfigurationService;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
@@ -35,15 +35,15 @@ public class MatchNotificationService {
 
     private final EmploymentCommencementProvider employmentCommencementProvider;
     private final EmploymentTerminationProvider employmentTerminationProvider;
-    private final NodeConfiguration nodeConfiguration;
+    private final NodeConfigurationService nodeConfigService;
 
     @Inject
-    public MatchNotificationService(ServiceListFactoryBean factoryBean, NodeConfiguration nodeConfiguration) {
+    public MatchNotificationService(ServiceListFactoryBean factoryBean, NodeConfigurationService nodeConfigService) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.employmentCommencementProvider = factory != null ? factory.getEmploymentCommencementProvider() : null;
         this.employmentTerminationProvider = factory != null ? factory.getEmploymentTerminationProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
-        this.nodeConfiguration = nodeConfiguration;
+        this.nodeConfigService = nodeConfigService;
     }
 
     public void handleCommencementMatch(MatchForTermination notification) throws NotificationException {
@@ -64,7 +64,7 @@ public class MatchNotificationService {
         EncryptedCapitalTransferInfo encryptedCapitalTransferInfo = notification.getTransferInformation();
         if (encryptedCapitalTransferInfo != null) {
             String retirementFundUid = employmentTermination.get().getEmploymentInfo().getRetirementFundUid();
-            fullNotification.setTransferInformation(encryptedCapitalTransferInfo.decryptData(nodeConfiguration.getPrivateKey(retirementFundUid)));
+            fullNotification.setTransferInformation(encryptedCapitalTransferInfo.decryptData(nodeConfigService.getPrivateKey(retirementFundUid)));
         }
 
         listener.handleCommencementMatch(fullNotification);
@@ -92,7 +92,7 @@ public class MatchNotificationService {
         if (info == null) {
             return Optional.empty();
         }
-        return Optional.of(new EncryptedCapitalTransferInfo(info, nodeConfiguration.getPublicKey(notification.getPreviousRetirementFundUid())));
+        return Optional.of(new EncryptedCapitalTransferInfo(info, nodeConfigService.getPublicKey(notification.getPreviousRetirementFundUid())));
     }
 
     private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
