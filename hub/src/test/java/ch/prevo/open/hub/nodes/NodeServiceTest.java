@@ -63,7 +63,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentTerminationsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentTerminations();
 
         assertEquals(1, insurantInformations.size());
         assertEquals(terminationInsurantInfo, insurantInformations.iterator().next());
@@ -80,7 +80,7 @@ public class NodeServiceTest {
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
-        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentTerminations();
 
         // then
         assertEquals(1, currentEntries.size());
@@ -98,7 +98,7 @@ public class NodeServiceTest {
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
-        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentTerminations();
 
         // then
         assertEquals(1, currentEntries.size());
@@ -111,7 +111,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentCommencementsUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentCommencements();
 
         assertEquals(1, insurantInformations.size());
         assertEquals(commencementInsurantInfo, insurantInformations.iterator().next());
@@ -145,7 +145,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentTerminationsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentTerminations();
 
         assertTrue(insurantInformations.isEmpty());
     }
@@ -158,7 +158,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentCommencementsUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentCommencements();
 
         assertTrue(insurantInformations.isEmpty());
     }
