@@ -121,7 +121,7 @@ public class NodeServiceTest {
     public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
 
-        EncryptedData transferInformation = new EncryptedData();
+        EncryptedData transferInformation = new EncryptedData("", "");
         when(nodeCaller.postCommencementNotification(eq(node2_old.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 

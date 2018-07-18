@@ -24,14 +24,6 @@ public class EncryptedData implements Serializable {
         return encryptedSymmetricKeyBase64;
     }
 
-    public void setEncryptedDataBase64(String encryptedDataBase64) {
-        this.encryptedDataBase64 = encryptedDataBase64;
-    }
-
-    public void setEncryptedSymmetricKeyBase64(String encryptedSymmetricKeyBase64) {
-        this.encryptedSymmetricKeyBase64 = encryptedSymmetricKeyBase64;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

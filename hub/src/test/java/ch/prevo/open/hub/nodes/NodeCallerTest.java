@@ -243,9 +243,7 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData();
-        transferInformation.setEncryptedDataBase64(ENCRYPTED_DATA);
-        transferInformation.setEncryptedSymmetricKeyBase64(ENCRYPTED_KEY);
+        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY);
         MatchForTermination MatchForTermination = new MatchForTermination();
         MatchForTermination.setEncryptedOasiNumber(OASI1);
         MatchForTermination.setNewRetirementFundUid(UID2);
