@@ -36,6 +36,7 @@ public class NodeCallerTest {
     private static final String OASI2 = "756.1335.5778.23";
     private static final String UID1 = "CHE-223.471.073";
     private static final String UID2 = "CHE-109.723.097";
+    private static final String UID3 = "CHE-109.537.488";
 
     private static final String RETIREMENT_FUND_NAME = "Baloise-Sammelstiftung";
     private static final String IBAN = "CH53 0077 0016 02222 3334 4";
@@ -55,6 +56,7 @@ public class NodeCallerTest {
 
     private static final String URL1 = "https://host.domain1/path";
     private static final String URL2 = "https://host.domain2/path";
+    private static final String URL3 = "https://host.domain3/path";
 
     @Inject
     private MockRestServiceServer server;
@@ -149,6 +151,35 @@ public class NodeCallerTest {
     }
 
     @Test
+    public void notifySingleCommencementMatchForSeveralTerminationMatches() {
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
+                .andExpect(jsonPath("$.retirementFundUid", is(UID3)))
+                .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
+
+        MatchForCommencement matchForCommencement_node2 = createMatchForCommencement();
+        MatchForCommencement matchForCommencement_node3 = createMatchForCommencement();
+        matchForCommencement_node3.setRetirementFundUid(UID3);
+
+        // when
+        CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement_node2);
+        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement_node3);
+
+        // then
+        server.verify();
+        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
+        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
+    }
+
+    @Test
     public void verifyNotifyCommencementMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
         server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL1))
@@ -197,6 +228,28 @@ public class NodeCallerTest {
         // when
         nodeCaller.postTerminationNotification(URL2, MatchForTermination);
         nodeCaller.postTerminationNotification(URL2, MatchForTermination);
+
+        // then
+        server.verify();
+    }
+
+    @Test
+    public void notifySeveralTerminationMatchesForSingleCommencement() {
+        server.expect(requestTo(URL1))
+                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andRespond(withSuccess());
+        server.expect(requestTo(URL3))
+                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andRespond(withSuccess());
+
+        MatchForTermination matchForTermination_node1 = createMatchForTermination();
+        matchForTermination_node1.setPreviousRetirementFundUid(UID1);
+        MatchForTermination matchForTermination_node3 = createMatchForTermination();
+        matchForTermination_node3.setPreviousRetirementFundUid(UID3);
+
+        // when
+        nodeCaller.postTerminationNotification(URL1, matchForTermination_node1);
+        nodeCaller.postTerminationNotification(URL3, matchForTermination_node3);
 
         // then
         server.verify();

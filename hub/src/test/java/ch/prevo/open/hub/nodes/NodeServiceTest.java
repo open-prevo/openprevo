@@ -1,8 +1,8 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
 import org.junit.Before;
@@ -14,11 +14,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Set;
 
 import static java.time.LocalDate.of;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,8 +34,9 @@ import static org.mockito.Mockito.when;
 public class NodeServiceTest {
 
     private static final String OASI1 = "756.1234.5678.97";
-    private static final String UID1_OLD = "CHE-223.471.073";
-    private static final String UID2_NEW = "CHE-109.723.097";
+    private static final String UID1 = "CHE-223.471.073";
+    private static final String UID2 = "CHE-109.723.097";
+    private static final String UID3 = "CHE-109.537.488";
 
     @Inject
     private NodeService nodeService;
@@ -46,15 +50,17 @@ public class NodeServiceTest {
 
     private NodeConfiguration node1_new;
     private NodeConfiguration node2_old;
+    private NodeConfiguration node3_old;
     private InsurantInformation terminationInsurantInfo;
     private InsurantInformation commencementInsurantInfo;
 
     @Before
     public void setUp() {
-        node1_new = new NodeConfiguration("https://host1", UID1_OLD);
-        node2_old = new NodeConfiguration("https://host2", UID2_NEW);
-        terminationInsurantInfo = new InsurantInformation(OASI1, UID1_OLD, of(2020, 12, 15));
-        commencementInsurantInfo = new InsurantInformation(OASI1, UID2_NEW, of(2021, 2, 1));
+        node1_new = new NodeConfiguration("https://host1", UID1);
+        node2_old = new NodeConfiguration("https://host2", UID2);
+        node3_old = new NodeConfiguration("https://host3", UID3);
+        terminationInsurantInfo = new InsurantInformation(OASI1, UID1, of(2020, 12, 15));
+        commencementInsurantInfo = new InsurantInformation(OASI1, UID2, of(2021, 2, 1));
     }
 
     @Test
@@ -63,7 +69,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentTerminationsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentTerminations();
 
         assertEquals(1, insurantInformations.size());
         assertEquals(terminationInsurantInfo, insurantInformations.iterator().next());
@@ -80,7 +86,7 @@ public class NodeServiceTest {
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
-        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentTerminations();
 
         // then
         assertEquals(1, currentEntries.size());
@@ -98,7 +104,7 @@ public class NodeServiceTest {
                 .thenReturn(singletonList(terminationInsurantInfo));
 
         // when
-        Set<InsurantInformation> currentEntries = nodeService.getCurrentExits();
+        Set<InsurantInformation> currentEntries = nodeService.getCurrentTerminations();
 
         // then
         assertEquals(1, currentEntries.size());
@@ -111,7 +117,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentCommencementsUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentCommencements();
 
         assertEquals(1, insurantInformations.size());
         assertEquals(commencementInsurantInfo, insurantInformations.iterator().next());
@@ -129,10 +135,10 @@ public class NodeServiceTest {
         LocalDate entryDate = of(2018, 7, 1);
         LocalDate exitDate = of(2018, 6, 30);
         nodeService.notifyMatches(
-                singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate)));
+                singletonList(new Match(OASI1, UID1, UID2, entryDate, exitDate)));
 
         // then
-        MatchForTermination matchNotification = new MatchForTermination(OASI1, UID1_OLD, UID2_NEW, entryDate, exitDate, transferInformation);
+        MatchForTermination matchNotification = new MatchForTermination(OASI1, UID1, UID2, entryDate, exitDate, transferInformation);
         verify(nodeCaller).postTerminationNotification(eq(node1_new.getTerminationMatchNotifyUrl()), eq(matchNotification));
     }
 
@@ -145,7 +151,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node2_old.getEmploymentTerminationsUrl()))
                 .thenReturn(singletonList(terminationInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentExits();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentTerminations();
 
         assertTrue(insurantInformations.isEmpty());
     }
@@ -158,7 +164,7 @@ public class NodeServiceTest {
         when(nodeCaller.getInsurantInformationList(node1_new.getEmploymentCommencementsUrl()))
                 .thenReturn(singletonList(commencementInsurantInfo));
 
-        Set<InsurantInformation> insurantInformations = nodeService.getCurrentEntries();
+        Set<InsurantInformation> insurantInformations = nodeService.getCurrentCommencements();
 
         assertTrue(insurantInformations.isEmpty());
     }
@@ -170,16 +176,40 @@ public class NodeServiceTest {
         when(nodeCaller.postCommencementNotification(eq(node1_new.getCommencementMatchNotifyUrl()), any())).thenReturn(null);
 
         // when
-        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1_OLD, UID2_NEW, commencementInsurantInfo.getDate(), terminationInsurantInfo.getDate())));
+        nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, commencementInsurantInfo.getDate(), terminationInsurantInfo.getDate())));
 
         // then
         // TODO: fix and activate; we should not notify without the Transfer info
         // verify(nodeCaller, times(0)).postTerminationNotification(any(), any());
     }
 
+    @Test
+    public void testNotificationForSeveralTerminationsMatchingSingleCommencement() {
+        when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old, node3_old));
+
+        CapitalTransferInformation transferInformation = new CapitalTransferInformation();
+        when(nodeCaller.postCommencementNotification(eq(node1_new.getCommencementMatchNotifyUrl()), any()))
+                .thenReturn(transferInformation);
+
+        LocalDate commencementDate = of(2018, 7, 1);
+        LocalDate terminationDate = of(2018, 6, 30);
+
+        // when
+        nodeService.notifyMatches(Arrays.asList(
+                new Match(OASI1, UID2, UID1, commencementDate, terminationDate),
+                new Match(OASI1, UID3, UID1, commencementDate, terminationDate)
+        ));
+
+        // then
+        MatchForTermination matchNotification_node2 = new MatchForTermination(OASI1, UID2, UID1, commencementDate, terminationDate, transferInformation);
+        MatchForTermination matchNotification_node3 = new MatchForTermination(OASI1, UID3, UID1, commencementDate, terminationDate, transferInformation);
+        verify(nodeCaller).postTerminationNotification(eq(node2_old.getTerminationMatchNotifyUrl()), eq(matchNotification_node2));
+        verify(nodeCaller).postTerminationNotification(eq(node3_old.getTerminationMatchNotifyUrl()), eq(matchNotification_node3));
+    }
+
     private void assertEqualsToTestdata(Set<InsurantInformation> insurantInformations) {
         InsurantInformation insurantInformation = insurantInformations.iterator().next();
         assertEquals(OASI1, insurantInformation.getEncryptedOasiNumber());
-        assertEquals(UID1_OLD, insurantInformation.getRetirementFundUid());
+        assertEquals(UID1, insurantInformation.getRetirementFundUid());
     }
 }

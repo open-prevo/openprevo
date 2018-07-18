@@ -1,40 +1,35 @@
 package ch.prevo.open.hub.match;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import ch.prevo.open.encrypted.model.InsurantInformation;
 import org.springframework.stereotype.Service;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MatcherService {
 
     public List<Match> findMatches(Set<InsurantInformation> retirementFundTerminations, Set<InsurantInformation> retirementFundCommencements) {
-        List<Match> matches = new ArrayList<>();
+        final List<Match> matches = new ArrayList<>();
         for (InsurantInformation termination : retirementFundTerminations) {
-            InsurantInformation matchingEntry = findMatchingEntry(retirementFundCommencements, termination);
-            if (matchingEntry != null) {
-                matches.add(new Match(termination.getEncryptedOasiNumber(), termination.getRetirementFundUid(), matchingEntry.getRetirementFundUid(), matchingEntry.getDate(), termination.getDate()));
-            }
+            final Optional<InsurantInformation> matchingEntry = findMatchingEntry(retirementFundCommencements, termination);
+            matchingEntry.ifPresent(commencement -> matches.add(
+                    new Match(
+                            termination.getEncryptedOasiNumber(),
+                            termination.getRetirementFundUid(),
+                            commencement.getRetirementFundUid(),
+                            commencement.getDate(),
+                            termination.getDate()
+                    )
+            ));
         }
         return matches;
     }
 
-    private InsurantInformation findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation exit) {
-        Set<InsurantInformation> matchingEntries = retirementFundEntries.stream()
-                .filter(entry -> isMatching(entry, exit))
-                .collect(Collectors.toSet());
-
-        if (matchingEntries.isEmpty()) {
-            return null;
-        }
-        if (matchingEntries.size() > 1) {
-            throw new RuntimeException("Cannot handle multiple entries for a single exit");
-        }
-        return matchingEntries.iterator().next();
+    private Optional<InsurantInformation> findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation termination) {
+        return retirementFundEntries.stream().filter(commencement -> isMatching(commencement, termination)).findAny();
     }
 
     private boolean isMatching(InsurantInformation entry, InsurantInformation exit) {
