@@ -123,8 +123,8 @@ public class NodeCallerTest {
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isNotBlank();
-        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBase64()).isNotBlank();
+        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isEqualTo(ENCRYPTED_DATA);
+        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBase64()).isEqualTo(ENCRYPTED_KEY);
     }
 
     @Test
