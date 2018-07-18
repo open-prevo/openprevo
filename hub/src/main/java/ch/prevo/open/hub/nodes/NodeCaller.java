@@ -1,6 +1,6 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
@@ -43,12 +43,12 @@ public class NodeCaller {
         }
     }
 
-    EncryptedCapitalTransferInfo postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
+    EncryptedData postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             if (!notificationRepository.isMatchForCommencementAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send termination match notification for match: {}", matchNotification);
-                EncryptedCapitalTransferInfo encryptedCapitalTransferInfo = restTemplate
-                        .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedCapitalTransferInfo.class);
+                EncryptedData encryptedCapitalTransferInfo = restTemplate
+                        .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedData.class);
 
                 notificationRepository.saveMatchForCommencement(matchNotification);
 

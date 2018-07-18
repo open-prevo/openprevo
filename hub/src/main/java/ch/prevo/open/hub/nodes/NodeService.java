@@ -83,7 +83,7 @@ public class NodeService {
         for (Match match : matches) {
             try {
                 // notify new node
-                final EncryptedCapitalTransferInfo transferInformation = tryNotifyNewRetirementFundAboutMatch(
+                final EncryptedData transferInformation = tryNotifyNewRetirementFundAboutMatch(
                         findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
                 if (transferInformation != null) {
                     // notify previous node
@@ -97,7 +97,7 @@ public class NodeService {
         }
     }
 
-    private EncryptedCapitalTransferInfo tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
+    private EncryptedData tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
         MatchForCommencement matchNotification = new MatchForCommencement();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
@@ -109,7 +109,7 @@ public class NodeService {
 
     private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig,
                                                                       Match match,
-                                                                      EncryptedCapitalTransferInfo transferInformation) {
+                                                                      EncryptedData transferInformation) {
         MatchForTermination matchNotification = new MatchForTermination();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());

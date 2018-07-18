@@ -19,9 +19,12 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import static ch.prevo.open.encrypted.services.EncryptedData.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 @Service
 public class NodeConfigurationService {

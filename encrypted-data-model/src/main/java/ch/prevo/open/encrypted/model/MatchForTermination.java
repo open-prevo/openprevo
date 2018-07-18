@@ -15,12 +15,12 @@ public class MatchForTermination {
     private String newRetirementFundUid;
     private LocalDate commencementDate;
     private LocalDate terminationDate;
-    private EncryptedCapitalTransferInfo transferInformation;
+    private EncryptedData transferInformation;
 
     public MatchForTermination() {
     }
 
-    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, EncryptedCapitalTransferInfo transferInformation) {
+    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, EncryptedData transferInformation) {
         this.encryptedOasiNumber = encryptedOasiNumber;
         this.previousRetirementFundUid = previousRetirementFundUid;
         this.newRetirementFundUid = newRetirementFundUid;
@@ -69,11 +69,11 @@ public class MatchForTermination {
         this.terminationDate = terminationDate;
     }
 
-    public EncryptedCapitalTransferInfo getTransferInformation() {
+    public EncryptedData getTransferInformation() {
         return transferInformation;
     }
 
-    public void setTransferInformation(EncryptedCapitalTransferInfo transferInformation) {
+    public void setTransferInformation(EncryptedData transferInformation) {
         this.transferInformation = transferInformation;
     }
 

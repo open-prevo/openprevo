@@ -1,23 +1,13 @@
-package ch.prevo.open.encrypted.model;
+package ch.prevo.open.encrypted.services;
 
-import ch.prevo.open.encrypted.services.EncryptedData;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.security.PublicKey;
 
-
-public class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferInformation> {
+public class CapitalTransferInfoEncrypter extends DataEncrypter<CapitalTransferInformation> {
 
     private static final String JSON_CHARSET = "UTF-8";
-
-    public EncryptedCapitalTransferInfo() {
-        super();
-    }
-
-    public EncryptedCapitalTransferInfo(CapitalTransferInformation info, PublicKey publicEncodingKey) {
-        super(info, publicEncodingKey);
-    }
 
     @Override
     protected byte[] toByteArray(CapitalTransferInformation data) throws IOException {
@@ -29,5 +19,4 @@ public class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferI
     protected CapitalTransferInformation fromByteArray(byte[] data) throws IOException {
         return new ObjectMapper().readValue(data, CapitalTransferInformation.class);
     }
-
 }

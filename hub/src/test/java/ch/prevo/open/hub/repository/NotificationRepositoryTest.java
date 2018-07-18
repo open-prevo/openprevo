@@ -1,6 +1,6 @@
 package ch.prevo.open.hub.repository;
 
-import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import org.junit.Before;
@@ -53,7 +53,7 @@ public class NotificationRepositoryTest {
     }
 
     private MatchForTermination getMatchForTermination() {
-        EncryptedCapitalTransferInfo transferInformation = new EncryptedCapitalTransferInfo();
+        EncryptedData transferInformation = new EncryptedData();
         transferInformation.setEncryptedSymmetricKeyBase64("Key_" + Math.random());
         transferInformation.setEncryptedDataBase64("Data_" + Math.random());
         return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,

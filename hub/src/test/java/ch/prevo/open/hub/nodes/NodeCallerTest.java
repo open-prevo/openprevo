@@ -1,6 +1,6 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
@@ -118,7 +118,7 @@ public class NodeCallerTest {
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
-        EncryptedCapitalTransferInfo capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
@@ -137,9 +137,9 @@ public class NodeCallerTest {
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
-        EncryptedCapitalTransferInfo capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
-        EncryptedCapitalTransferInfo secondCallTransferInfo = nodeCaller
+        EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
@@ -159,9 +159,9 @@ public class NodeCallerTest {
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
-        EncryptedCapitalTransferInfo capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
-        EncryptedCapitalTransferInfo secondCallTransferInfo = nodeCaller
+        EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
@@ -243,7 +243,7 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        EncryptedCapitalTransferInfo transferInformation = new EncryptedCapitalTransferInfo();
+        EncryptedData transferInformation = new EncryptedData();
         transferInformation.setEncryptedDataBase64(ENCRYPTED_DATA);
         transferInformation.setEncryptedSymmetricKeyBase64(ENCRYPTED_KEY);
         MatchForTermination MatchForTermination = new MatchForTermination();
