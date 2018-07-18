@@ -22,6 +22,7 @@ public abstract class DataEncrypter<T> {
 
     private static final String SYMMETRIC_TRANSFORMATION_ALGORITHM = "AES";
     public static final String ASYMMETRIC_TRANSFORMATION_ALGORITHM = "RSA";
+    public static final int SYMMETRIC_KEY_SIZE = 256;
 
 
     public EncryptedData encrypt(T data, PublicKey publicKey) {
@@ -70,7 +71,9 @@ public abstract class DataEncrypter<T> {
     }
 
     private SecretKey createSymmetricKey() throws NoSuchAlgorithmException {
-        return KeyGenerator.getInstance(SYMMETRIC_TRANSFORMATION_ALGORITHM).generateKey();
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(SYMMETRIC_TRANSFORMATION_ALGORITHM);
+        keyGenerator.init(SYMMETRIC_KEY_SIZE);
+        return keyGenerator.generateKey();
     }
 
     private byte[] decryptData(EncryptedData data, byte[] symmetricKey) throws GeneralSecurityException {
