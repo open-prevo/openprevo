@@ -4,7 +4,6 @@ import ch.prevo.open.encrypted.services.EncryptedData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 
 
@@ -16,7 +15,7 @@ class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferInformat
         super();
     }
 
-    public EncryptedCapitalTransferInfo(CapitalTransferInformation info, PublicKey publicEncodingKey) throws GeneralSecurityException, IOException {
+    public EncryptedCapitalTransferInfo(CapitalTransferInformation info, PublicKey publicEncodingKey) {
         super(info, publicEncodingKey);
     }
 

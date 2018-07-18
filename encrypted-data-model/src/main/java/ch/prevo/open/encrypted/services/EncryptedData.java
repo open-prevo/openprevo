@@ -28,16 +28,24 @@ public abstract class EncryptedData<T> implements Serializable {
         // required for serialisation
     }
 
-    public EncryptedData(T info, PublicKey publicEncodingKey) throws GeneralSecurityException, IOException {
-        SecretKey symmetricKey = createSymmetricKey();
-        encryptedData = encryptSymmetrically(info, symmetricKey);
-        encryptedSymmetricKey = encryptAsymmetrically(publicEncodingKey, symmetricKey);
+    public EncryptedData(T info, PublicKey publicEncodingKey) {
+        try {
+            SecretKey symmetricKey = createSymmetricKey();
+            encryptedData = encryptSymmetrically(info, symmetricKey);
+            encryptedSymmetricKey = encryptAsymmetrically(publicEncodingKey, symmetricKey);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new IllegalStateException("Could not encrypt data", e);
+        }
     }
 
-    public T decryptData(PrivateKey privateKey) throws GeneralSecurityException, IOException {
-        byte[] symmetricKey = decryptSymmentricKey(privateKey);
-        byte[] decryptedData = decryptData(symmetricKey);
-        return fromByteArray(decryptedData);
+    public T decryptData(PrivateKey privateKey) {
+        try {
+            byte[] symmetricKey = decryptSymmentricKey(privateKey);
+            byte[] decryptedData = decryptData(symmetricKey);
+            return fromByteArray(decryptedData);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new IllegalStateException("Could not decrypt data", e);
+        }
     }
 
     protected abstract byte[] toByteArray(T data) throws IOException;
