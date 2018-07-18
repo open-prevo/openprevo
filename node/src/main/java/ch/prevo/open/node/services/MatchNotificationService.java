@@ -56,16 +56,14 @@ public class MatchNotificationService {
             return;
         }
 
-        String retirementFundUid = employmentTermination.get().getEmploymentInfo().getRetirementFundUid();
-
         final FullCommencementNotification fullNotification = new FullCommencementNotification();
-        String newRetirementFundUid = notification.getNewRetirementFundUid();
-        fullNotification.setNewRetirementFundUid(newRetirementFundUid);
+        fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
         fullNotification.setCommencementDate(notification.getCommencementDate());
         fullNotification.setEmploymentTermination(employmentTermination.get());
 
         EncryptedCapitalTransferInfo encryptedCapitalTransferInfo = notification.getTransferInformation();
         if (encryptedCapitalTransferInfo != null) {
+            String retirementFundUid = employmentTermination.get().getEmploymentInfo().getRetirementFundUid();
             fullNotification.setTransferInformation(encryptedCapitalTransferInfo.decryptData(nodeConfiguration.getPrivateKey(retirementFundUid)));
         }
 
