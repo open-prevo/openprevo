@@ -71,7 +71,15 @@ NOTE: Depending on the amount of data we need to encrypt, we might have to use s
 
 ==== Public Key Registry
 
-It needs to be decided, if the public key registry will be maintained by the same team that maintains the hub or if it will be outsourced to an independent third party.
+To implement reliable authentication, signatures, and encryption via public- and private keys, one has to ensure that the public keys in use are really coming from the communication partner. In principal there are three approaches how public keys can be distributed:
+
+1. In addition to the hub, we setup a central key server for the public keys. Every time a node requires the public key of another node, it requests it from the server. Only authorised persons must be allowed to change the key of their node. In addition a notification should be sent out to the RF every time the public key of a node has been changed. One may wonder, why the RFs should trust the key server, if they do not trust the hub. Manipulations are much easier to discover, because the data is publicly visible and can be checked anytime. Technically an LDAP-server would probably already be sufficient, though specialized key servers exists, in particular in the PGP ecosystem.
+
+2. The management and distribution of public keys can be outsourced to an independent third party. There are service providers, who offer PKI as a service. With this solution, the distribution of the public keys would be completely separated from the organization that is running OpenPrevo. But it also means that all RFs have to trust the service provider.
+
+3. A completely different approach is a "web of trust". If a participant is sure, that a public key belongs to another participant, he or she can sign the public key. The more signatures the public key of a person has, who is unknown to me, the more I can trust his or her public key. Usually one sets a threshold when unknown keys can be trusted, e.g. if it has three or more signatures. One difficult question to be answered is how a new participant can get the first signatures. This approach is the least feasible in our context and should only be chosen, if the RFs cannot agree on a central instance that everybody trusts (internal or external).
+
+It needs to be decided, if the public key registry will be maintained by the same team that maintains the hub, if it will be outsourced to an independent third party or if no central authority can be established and a "web of trust" has to be implemented. This is not a technical question and probably has to be discussed with potential customers first. Therefore it is probably out-of-scope of the MVP.
 
 ==== Hashing
 
