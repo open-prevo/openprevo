@@ -3,6 +3,8 @@ package ch.prevo.open.node.adapter.excel;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
+import ch.prevo.open.node.data.provider.error.NotificationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,24 +20,26 @@ public class ExcelMatchNotificationListener implements MatchNotificationListener
     private static final String FILE_NAME_FORMAT = "%1$s_%2$tY-%2$tm-%2$td_%2$tH-%2$tM-%2$tS.%2$tL.xlsx";
 
     @Override
-    public void handleTerminationMatch(FullTerminationNotification notification) {
+    public void handleTerminationMatch(FullTerminationNotification notification) throws NotificationException {
         final String filename = getFilename();
 
         try (final TerminationNotificationWriter writer = new TerminationNotificationWriter(filename)) {
             writer.append(notification);
         } catch (IOException e) {
-            LOG.error("Exception while trying to write notification (" + notification +") to Excel-file", e);
+            LOG.error("Exception while trying to write notification (" + notification + ") to Excel-file", e);
+            throw new NotificationException(e);
         }
     }
 
     @Override
-    public void handleCommencementMatch(FullCommencementNotification notification) {
+    public void handleCommencementMatch(FullCommencementNotification notification) throws NotificationException {
         final String filename = getFilename();
 
         try (final CommencementNotificationWriter writer = new CommencementNotificationWriter(filename)) {
             writer.append(notification);
         } catch (IOException e) {
-            LOG.error("Exception while trying to write notification (" + notification +") to Excel-file", e);
+            LOG.error("Exception while trying to write notification (" + notification + ") to Excel-file", e);
+            throw new NotificationException(e);
         }
     }
 

@@ -1,28 +1,23 @@
 package ch.prevo.open.hub.match;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import ch.prevo.open.encrypted.model.InsurantInformation;
+
 @Service
 public class MatcherService {
 
-    private final List<InsurantInformation> matchedEmploymentCommencements = Collections.synchronizedList(new ArrayList<>());
-    private final List<InsurantInformation> matchedEmploymentTerminations = Collections.synchronizedList(new ArrayList<>());
-
-    public List<Match> findMatches(Set<InsurantInformation> retirementFundExits, Set<InsurantInformation> retirementFundEntries) {
+    public List<Match> findMatches(Set<InsurantInformation> retirementFundTerminations, Set<InsurantInformation> retirementFundCommencements) {
         List<Match> matches = new ArrayList<>();
-        for (InsurantInformation exit : retirementFundExits) {
-            InsurantInformation matchingEntry = findMatchingEntry(retirementFundEntries, exit);
+        for (InsurantInformation termination : retirementFundTerminations) {
+            InsurantInformation matchingEntry = findMatchingEntry(retirementFundCommencements, termination);
             if (matchingEntry != null) {
-                matchedEmploymentCommencements.add(matchingEntry);
-                matchedEmploymentTerminations.add(exit);
-                matches.add(new Match(exit.getEncryptedOasiNumber(), exit.getRetirementFundUid(), matchingEntry.getRetirementFundUid(), matchingEntry.getDate(), exit.getDate()));
+                matches.add(new Match(termination.getEncryptedOasiNumber(), termination.getRetirementFundUid(), matchingEntry.getRetirementFundUid(), matchingEntry.getDate(), termination.getDate()));
             }
         }
         return matches;
@@ -50,13 +45,5 @@ public class MatcherService {
     private boolean isSameFundWithEntryBeforeExit(InsurantInformation entry, InsurantInformation exit) {
         return entry.getRetirementFundUid().equals(exit.getRetirementFundUid())
                 && entry.getDate().isBefore(exit.getDate());
-    }
-
-    public boolean employmentCommencementNotMatched(InsurantInformation info) {
-        return !matchedEmploymentCommencements.contains(info);
-    }
-
-    public boolean employmentTerminationNotMatched(InsurantInformation info) {
-        return !matchedEmploymentTerminations.contains(info);
     }
 }

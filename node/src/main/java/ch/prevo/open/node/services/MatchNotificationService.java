@@ -14,6 +14,8 @@ import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
+import ch.prevo.open.node.data.provider.error.NotificationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
@@ -40,7 +42,7 @@ public class MatchNotificationService {
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
     }
 
-    public void handleCommencementMatch(MatchForTermination notification) {
+    public void handleCommencementMatch(MatchForTermination notification) throws NotificationException {
         final Optional<EmploymentTermination> employmentTermination = employmentTerminationProvider.getEmploymentTerminations().stream()
                 .filter(currentEmploymentTermination -> isSameAsNotification(currentEmploymentTermination, notification))
                 .findAny();
@@ -59,7 +61,8 @@ public class MatchNotificationService {
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification) {
+    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification)
+            throws NotificationException {
         final Optional<EmploymentCommencement> employmentCommencement = employmentCommencementProvider.getEmploymentCommencements().stream()
                 .filter(currentEmploymentCommencement -> isSameAsNotification(currentEmploymentCommencement, notification))
                 .findAny();

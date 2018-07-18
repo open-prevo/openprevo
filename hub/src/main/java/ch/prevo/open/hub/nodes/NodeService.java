@@ -1,22 +1,22 @@
 package ch.prevo.open.hub.nodes;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.match.MatcherService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class NodeService {
@@ -25,24 +25,21 @@ public class NodeService {
 
     private final NodeRegistry nodeRegistry;
 
-    private final MatcherService matcherService;
-
     private final NodeCaller nodeCaller;
 
     @Inject
-    public NodeService(NodeRegistry nodeRegistry, MatcherService matcherService, NodeCaller nodeCaller) {
+    public NodeService(NodeRegistry nodeRegistry, NodeCaller nodeCaller) {
         this.nodeRegistry = nodeRegistry;
-        this.matcherService = matcherService;
         this.nodeCaller = nodeCaller;
     }
 
     public Set<InsurantInformation> getCurrentExits() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
-            List<InsurantInformation> pensionFundExits = nodeCaller.getInsurantInformationList(nodeConfig.getEmploymentExitsUrl());
-            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
-                    pensionFundExits,
-                    matcherService::employmentTerminationNotMatched);
+            List<InsurantInformation> pensionFundExits = nodeCaller
+                    .getInsurantInformationList(nodeConfig.getEmploymentTerminationsUrl());
+            List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
+                    pensionFundExits);
             exits.addAll(filteredInformation);
         }
         return exits;
@@ -51,23 +48,21 @@ public class NodeService {
     public Set<InsurantInformation> getCurrentEntries() {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
-            List<InsurantInformation> pensionFundEntries = nodeCaller.getInsurantInformationList(nodeConfig.getEmploymentEntriesUrl());
-            List<InsurantInformation> filteredInformation = filterInvalidAndAlreadyMatchedEntries(nodeConfig,
-                    pensionFundEntries,
-                    matcherService::employmentCommencementNotMatched);
+            List<InsurantInformation> pensionFundEntries = nodeCaller
+                    .getInsurantInformationList(nodeConfig.getEmploymentCommencementsUrl());
+            List<InsurantInformation> filteredInformation = filterInvalidInsurantInformation(nodeConfig,
+                    pensionFundEntries);
             entries.addAll(filteredInformation);
         }
         return entries;
     }
 
-    private List<InsurantInformation> filterInvalidAndAlreadyMatchedEntries(NodeConfiguration nodeConfiguration,
-                                                                            List<InsurantInformation> insurantInformation,
-                                                                            Predicate<InsurantInformation> notYetMatched) {
+    private List<InsurantInformation> filterInvalidInsurantInformation(NodeConfiguration nodeConfiguration,
+                                                                            List<InsurantInformation> insurantInformation) {
         List<InsurantInformation> invalidMatches = verifyInsurantInformationOnlyBelongsToThisNode(nodeConfiguration,
                 insurantInformation);
         return insurantInformation.stream()
                 .filter(((Predicate<InsurantInformation>) invalidMatches::contains).negate())
-                .filter(notYetMatched)
                 .collect(toList());
     }
 
@@ -78,7 +73,8 @@ public class NodeService {
                 .collect(toList());
 
         if (invalidInsurants.size() > 0) {
-            LOGGER.error("Invalid data received from node {} the following insurants have an invalid retirement fund {}",
+            LOGGER.error(
+                    "Invalid data received from node {} the following insurants have an invalid retirement fund {}",
                     nodeConfig, invalidInsurants);
         }
         return invalidInsurants;
@@ -90,9 +86,14 @@ public class NodeService {
         for (Match match : matches) {
             try {
                 // notify new node
-                final CapitalTransferInformation transferInformation = tryNotifyNewRetirementFundAboutMatch(findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
-                // notify previous node
-                tryNotifyPreviousRetirementFundAboutTerminationMatch(findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match, transferInformation);
+                final CapitalTransferInformation transferInformation = tryNotifyNewRetirementFundAboutMatch(
+                        findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
+                if (transferInformation != null) {
+                    // notify previous node
+                    tryNotifyPreviousRetirementFundAboutTerminationMatch(
+                            findNodeToNotify(match.getPreviousRetirementFundUid(), nodeConfigurations), match,
+                            transferInformation);
+                }
             } catch (Exception e) {
                 LOGGER.error("Unexpected error occurred while notifying match: {}", match, e);
             }
@@ -109,8 +110,9 @@ public class NodeService {
         return nodeCaller.postCommencementNotification(nodeConfig.getCommencementMatchNotifyUrl(), matchNotification);
     }
 
-
-    private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig, Match match, CapitalTransferInformation transferInformation) {
+    private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig,
+                                                                      Match match,
+                                                                      CapitalTransferInformation transferInformation) {
         MatchForTermination matchNotification = new MatchForTermination();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
