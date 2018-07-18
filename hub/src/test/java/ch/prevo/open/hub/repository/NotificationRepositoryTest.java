@@ -1,24 +1,22 @@
 package ch.prevo.open.hub.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
-
+import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotificationRepositoryTest {
 
     private final String OASI = "756.1335.5778.23";
     private final String previousRetirementFundUID = "CHE-109.740.084";
     private final String newRetirementFundUID = "CHE-109.537.488";
-    private final LocalDate commencementDate = LocalDate.of(2018,7,1);
-    private final LocalDate terminationDate = LocalDate.of(2018,6,30);
+    private final LocalDate commencementDate = LocalDate.of(2018, 7, 1);
+    private final LocalDate terminationDate = LocalDate.of(2018, 6, 30);
 
     private NotificationRepository notificationRepository;
 
@@ -55,13 +53,9 @@ public class NotificationRepositoryTest {
     }
 
     private MatchForTermination getMatchForTermination() {
-        Address address = new Address("Baslerstrasse", "4000", "Basel");
-        CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation("BKB", "Basler Kantonalbank",
-                address, "CH53 0077 0016 02222 3334 4");
-
         return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,
                 commencementDate, terminationDate,
-                capitalTransferInformation);
+                new EncryptedCapitalTransferInfo());
     }
 
     @Test

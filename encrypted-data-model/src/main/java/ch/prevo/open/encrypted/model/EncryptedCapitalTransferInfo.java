@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.security.PublicKey;
 
 
-class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferInformation> {
+public class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferInformation> {
 
     private static final String JSON_CHARSET = "UTF-8";
 
-    protected EncryptedCapitalTransferInfo() {
+    public EncryptedCapitalTransferInfo() {
         super();
     }
 
@@ -30,6 +30,4 @@ class EncryptedCapitalTransferInfo extends EncryptedData<CapitalTransferInformat
         return new ObjectMapper().readValue(data, CapitalTransferInformation.class);
     }
 
-
 }
-

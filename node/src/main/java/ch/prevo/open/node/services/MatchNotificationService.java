@@ -6,10 +6,12 @@ import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
+import ch.prevo.open.node.config.NodeConfiguration;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
@@ -33,13 +35,15 @@ public class MatchNotificationService {
 
     private final EmploymentCommencementProvider employmentCommencementProvider;
     private final EmploymentTerminationProvider employmentTerminationProvider;
+    private final NodeConfiguration nodeConfiguration;
 
     @Inject
-    public MatchNotificationService(ServiceListFactoryBean factoryBean) {
+    public MatchNotificationService(ServiceListFactoryBean factoryBean, NodeConfiguration nodeConfiguration) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.employmentCommencementProvider = factory != null ? factory.getEmploymentCommencementProvider() : null;
         this.employmentTerminationProvider = factory != null ? factory.getEmploymentTerminationProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
+        this.nodeConfiguration = nodeConfiguration;
     }
 
     public void handleCommencementMatch(MatchForTermination notification) throws NotificationException {
@@ -52,16 +56,23 @@ public class MatchNotificationService {
             return;
         }
 
+        String retirementFundUid = employmentTermination.get().getEmploymentInfo().getRetirementFundUid();
+
         final FullCommencementNotification fullNotification = new FullCommencementNotification();
-        fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
+        String newRetirementFundUid = notification.getNewRetirementFundUid();
+        fullNotification.setNewRetirementFundUid(newRetirementFundUid);
         fullNotification.setCommencementDate(notification.getCommencementDate());
-        fullNotification.setTransferInformation(notification.getTransferInformation());
         fullNotification.setEmploymentTermination(employmentTermination.get());
+
+        EncryptedCapitalTransferInfo encryptedCapitalTransferInfo = notification.getTransferInformation();
+        if (encryptedCapitalTransferInfo != null) {
+            fullNotification.setTransferInformation(encryptedCapitalTransferInfo.decryptData(nodeConfiguration.getPrivateKey(retirementFundUid)));
+        }
 
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification)
+    public Optional<EncryptedCapitalTransferInfo> handleTerminationMatch(MatchForCommencement notification)
             throws NotificationException {
         final Optional<EmploymentCommencement> employmentCommencement = employmentCommencementProvider.getEmploymentCommencements().stream()
                 .filter(currentEmploymentCommencement -> isSameAsNotification(currentEmploymentCommencement, notification))
@@ -79,7 +90,11 @@ public class MatchNotificationService {
 
         listener.handleTerminationMatch(fullNotification);
 
-        return employmentCommencement.map(EmploymentCommencement::getCapitalTransferInfo);
+        CapitalTransferInformation info = employmentCommencement.get().getCapitalTransferInfo();
+        if (info == null) {
+            return Optional.empty();
+        }
+        return Optional.of(new EncryptedCapitalTransferInfo(info, nodeConfiguration.getPublicKey(notification.getPreviousRetirementFundUid())));
     }
 
     private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {

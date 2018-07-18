@@ -1,8 +1,8 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.EncryptedCapitalTransferInfo;
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.hub.match.Match;
 import ch.prevo.open.hub.match.MatcherService;
 import org.junit.Before;
@@ -121,7 +121,7 @@ public class NodeServiceTest {
     public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
 
-        CapitalTransferInformation transferInformation = new CapitalTransferInformation();
+        EncryptedCapitalTransferInfo transferInformation = new EncryptedCapitalTransferInfo();
         when(nodeCaller.postCommencementNotification(eq(node2_old.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 
