@@ -70,12 +70,17 @@ public class MatcherServiceTest {
         assertTrue(matcherService.findMatches(emptySet(), emptySet()).isEmpty());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void findMatchesWithDuplicates() throws Exception {
         Set<InsurantInformation> terminations = createSet(new InsurantInformation(OASI_1, UID_1));
         Set<InsurantInformation> commencements = createSet(new InsurantInformation(OASI_1, UID_2), new InsurantInformation(OASI_1, UID_3));
 
-        matcherService.findMatches(terminations, commencements);
+        List<Match> matches = matcherService.findMatches(terminations, commencements);
+
+        assertThat(matches).containsAnyOf(
+                new Match(OASI_1, UID_1, UID_2, null, null),
+                new Match(OASI_1, UID_1, UID_3, null, null)
+        );
     }
 
     @Test
