@@ -1,4 +1,4 @@
-package ch.prevo.pakt.entities;
+package ch.prevo.pakt.jpa.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
