@@ -84,6 +84,17 @@ subprojects { project ->
             }
         }
     }
+
+    //prevent usage of any snapshot, alpha, beta etc. dependency
+    def versionsToReject = ['alpha', 'beta', 'rc', 'cr', 'm', 'snapshot']
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if ('ch.prevo.open' != details.requested.group && versionsToReject.contains(details.requested.version.toLowerCase())) {
+                throw new GradleException("found snapshot dependency")
+            }
+        }
+    }
+
 }
 
 assemble.dependsOn ':doc:publishDocumentation'
