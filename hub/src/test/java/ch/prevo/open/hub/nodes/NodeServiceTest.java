@@ -1,7 +1,6 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.hub.match.Match;
@@ -20,9 +19,7 @@ import java.util.Set;
 
 import static java.time.LocalDate.of;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -188,7 +185,7 @@ public class NodeServiceTest {
     public void testNotificationForSeveralTerminationsMatchingSingleCommencement() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old, node3_old));
 
-        CapitalTransferInformation transferInformation = new CapitalTransferInformation();
+        EncryptedData transferInformation = new EncryptedData();
         when(nodeCaller.postCommencementNotification(eq(node1_new.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 

@@ -167,17 +167,16 @@ public class NodeCallerTest {
         matchForCommencement_node3.setRetirementFundUid(UID3);
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement_node2);
-        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+        EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement_node3);
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
-        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
+        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isNotBlank();
+        assertThat(secondCallTransferInfo.getEncryptedDataBase64()).isNotBlank();
+        assertThat(secondCallTransferInfo).isEqualTo(capitalTransferInformation);
     }
 
     @Test
@@ -235,16 +234,18 @@ public class NodeCallerTest {
 
     @Test
     public void notifySeveralTerminationMatchesForSingleCommencement() {
+        EncryptedData transferInformation2 = new EncryptedData("Data2", "Key2", "Iv2)");
         server.expect(requestTo(URL1))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
         server.expect(requestTo(URL3))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(transferInformation2.getEncryptedSymmetricKeyBase64())))
                 .andRespond(withSuccess());
 
         MatchForTermination matchForTermination_node1 = createMatchForTermination();
         matchForTermination_node1.setPreviousRetirementFundUid(UID1);
         MatchForTermination matchForTermination_node3 = createMatchForTermination();
+        matchForTermination_node3.setTransferInformation(transferInformation2);
         matchForTermination_node3.setPreviousRetirementFundUid(UID3);
 
         // when
