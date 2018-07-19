@@ -23,7 +23,7 @@ public class NodeConfigurationServiceTest {
         assertNotNull(nodeConfigService.getPublicKey("CHE-109.740.084"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void attemptReadConfigForUnknownUID() {
         assertNull(nodeConfigService.getPublicKey("12345"));
     }

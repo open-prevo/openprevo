@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
@@ -36,7 +36,10 @@ public class NodeConfigurationService {
 
     @Value("${open.prevo.node.config.file}")
     private String configFile;
-    private NodeConfigurationData config;
+    private NodeConfigurationRawData config;
+
+    private final Map<String, PublicKey> otherRetirementFundsKeys = new HashMap<>();
+    private final Map<String, PrivateKey> ownRetirementFundKeys = new HashMap<>();
 
     @Inject
     public NodeConfigurationService(ResourceLoader loader) {
@@ -47,31 +50,25 @@ public class NodeConfigurationService {
     public void init() {
         try {
             final Resource resource = loader.getResource(configFile);
-            config = mapper.readValue(resource.getInputStream(), new TypeReference<NodeConfigurationData>() {
+            NodeConfigurationRawData rawConfig = mapper.readValue(resource.getInputStream(), new TypeReference<NodeConfigurationRawData>() {
             });
+            rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> otherRetirementFundsKeys.put(uid, convertPublicKey(uid, publicKeyString)));
+            rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
+            //Note: we ignore own public keys for now, they're not in use
         } catch (IOException e) {
             LOG.warn("Unable to read bootstrap-data from " + configFile, e);
         }
     }
 
-    public Set<String> getOwnRetirementFundUids() {
-        return config.ownRetirementFunds.keySet();
-    }
-
-    public Set<String> getOtherRetirementFundUids() {
-        return config.otherRetirementFunds.keySet();
-    }
-
     public PrivateKey getPrivateKey(String uid) {
-        try {
-            return KeyFactory.getInstance(ASYMMETRIC_TRANSFORMATION_ALGORITHM).generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(config.ownRetirementFunds.get(uid).base64PrivateKey)));
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new IllegalStateException("Configuration error, cannot read private key", e);
-        }
+        return ownRetirementFundKeys.get(uid);
     }
 
-    public java.security.PublicKey getPublicKey(String uid) {
-        PublicKey publicKey = config.otherRetirementFunds.get(uid);
+    public PublicKey getPublicKey(String uid) {
+        return otherRetirementFundsKeys.get(uid);
+    }
+
+    private PublicKey convertPublicKey(String uid, PublicKeyString publicKey) {
         if (publicKey == null) {
             throw new IllegalStateException("Configuration error: cannot locate public key for pension fund " + uid);
         }
@@ -82,17 +79,27 @@ public class NodeConfigurationService {
         }
     }
 
-    private static class NodeConfigurationData {
-        public Map<String, PublicPrivateKeys> ownRetirementFunds = new HashMap<>();
-        public Map<String, PublicKey> otherRetirementFunds = new HashMap<>();
+    private PrivateKey convertPrivateKey(String uid, PublicPrivateKeyStrings publicPrivateKeyStrings) {
+        try {
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(publicPrivateKeyStrings.base64PrivateKey));
+            return KeyFactory.getInstance(ASYMMETRIC_TRANSFORMATION_ALGORITHM).generatePrivate(keySpec);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Configuration error, cannot read private key for pension fund " + uid, e);
+        }
+
     }
 
-    private static class PublicPrivateKeys {
+    private static class NodeConfigurationRawData {
+        public Map<String, PublicPrivateKeyStrings> ownRetirementFunds = new HashMap<>();
+        public Map<String, PublicKeyString> otherRetirementFunds = new HashMap<>();
+    }
+
+    private static class PublicPrivateKeyStrings {
         public String base64PrivateKey;
         public String base64PublicKey;
     }
 
-    private static class PublicKey {
+    private static class PublicKeyString {
         public String base64PublicKey;
     }
 
