@@ -1,20 +1,39 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: 'com.palantir.docker'
+apply plugin: 'docker-compose'
+
 task buildDemoZip(type: Zip) {
     from "${buildDir}/demo"
     include('**/*')
+    exclude('**/demo-nodes-docker.yml')
     archiveName 'demo.zip'
     destinationDir file("${buildDir}/")
 }
 
-task prepareHub(type: Copy) {
+task prepareHubDockerConfig(type: Copy) {
+    from("demo-nodes.yml")
+
+    filter { line ->
+        line.replaceAll('localhost:8851', 'node_baloise:8851')
+            .replaceAll('localhost:8852', 'node_helvetia:8852')
+            .replaceAll('localhost:8853', 'node_zurich:8853')
+    }
+
+    rename("demo-nodes.yml", "demo-nodes-docker.yml")
+    into "${buildDir}/demo/Hub"
+}
+
+task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
     from("${project(':hub').buildDir}/libs")
     from("demo-nodes.yml")
     into "${buildDir}/demo/Hub"
     doLast {
         def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
-        def batFile = new File("${buildDir}/demo/Hub/start-hub.bat")
+        def batFile = new File("${buildDir}/demo/Hub/start.bat")
         batFile.text = javaCmd
         batFile.executable = true
-        def shFile = new File("${buildDir}/demo/Hub/start-hub.sh")
+        def shFile = new File("${buildDir}/demo/Hub/start.sh")
         shFile.text = javaCmd
         shFile.executable = true
     }
@@ -45,22 +64,23 @@ def createTask(node) {
 
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
-        } 
-        
+        }
+        from("src/data/${node.name}-config.yml")
+
         into "${buildDir}/demo/${node.name}"
-        
+
         if (node.adapter == "adapter-pakt") {
             copy {
                 from("src/config")
                 into "${buildDir}/demo/${node.name}/config"
             }
         }
-            
+        
         doLast {
-            def batFile = new File("${buildDir}/demo/${node.name}/start-node.bat")
+            def batFile = new File("${buildDir}/demo/${node.name}/start.bat")
             batFile.text = getJavaCommandLineForNode(node)
             batFile.executable = true
-            def shFile = new File("${buildDir}/demo/${node.name}/start-node.sh")
+            def shFile = new File("${buildDir}/demo/${node.name}/start.sh")
             shFile.text = getJavaCommandLineForNode(node)
             shFile.executable = true
         }
@@ -74,14 +94,58 @@ nodeConfiguration.each { node ->
 
 def getJavaCommandLineForNode(nodeConfiguration) {
 
-    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
-            "-Dserver.port=${nodeConfiguration.port}"
+    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName} " +
+            "-Dserver.port=${nodeConfiguration.port},config " +
+            "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
     }
-    
     cmd += " -jar ${project(":node").bootJar.archiveName}"
 }
 
 assemble.dependsOn(buildDemoZip)
+
+docker {
+    dependsOn buildDemoZip
+    name "openprevo/node-demo-base:staging"
+}
+
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml']
+    waitForTcpPorts = true
+    stopContainers = true
+    removeContainers = true
+}
+
+composeUp.dependsOn { tasks.docker }
+
+task demoIntegrationTest {
+    dependsOn composeUp
+    doLast {
+        // wait till the matching runs through
+        sleep(20000)
+
+        //assert that all nodes are notified with the expected amount of matches
+        assert 10 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
+            it.name.startsWith("retirement-fund-out-data")
+        }.size()
+        assert 18 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
+            it.name.startsWith("retirement-fund-out-data")
+        }.size()
+        assert 8 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
+            it.name.startsWith("retirement-fund-out-data")
+        }.size()
+    }
+}
+
+demoIntegrationTest.finalizedBy composeDown
+
+task ciDemoIntegrationTesting(type: GradleBuild) {
+    tasks = ['demoIntegrationTest']
+    onlyIf {
+        System.getenv("TRAVIS") == "true"
+    }
+}
+
+check.finalizedBy ciDemoIntegrationTesting
