@@ -20,7 +20,7 @@ public class Cryptography {
             final MessageDigest digest = MessageDigest.getInstance("SHA-512");
             digest.digest("Hello World".getBytes(StandardCharsets.UTF_8));
 
-            LOG.info("Setup of cryptography ok");
+            LOG.info("Setup of OASI cryptography ok");
         } catch (NoSuchAlgorithmException e) {
             LOG.error("Setup of cryptography failed", e);
         }
