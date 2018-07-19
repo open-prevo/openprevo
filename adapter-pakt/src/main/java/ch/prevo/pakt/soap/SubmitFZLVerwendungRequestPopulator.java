@@ -1,4 +1,4 @@
-package ch.prevo.pakt.utils;
+package ch.prevo.pakt.soap;
 
 import java.time.LocalDate;
 import java.util.function.Function;

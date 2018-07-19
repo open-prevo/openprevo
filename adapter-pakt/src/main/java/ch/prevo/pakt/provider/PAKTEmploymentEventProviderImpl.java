@@ -1,7 +1,7 @@
 package ch.prevo.pakt.provider;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -37,15 +37,11 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
         this.config = config;
     }
 
-    @Override
-    public List<EmploymentTermination> getEmploymentTerminations() {
-        final List<EmploymentTermination> employmentTerminations = new ArrayList<>();
-
-		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).forEach(ptVerm -> {
-			 employmentTerminations.add(buildEmploymentTermination(ptVerm));
-		});
-		return employmentTerminations;
-    }
+	@Override
+	public List<EmploymentTermination> getEmploymentTerminations() {
+		return repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).stream()
+				.map(ptVerm -> buildEmploymentTermination(ptVerm)).collect(Collectors.toList());
+	}
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
         return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm));
@@ -66,15 +62,11 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
         return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
     }
 
-    @Override
-    public List<EmploymentCommencement> getEmploymentCommencements() {
-        final List<EmploymentCommencement> employmentCommencements = new ArrayList<>();
-
-		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.NEUEINTRERF.getCode()).forEach(ptVerm -> {
-			employmentCommencements.add(buildEmploymentCommencement(ptVerm));
-		});
-        return employmentCommencements;
-    }
+	@Override
+	public List<EmploymentCommencement> getEmploymentCommencements() {
+		return repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.NEUEINTRERF.getCode()).stream()
+				.map(ptVerm -> buildEmploymentCommencement(ptVerm)).collect(Collectors.toList());
+	}
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
         return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm),

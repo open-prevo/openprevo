@@ -2,7 +2,7 @@ package ch.prevo.pakt;
 public enum RetirementFund {
 	BALOISE_SAMMELSTIFTUNG(Short.valueOf("4"), 
 			"Baloise-Sammelstiftung fuer die obligatorische berufliche Vorsorge",
-			"CHE-223.471.073-Perspectiva Sammelstiftung fuer berufliche Vorsorge",
+			"CHE-109.740.084-Perspectiva Sammelstiftung fuer berufliche Vorsorge",
 			""), 
 	PERSPECTIVA_SAMMELSTIFTUNG(Short.valueOf("1"),
 			"Perspectiva Sammelstiftung fuer berufliche Vorsorge", 

@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -18,8 +16,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -65,22 +61,6 @@ public class SoapUtil {
 		// Parse the String output to a org.w3c.dom.Document and be able to reach every
 		// node with the org.w3c.dom API.
 		responseConsumer.accept(parseXmlFile(outputString));
-	}
-
-	public String formatXML(String unformattedXml) {
-		try {
-			Document document = parseXmlFile(unformattedXml);
-			OutputFormat format = new OutputFormat(document);
-			format.setIndenting(true);
-			format.setIndent(3);
-			format.setOmitXMLDeclaration(true);
-			Writer out = new StringWriter();
-			XMLSerializer serializer = new XMLSerializer(out, format);
-			serializer.serialize(document);
-			return out.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private Document parseXmlFile(String in) {

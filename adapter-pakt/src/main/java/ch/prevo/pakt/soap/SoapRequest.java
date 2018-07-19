@@ -1,9 +1,11 @@
-package ch.prevo.pakt.utils;
+package ch.prevo.pakt.soap;
 
 import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.w3c.dom.Document;
+
+import ch.prevo.pakt.utils.SoapUtil;
 
 public class SoapRequest {
 

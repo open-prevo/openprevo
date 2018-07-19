@@ -11,8 +11,8 @@ import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.pakt.PaktEnvironment;
 import ch.prevo.pakt.RetirementFund;
-import ch.prevo.pakt.utils.SoapRequest;
-import ch.prevo.pakt.utils.SubmitFZLVerwendungRequestPopulator;
+import ch.prevo.pakt.soap.SoapRequest;
+import ch.prevo.pakt.soap.SubmitFZLVerwendungRequestPopulator;
 
 @Service
 public class PAKTMatchNotificationListenerImpl implements MatchNotificationListener {
