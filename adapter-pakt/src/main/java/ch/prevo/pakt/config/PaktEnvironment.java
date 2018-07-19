@@ -1,14 +1,16 @@
-package ch.prevo.pakt;
+package ch.prevo.pakt.config;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @Component
 @ConfigurationProperties(prefix = "pakt")
+@PropertySource("classpath:pakt.properties")
 @Validated
 public class PaktEnvironment {
 	@NotNull

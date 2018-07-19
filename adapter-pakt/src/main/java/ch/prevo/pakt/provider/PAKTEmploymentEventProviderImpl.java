@@ -16,8 +16,8 @@ import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
-import ch.prevo.pakt.PaktEnvironment;
-import ch.prevo.pakt.RetirementFund;
+import ch.prevo.pakt.config.PaktEnvironment;
+import ch.prevo.pakt.config.RetirementFundRegistry;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
@@ -27,16 +27,15 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     private static Logger LOG = LoggerFactory.getLogger(PAKTEmploymentEventProviderImpl.class);
 	
-    private final PartnerVermittlungRepository repository;
+    @Inject
+    private PartnerVermittlungRepository repository;
 
-    private final PaktEnvironment config;
+    @Inject
+    private PaktEnvironment config;
     
-	@Inject
-    public PAKTEmploymentEventProviderImpl(PaktEnvironment config, PartnerVermittlungRepository partnerVermittlungRepository) {
-        this.repository = partnerVermittlungRepository;
-        this.config = config;
-    }
-
+    @Inject
+    private RetirementFundRegistry retirementFundRegistry;
+	
 	@Override
 	public List<EmploymentTermination> getEmploymentTerminations() {
 		return repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).stream()
@@ -50,7 +49,7 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
     private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
     	EmploymentInfo employmentInfo = new EmploymentInfo();
     	employmentInfo.setOasiNumber(ptVerm.getAhv());
-    	employmentInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
+    	employmentInfo.setRetirementFundUid(getRetirementFundUid(ptVerm));
     	employmentInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
     	employmentInfo.setInternalReferenz(ptVerm.getNameve());
     	employmentInfo.setDate(ptVerm.getDtgueltab());
@@ -58,8 +57,8 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
 
     }
 
-    private String getRetirementFundId(TozsPtverm ptVerm) {
-        return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
+    private String getRetirementFundUid(TozsPtverm ptVerm) {
+        return retirementFundRegistry.getByCdStf(ptVerm.getCdstf()).getUid();
     }
 
 	@Override

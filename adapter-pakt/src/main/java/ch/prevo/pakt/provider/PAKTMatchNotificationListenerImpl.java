@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
-import ch.prevo.pakt.PaktEnvironment;
-import ch.prevo.pakt.RetirementFund;
+import ch.prevo.pakt.config.PaktEnvironment;
+import ch.prevo.pakt.config.RetirementFundRegistry;
 import ch.prevo.pakt.soap.SoapRequest;
 import ch.prevo.pakt.soap.SubmitFZLVerwendungRequestPopulator;
 
@@ -22,25 +22,29 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 	@Inject
 	private PaktEnvironment config;
 
+    @Inject
+	private RetirementFundRegistry retirementFundRegistry;
+    
 	@Override
 	public void handleTerminationMatch(FullTerminationNotification notification) {
-		// TODO Auto-generated method stub
-
+		LOG.info("Handling FullTerminationNotification notification for OASI [{}]", notification.getEmploymentCommencement().getEmploymentInfo().getOasiNumber());
 	}
 
 	@Override
 	public void handleCommencementMatch(FullCommencementNotification notification) {
 		try {
+			LOG.info("Submitting FullCommencementNotification message to PAKT for OASI [{}]", notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
 			SoapRequest.callSubmitFZLVerwendung(config.getServiceBaseUrl(),
 					new SubmitFZLVerwendungRequestPopulator(this.getCdMandant(), this.getUserId(),
 							notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId(),
-							RetirementFund.getById(notification.getNewRetirementFundUid()).getIdPartner(),
+							retirementFundRegistry.getByUid(notification.getNewRetirementFundUid()).getIdPartner(),
 							notification.getCommencementDate(),
 							notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId()),
 					(doc) -> {
+						LOG.info("Message was successfuly submitted to PAKT for OASI [{}] and received number [{}]", notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber(), doc.getElementsByTagName("nrMeld").item(0).getTextContent());
 					});
 		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+			LOG.error("Error by submitting FullCommencementNotification message to PAKT", e);
 			throw new RuntimeException(e);
 		}
 	}
