@@ -1,21 +1,22 @@
 package ch.prevo.open.hub.nodes;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
+import java.util.List;
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.hub.repository.NotificationRepository;
 
 @Service
 public class NodeCaller {
@@ -24,9 +25,13 @@ public class NodeCaller {
 
     private final RestTemplate restTemplate;
 
+    private final NotificationRepository notificationRepository;
+
     @Inject
-    public NodeCaller(RestTemplateBuilder restTemplateBuilder) {
+    public NodeCaller(RestTemplateBuilder restTemplateBuilder,
+                      NotificationRepository notificationRepository) {
         this.restTemplate = restTemplateBuilder.build();
+        this.notificationRepository = notificationRepository;
     }
 
     List<InsurantInformation> getInsurantInformationList(String url) {
@@ -41,20 +46,34 @@ public class NodeCaller {
 
     CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
-            return restTemplate.postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
+            if (!notificationRepository.isMatchForCommencementAlreadyNotified(matchNotification)) {
+                LOGGER.debug("Send termination match notification for match: {}", matchNotification);
+                CapitalTransferInformation capitalTransferInformation = restTemplate
+                        .postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
+
+                notificationRepository.saveMatchForCommencement(matchNotification);
+
+                return capitalTransferInformation;
+            }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later
-            LOGGER.error("Could not send notification for match {} to URL {}", matchNotification, commencementMatchNotifyUrl, e);
-            return null;
+            LOGGER.error("Could not send notification for match {} to URL {}", matchNotification,
+                    commencementMatchNotifyUrl, e);
         }
+        return null;
     }
 
     void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
-            restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
+            if (!notificationRepository.isMatchForTerminationAlreadyNotified(matchNotification)) {
+                LOGGER.debug("Send commencement match notification for match: {}", matchNotification);
+                restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
+                notificationRepository.saveMatchForTermination(matchNotification);
+            }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later
-            LOGGER.error("Could not send notification for match {} to URL {}", matchNotification, terminationMatchNotifyUrl, e);
+            LOGGER.error("Could not send notification for match {} to URL {}", matchNotification,
+                    terminationMatchNotifyUrl, e);
         }
     }
 }

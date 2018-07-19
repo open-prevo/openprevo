@@ -56,23 +56,40 @@ Since we're operating on very sensitive information, security is an important as
 
 ==== Authentication
 
-We need end-to-end encryption: as an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data. Therefore, we decided to use asymmetric encryption to secure the data. This means that we won't implement a classic authentication in the beginning. We simply make sure that only the correct participant can read the data.
+When a Node and the Hub communicate with each other, both have to ensure that the communication partner is the one it claims to be. Our recommendation is to handle the authentication via server-certificates.
+
+As this can be done with standard technologies (e.g. Spring Security) and does not add much value when demonstrating the functionality of OpenPrevo, we decided that authentication is out-of-scope for the MVP.
+
 
 ==== Asymmetric Encryption
 
-To encrypt the data asymmetrically, we're using the **RSA** algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair.
+We need end-to-end encryption: as an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data.
 
-The public key will be stored on the OpenPrevo Hub and can be distributed to all participants. The private key must not leave a RFs environment.
+To encrypt the data asymmetrically, we're using the **RSA** algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair. The public key will be provided via a public key registry. The private key must not leave a RFs environment.
 
 NOTE: Depending on the amount of data we need to encrypt, we might have to use symmetrical encryption for the data and exchange the symmetric key via RSA. This will be decided depending on the attributes to use for the matching.
 
 ==== Public Key Registry
 
-Every RF needs to register its public key on our OpenPrevo Hub. So the Hub will manage all public keys of every RF.
+To implement reliable authentication, signatures, and encryption via public- and private keys, one has to ensure that the public keys in use are really coming from the communication partner. In principal there are three approaches how public keys can be distributed:
+
+1. In addition to the hub, we setup a central key server for the public keys. Every time a node requires the public key of another node, it requests it from the server. Only authorised persons must be allowed to change the key of their node. In addition a notification should be sent out to the RF every time the public key of a node has been changed. One may wonder, why the RFs should trust the key server, if they do not trust the hub. Manipulations are much easier to discover, because the data is publicly visible and can be checked anytime. Technically an LDAP-server would probably already be sufficient, though specialized key servers exists, in particular in the PGP ecosystem.
+
+2. The management and distribution of public keys can be outsourced to an independent third party. There are service providers, who offer PKI as a service. With this solution, the distribution of the public keys would be completely separated from the organization that is running OpenPrevo. But it also means that all RFs have to trust the service provider.
+
+3. A completely different approach is a "web of trust". If a participant is sure, that a public key belongs to another participant, he or she can sign the public key. The more signatures the public key of a person has, who is unknown to me, the more I can trust his or her public key. Usually one sets a threshold when unknown keys can be trusted, e.g. if it has three or more signatures. One difficult question to be answered is how a new participant can get the first signatures. This approach is the least feasible in our context and should only be chosen, if the RFs cannot agree on a central instance that everybody trusts (internal or external).
+
+It needs to be decided, if the public key registry will be maintained by the same team that maintains the hub, if it will be outsourced to an independent third party or if no central authority can be established and a "web of trust" has to be implemented. This is not a technical question and probably has to be discussed with potential customers first. Therefore it is probably out-of-scope of the MVP.
 
 ==== Hashing
 
 According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a _hash_ of their data.
+
+==== Transport-Layer Security
+
+In a production environment we recommend to use HTTPS exclusively. This can be achieved using standard technologies and is rather a question of deployment than one of development. Therefore we decided that this is not part of the MVP.
+
+As an additional security measure, the Hub should be enhanced so that it accepts only HTTPS-Urls to communicate with the Nodes.
 
 === Legal compliance
 
