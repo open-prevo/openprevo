@@ -49,8 +49,7 @@ prepareHub.dependsOn { project(":hub").bootJar }
 def nodeConfiguration = [
         [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
         [name: "NodeHelvetiaExcel", adapter: "adapter-excel", port: "8852"],
-        [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"],
-        [name: "NodeExample", adapter: "adapter-example-spring", port: "8888"]
+        [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"]
 ]
 
 def createTask(node) {
