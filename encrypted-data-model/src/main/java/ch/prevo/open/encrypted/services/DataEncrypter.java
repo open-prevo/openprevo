@@ -5,12 +5,10 @@ import ch.prevo.open.encrypted.model.EncryptedData;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.util.Base64;
 
 /**
@@ -21,16 +19,21 @@ import java.util.Base64;
 public abstract class DataEncrypter<T> {
 
     private static final String SYMMETRIC_TRANSFORMATION_ALGORITHM = "AES";
+    private static final String SYMMETRIC_TRANSFORMATION = "AES/CBC/PKCS5Padding";
     public static final String ASYMMETRIC_TRANSFORMATION_ALGORITHM = "RSA";
-    public static final int SYMMETRIC_KEY_SIZE = 256;
+    private static final String ASYMMETRIC_TRANSFORMATION = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
+    private static final int SYMMETRIC_KEY_SIZE = 256;
+    private static final int SYMMETRIC_BLOCK_SIZE_BYTES = 16;
 
 
     public EncryptedData encrypt(T data, PublicKey publicKey) {
         try {
             SecretKey symmetricKey = createSymmetricKey();
-            String encryptedDataBase64 = toBase64(encryptSymmetrically(data, symmetricKey));
+            IvParameterSpec iv = createIV();
+            String encryptedDataBase64 = toBase64(encryptSymmetrically(data, symmetricKey, iv));
             String encryptedSymmetricKeyBase64 = toBase64(encryptAsymmetrically(symmetricKey, publicKey));
-            return new EncryptedData(encryptedDataBase64, encryptedSymmetricKeyBase64);
+            String ivBase64 = toBase64(iv.getIV());
+            return new EncryptedData(encryptedDataBase64, encryptedSymmetricKeyBase64, ivBase64);
         } catch (GeneralSecurityException | IOException e) {
             throw new IllegalStateException("Could not encrypt data", e);
         }
@@ -59,15 +62,20 @@ public abstract class DataEncrypter<T> {
     }
 
     private byte[] encryptAsymmetrically(SecretKey symmetricKeyToEncrypt, PublicKey publicEncodingKey) throws GeneralSecurityException {
-        Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION_ALGORITHM);
+        Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION);
         asymmetricCipher.init(Cipher.ENCRYPT_MODE, publicEncodingKey);
         return asymmetricCipher.doFinal(symmetricKeyToEncrypt.getEncoded());
     }
 
-    private byte[] encryptSymmetrically(T info, SecretKey symmetricKey) throws GeneralSecurityException, IOException {
-        Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION_ALGORITHM);
-        symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
+    private byte[] encryptSymmetrically(T info, SecretKey symmetricKey, IvParameterSpec iv) throws GeneralSecurityException, IOException {
+        Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION);
+        symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey, iv);
         return symmetricCipher.doFinal(toByteArray(info));
+    }
+
+    private IvParameterSpec createIV() {
+        SecureRandom secureRandom = new SecureRandom();
+        return new IvParameterSpec(secureRandom.generateSeed(SYMMETRIC_BLOCK_SIZE_BYTES));
     }
 
     private SecretKey createSymmetricKey() throws NoSuchAlgorithmException {
@@ -78,13 +86,14 @@ public abstract class DataEncrypter<T> {
 
     private byte[] decryptData(EncryptedData data, byte[] symmetricKey) throws GeneralSecurityException {
         SecretKeySpec symmetricKeySpec = new SecretKeySpec(symmetricKey, SYMMETRIC_TRANSFORMATION_ALGORITHM);
-        Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION_ALGORITHM);
-        symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKeySpec);
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(fromBase64(data.getIvBase64()));
+        Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION);
+        symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKeySpec, ivParameterSpec);
         return symmetricCipher.doFinal(fromBase64(data.getEncryptedDataBase64()));
     }
 
     private byte[] decryptSymmentricKey(EncryptedData data, PrivateKey privateKey) throws GeneralSecurityException {
-        Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION_ALGORITHM);
+        Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION);
         asymmetricCipher.init(Cipher.DECRYPT_MODE, privateKey);
         return asymmetricCipher.doFinal(fromBase64(data.getEncryptedSymmetricKeyBase64()));
     }

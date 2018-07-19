@@ -39,6 +39,7 @@ public class NodeCallerTest {
 
     private static final String ENCRYPTED_DATA = "This is the encrypted data";
     private static final String ENCRYPTED_KEY = "This is the encrypted key";
+    private static final String IV = "IV";
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
@@ -243,7 +244,7 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY);
+        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY, IV);
         MatchForTermination MatchForTermination = new MatchForTermination();
         MatchForTermination.setEncryptedOasiNumber(OASI1);
         MatchForTermination.setNewRetirementFundUid(UID2);

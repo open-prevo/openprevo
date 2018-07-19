@@ -7,13 +7,15 @@ public class EncryptedData implements Serializable {
 
     private String encryptedDataBase64;
     private String encryptedSymmetricKeyBase64;
+    private String ivBase64;
 
     public EncryptedData() {
     }
 
-    public EncryptedData(String encryptedDataBase64, String encryptedSymmetricKeyBase64) {
+    public EncryptedData(String encryptedDataBase64, String encryptedSymmetricKeyBase64, String ivBase64) {
         this.encryptedDataBase64 = encryptedDataBase64;
         this.encryptedSymmetricKeyBase64 = encryptedSymmetricKeyBase64;
+        this.ivBase64 = ivBase64;
     }
 
     public String getEncryptedDataBase64() {
@@ -22,6 +24,10 @@ public class EncryptedData implements Serializable {
 
     public String getEncryptedSymmetricKeyBase64() {
         return encryptedSymmetricKeyBase64;
+    }
+
+    public String getIvBase64() {
+        return ivBase64;
     }
 
     @Override
