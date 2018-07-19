@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.*
+
 apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
@@ -9,10 +11,22 @@ task buildDemoZip(type: Zip) {
     destinationDir file("${buildDir}/")
 }
 
-task prepareHub(type: Copy) {
+task prepareHubDockerConfig(type: Copy) {
+    from("demo-nodes.yml")
+
+    filter { line ->
+        line.replaceAll('localhost:8851', 'node_baloise:8851')
+            .replaceAll('localhost:8852', 'node_helvetia:8852')
+            .replaceAll('localhost:8853', 'node_zurich:8853')
+    }
+
+    rename("demo-nodes.yml", "demo-nodes-docker.yml")
+    into "${buildDir}/demo/Hub"
+}
+
+task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
     from("${project(':hub').buildDir}/libs")
     from("demo-nodes.yml")
-    from("src/docker/demo-nodes-docker.yml")
     into "${buildDir}/demo/Hub"
     doLast {
         def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
