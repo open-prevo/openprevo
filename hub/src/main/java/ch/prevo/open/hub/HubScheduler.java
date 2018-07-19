@@ -12,7 +12,7 @@ import javax.inject.Inject;
 @Profile("!test")
 public class HubScheduler {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(HubScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HubScheduler.class);
 
     @Inject
     private HubService hubService;

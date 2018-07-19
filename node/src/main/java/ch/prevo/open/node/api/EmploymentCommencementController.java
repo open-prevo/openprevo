@@ -17,7 +17,7 @@ import ch.prevo.open.node.services.EmploymentCommencementService;
 @RestController
 class EmploymentCommencementController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EmploymentCommencementController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmploymentCommencementController.class);
 
     private EmploymentCommencementService employmentCommencementService;
 

@@ -17,7 +17,7 @@ import ch.prevo.open.node.services.EmploymentTerminationService;
 @RestController
 public class EmploymentTerminationController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EmploymentTerminationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmploymentTerminationController.class);
 
     private EmploymentTerminationService employmentTerminationService;
 

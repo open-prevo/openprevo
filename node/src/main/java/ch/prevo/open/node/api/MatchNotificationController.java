@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 public class MatchNotificationController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(MatchNotificationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatchNotificationController.class);
 
     private final MatchNotificationService notificationService;
 
