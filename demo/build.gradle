@@ -45,6 +45,7 @@ def createTask(node) {
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
         }
+        from("src/data/${node.name}-config.yml")
 
         into "${buildDir}/demo/${node.name}"
 
@@ -77,7 +78,8 @@ if (hasProperty("PREVO")) {
 def getJavaCommandLineForNode(nodeConfiguration) {
 
     def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName} " +
-            "-Dserver.port=${nodeConfiguration.port}"
+            "-Dserver.port=${nodeConfiguration.port} " +
+            "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"

@@ -15,13 +15,12 @@ public class MatchForTermination {
     private String newRetirementFundUid;
     private LocalDate commencementDate;
     private LocalDate terminationDate;
-    private CapitalTransferInformation transferInformation;
-
+    private EncryptedData transferInformation;
 
     public MatchForTermination() {
     }
 
-    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, CapitalTransferInformation transferInformation) {
+    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, EncryptedData transferInformation) {
         this.encryptedOasiNumber = encryptedOasiNumber;
         this.previousRetirementFundUid = previousRetirementFundUid;
         this.newRetirementFundUid = newRetirementFundUid;
@@ -70,12 +69,29 @@ public class MatchForTermination {
         this.terminationDate = terminationDate;
     }
 
-    public CapitalTransferInformation getTransferInformation() {
+    public EncryptedData getTransferInformation() {
         return transferInformation;
     }
 
-    public void setTransferInformation(CapitalTransferInformation transferInformation) {
+    public void setTransferInformation(EncryptedData transferInformation) {
         this.transferInformation = transferInformation;
+    }
+
+    /**
+     * I.E. are all attributes except the encrypted transfer info equal
+     */
+    public boolean isSameMatch(MatchForTermination that) {
+        if (this == that) return true;
+        if (that == null) return false;
+
+        if (encryptedOasiNumber != null ? !encryptedOasiNumber.equals(that.encryptedOasiNumber) : that.encryptedOasiNumber != null)
+            return false;
+        if (previousRetirementFundUid != null ? !previousRetirementFundUid.equals(that.previousRetirementFundUid) : that.previousRetirementFundUid != null)
+            return false;
+        if (newRetirementFundUid != null ? !newRetirementFundUid.equals(that.newRetirementFundUid) : that.newRetirementFundUid != null)
+            return false;
+        if (commencementDate != null ? !commencementDate.equals(that.commencementDate) : that.commencementDate != null) return false;
+        return terminationDate != null ? terminationDate.equals(that.terminationDate) : that.terminationDate == null;
     }
 
     @Override

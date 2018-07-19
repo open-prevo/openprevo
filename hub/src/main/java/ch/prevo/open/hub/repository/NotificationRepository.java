@@ -26,7 +26,7 @@ public class NotificationRepository {
     }
 
     public boolean isMatchForTerminationAlreadyNotified(MatchForTermination notification) {
-        return matchesForTerminations.contains(notification);
+        return matchesForTerminations.stream().anyMatch(existing -> existing.isSameMatch(notification));
     }
 
     public boolean isMatchForCommencementAlreadyNotified(MatchForCommencement notification) {
