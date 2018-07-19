@@ -30,7 +30,7 @@ public class NodeService {
         this.nodeCaller = nodeCaller;
     }
 
-    public Set<InsurantInformation> getCurrentExits() {
+    public Set<InsurantInformation> getCurrentTerminations() {
         Set<InsurantInformation> exits = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundExits = nodeCaller
@@ -42,7 +42,7 @@ public class NodeService {
         return exits;
     }
 
-    public Set<InsurantInformation> getCurrentEntries() {
+    public Set<InsurantInformation> getCurrentCommencements() {
         Set<InsurantInformation> entries = new HashSet<>();
         for (NodeConfiguration nodeConfig : nodeRegistry.getCurrentNodes()) {
             List<InsurantInformation> pensionFundEntries = nodeCaller
