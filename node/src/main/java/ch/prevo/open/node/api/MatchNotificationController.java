@@ -1,8 +1,10 @@
 package ch.prevo.open.node.api;
 
-import java.util.Optional;
-import javax.inject.Inject;
-
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.node.data.provider.error.NotificationException;
+import ch.prevo.open.node.services.MatchNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.node.data.provider.error.NotificationException;
-import ch.prevo.open.node.services.MatchNotificationService;
+import javax.inject.Inject;
+import java.util.Optional;
 
 @RestController
 public class MatchNotificationController {
@@ -31,12 +30,12 @@ public class MatchNotificationController {
     }
 
     @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
-    public ResponseEntity<CapitalTransferInformation> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
+    public ResponseEntity<EncryptedData> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
         LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getRetirementFundUid());
 
         try {
-            final Optional<CapitalTransferInformation> transferInformation = notificationService
+            final Optional<EncryptedData> transferInformation = notificationService
                     .handleTerminationMatch(matchNotification);
 
             return transferInformation.isPresent() ?

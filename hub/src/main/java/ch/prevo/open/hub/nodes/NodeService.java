@@ -8,14 +8,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 import javax.inject.Inject;
 
+import ch.prevo.open.encrypted.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.hub.match.Match;
 
 @Service
@@ -86,7 +83,7 @@ public class NodeService {
         for (Match match : matches) {
             try {
                 // notify new node
-                final CapitalTransferInformation transferInformation = tryNotifyNewRetirementFundAboutMatch(
+                final EncryptedData transferInformation = tryNotifyNewRetirementFundAboutMatch(
                         findNodeToNotify(match.getNewRetirementFundUid(), nodeConfigurations), match);
                 if (transferInformation != null) {
                     // notify previous node
@@ -100,7 +97,7 @@ public class NodeService {
         }
     }
 
-    private CapitalTransferInformation tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
+    private EncryptedData tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
         MatchForCommencement matchNotification = new MatchForCommencement();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
@@ -112,7 +109,7 @@ public class NodeService {
 
     private void tryNotifyPreviousRetirementFundAboutTerminationMatch(NodeConfiguration nodeConfig,
                                                                       Match match,
-                                                                      CapitalTransferInformation transferInformation) {
+                                                                      EncryptedData transferInformation) {
         MatchForTermination matchNotification = new MatchForTermination();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
