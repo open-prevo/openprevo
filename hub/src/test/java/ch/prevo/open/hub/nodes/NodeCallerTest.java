@@ -113,7 +113,7 @@ public class NodeCallerTest {
     public void notifyCommencementMatch() {
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
@@ -132,7 +132,7 @@ public class NodeCallerTest {
     public void notifyCommencementMatchOnlyOnce() {
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
@@ -154,16 +154,16 @@ public class NodeCallerTest {
     public void notifySingleCommencementMatchForSeveralTerminationMatches() {
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID3)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID3)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement matchForCommencement_node2 = createMatchForCommencement();
         MatchForCommencement matchForCommencement_node3 = createMatchForCommencement();
-        matchForCommencement_node3.setRetirementFundUid(UID3);
+        matchForCommencement_node3.setNewRetirementFundUid(UID3);
 
         // when
         CapitalTransferInformation capitalTransferInformation = nodeCaller
@@ -184,7 +184,7 @@ public class NodeCallerTest {
         server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
@@ -314,7 +314,7 @@ public class NodeCallerTest {
         MatchForCommencement.setCommencementDate(of(2018, 7, 1));
         MatchForCommencement.setTerminationDate(of(2018, 6, 30));
         MatchForCommencement.setPreviousRetirementFundUid(UID1);
-        MatchForCommencement.setRetirementFundUid(UID2);
+        MatchForCommencement.setNewRetirementFundUid(UID2);
         return MatchForCommencement;
     }
 
