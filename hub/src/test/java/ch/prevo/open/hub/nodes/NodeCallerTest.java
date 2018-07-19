@@ -1,13 +1,14 @@
 package ch.prevo.open.hub.nodes;
 
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.hub.repository.NotificationRepository;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.repository.NotificationDAO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,13 +23,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({ NodeCaller.class, NotificationRepository.class })
+@RestClientTest({ NodeCaller.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeCallerTest {
 
@@ -63,6 +66,9 @@ public class NodeCallerTest {
 
     @Inject
     private NodeCaller nodeCaller;
+
+    @MockBean
+    private NotificationDAO notificationDAO;
 
     @Test
     public void getInsurantInformationList() throws Exception {
@@ -130,24 +136,26 @@ public class NodeCallerTest {
 
     @Test
     public void notifyCommencementMatchOnlyOnce() {
+        // given
+        final MatchForCommencement matchForCommencement = createMatchForCommencement();
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
                 .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
-
-        MatchForCommencement MatchForCommencement = createMatchForCommencement();
+        when(notificationDAO.isMatchForCommencementAlreadyNotified(matchForCommencement)).thenReturn(false).thenReturn(true);
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller
-                .postCommencementNotification(URL1, MatchForCommencement);
-        CapitalTransferInformation secondCallTransferInfo = nodeCaller
-                .postCommencementNotification(URL1, MatchForCommencement);
+        final CapitalTransferInformation capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement);
+        final CapitalTransferInformation secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement);
 
         // then
         server.verify();
         assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
         assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
         assertThat(secondCallTransferInfo).isNull();
+        verify(notificationDAO).saveMatchForCommencement(matchForCommencement);
     }
 
     @Test
@@ -219,18 +227,20 @@ public class NodeCallerTest {
 
     @Test
     public void notifyTerminationMatchOnlyOnce() {
+        // given
+        final MatchForTermination matchForTermination = createMatchForTermination();
         server.expect(requestTo(URL2))
                 .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
                 .andRespond(withSuccess());
-
-        MatchForTermination MatchForTermination = createMatchForTermination();
+        when(notificationDAO.isMatchForTerminationAlreadyNotified(matchForTermination)).thenReturn(false).thenReturn(true);
 
         // when
-        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
-        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
+        nodeCaller.postTerminationNotification(URL2, matchForTermination);
+        nodeCaller.postTerminationNotification(URL2, matchForTermination);
 
         // then
         server.verify();
+        verify(notificationDAO).saveMatchForTermination(matchForTermination);
     }
 
     @Test

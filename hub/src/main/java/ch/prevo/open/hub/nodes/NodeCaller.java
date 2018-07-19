@@ -1,22 +1,21 @@
 package ch.prevo.open.hub.nodes;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
-import java.util.List;
-import javax.inject.Inject;
-
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.repository.NotificationDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.hub.repository.NotificationRepository;
+import javax.inject.Inject;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 @Service
 public class NodeCaller {
@@ -25,13 +24,13 @@ public class NodeCaller {
 
     private final RestTemplate restTemplate;
 
-    private final NotificationRepository notificationRepository;
+    private final NotificationDAO notificationDAO;
 
     @Inject
     public NodeCaller(RestTemplateBuilder restTemplateBuilder,
-                      NotificationRepository notificationRepository) {
+                      NotificationDAO notificationDAO) {
         this.restTemplate = restTemplateBuilder.build();
-        this.notificationRepository = notificationRepository;
+        this.notificationDAO = notificationDAO;
     }
 
     List<InsurantInformation> getInsurantInformationList(String url) {
@@ -46,12 +45,12 @@ public class NodeCaller {
 
     CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
-            if (!notificationRepository.isMatchForCommencementAlreadyNotified(matchNotification)) {
+            if (!notificationDAO.isMatchForCommencementAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send termination match notification for match: {}", matchNotification);
                 CapitalTransferInformation capitalTransferInformation = restTemplate
                         .postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
 
-                notificationRepository.saveMatchForCommencement(matchNotification);
+                notificationDAO.saveMatchForCommencement(matchNotification);
 
                 return capitalTransferInformation;
             }
@@ -65,10 +64,10 @@ public class NodeCaller {
 
     void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
-            if (!notificationRepository.isMatchForTerminationAlreadyNotified(matchNotification)) {
+            if (!notificationDAO.isMatchForTerminationAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send commencement match notification for match: {}", matchNotification);
                 restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
-                notificationRepository.saveMatchForTermination(matchNotification);
+                notificationDAO.saveMatchForTermination(matchNotification);
             }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later

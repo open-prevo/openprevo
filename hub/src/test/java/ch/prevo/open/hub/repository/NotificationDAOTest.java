@@ -1,18 +1,24 @@
 package ch.prevo.open.hub.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.junit4.SpringRunner;
 
-public class NotificationRepositoryTest {
+import javax.inject.Inject;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@ComponentScan
+public class NotificationDAOTest {
 
     private final String OASI = "756.1335.5778.23";
     private final String previousRetirementFundUID = "CHE-109.740.084";
@@ -20,31 +26,26 @@ public class NotificationRepositoryTest {
     private final LocalDate commencementDate = LocalDate.of(2018,7,1);
     private final LocalDate terminationDate = LocalDate.of(2018,6,30);
 
-    private NotificationRepository notificationRepository;
-
-    @Before
-    public void setUp() {
-        this.notificationRepository = new NotificationRepository();
-    }
+    @Inject
+    private NotificationDAO notificationDAO;
 
     @Test
-    public void isCommencementMatchAlreadyNotified() {
+    public void isMatchForTerminationAlreadyNotified() {
 
         // given
         MatchForTermination commencementMatch = getMatchForTermination();
         MatchForTermination duplicateCommencementMatch = getMatchForTermination();
 
         // when
-        notificationRepository = new NotificationRepository();
-        boolean initiallyNotMatched = notificationRepository
+        boolean initiallyNotMatched = notificationDAO
                 .isMatchForTerminationAlreadyNotified(commencementMatch);
 
-        notificationRepository.saveMatchForTermination(commencementMatch);
+        notificationDAO.saveMatchForTermination(commencementMatch);
 
-        boolean commencementMatchAlreadyNotified = notificationRepository
+        boolean commencementMatchAlreadyNotified = notificationDAO
                 .isMatchForTerminationAlreadyNotified(commencementMatch);
 
-        boolean duplicateIsAlreadyNotified = notificationRepository
+        boolean duplicateIsAlreadyNotified = notificationDAO
                 .isMatchForTerminationAlreadyNotified(duplicateCommencementMatch);
 
         // then
@@ -65,23 +66,22 @@ public class NotificationRepositoryTest {
     }
 
     @Test
-    public void isTerminationMatchAlreadyNotified() {
+    public void isMatchForCommencementAlreadyNotified() {
 
         // given
         MatchForCommencement terminationMatch = getMatchForCommencement();
         MatchForCommencement duplicateTerminationMatch = getMatchForCommencement();
 
         // when
-        notificationRepository = new NotificationRepository();
-        boolean initiallyNotMatched = notificationRepository
+        boolean initiallyNotMatched = notificationDAO
                 .isMatchForCommencementAlreadyNotified(terminationMatch);
 
-        notificationRepository.saveMatchForCommencement(terminationMatch);
+        notificationDAO.saveMatchForCommencement(terminationMatch);
 
-        boolean commencementMatchAlreadyNotified = notificationRepository
+        boolean commencementMatchAlreadyNotified = notificationDAO
                 .isMatchForCommencementAlreadyNotified(terminationMatch);
 
-        boolean duplicateIsAlreadyNotified = notificationRepository
+        boolean duplicateIsAlreadyNotified = notificationDAO
                 .isMatchForCommencementAlreadyNotified(duplicateTerminationMatch);
 
         // then
