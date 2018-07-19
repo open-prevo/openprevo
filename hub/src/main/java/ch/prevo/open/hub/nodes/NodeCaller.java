@@ -1,22 +1,21 @@
 package ch.prevo.open.hub.nodes;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
-import java.util.List;
-import javax.inject.Inject;
-
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.repository.NotificationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.hub.repository.NotificationRepository;
+import javax.inject.Inject;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 @Service
 public class NodeCaller {
@@ -44,16 +43,16 @@ public class NodeCaller {
         }
     }
 
-    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
+    EncryptedData postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             if (!notificationRepository.isMatchForCommencementAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send termination match notification for match: {}", matchNotification);
-                CapitalTransferInformation capitalTransferInformation = restTemplate
-                        .postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
+                EncryptedData encryptedCapitalTransferInfo = restTemplate
+                        .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedData.class);
 
                 notificationRepository.saveMatchForCommencement(matchNotification);
 
-                return capitalTransferInformation;
+                return encryptedCapitalTransferInfo;
             }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later

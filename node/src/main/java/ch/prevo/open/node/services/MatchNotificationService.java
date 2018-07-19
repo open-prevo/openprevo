@@ -1,21 +1,19 @@
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.*;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.services.CapitalTransferInfoEncrypter;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.config.AdapterServiceConfiguration;
-import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.config.NodeConfigurationService;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
 import ch.prevo.open.node.data.provider.error.NotificationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
@@ -33,13 +31,15 @@ public class MatchNotificationService {
 
     private final EmploymentCommencementProvider employmentCommencementProvider;
     private final EmploymentTerminationProvider employmentTerminationProvider;
+    private final NodeConfigurationService nodeConfigService;
 
     @Inject
-    public MatchNotificationService(ServiceListFactoryBean factoryBean) {
+    public MatchNotificationService(ServiceListFactoryBean factoryBean, NodeConfigurationService nodeConfigService) {
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.employmentCommencementProvider = factory != null ? factory.getEmploymentCommencementProvider() : null;
         this.employmentTerminationProvider = factory != null ? factory.getEmploymentTerminationProvider() : null;
         this.listener = factory != null ? factory.getMatchNotificationListener() : null;
+        this.nodeConfigService = nodeConfigService;
     }
 
     public void handleCommencementMatch(MatchForTermination notification) throws NotificationException {
@@ -55,13 +55,18 @@ public class MatchNotificationService {
         final FullCommencementNotification fullNotification = new FullCommencementNotification();
         fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
         fullNotification.setCommencementDate(notification.getCommencementDate());
-        fullNotification.setTransferInformation(notification.getTransferInformation());
         fullNotification.setEmploymentTermination(employmentTermination.get());
+
+        EncryptedData encryptedCapitalTransferInfo = notification.getTransferInformation();
+        if (encryptedCapitalTransferInfo != null) {
+            String retirementFundUid = employmentTermination.get().getEmploymentInfo().getRetirementFundUid();
+            fullNotification.setTransferInformation(new CapitalTransferInfoEncrypter().decrypt(encryptedCapitalTransferInfo, nodeConfigService.getPrivateKey(retirementFundUid)));
+        }
 
         listener.handleCommencementMatch(fullNotification);
     }
 
-    public Optional<CapitalTransferInformation> handleTerminationMatch(MatchForCommencement notification)
+    public Optional<EncryptedData> handleTerminationMatch(MatchForCommencement notification)
             throws NotificationException {
         final Optional<EmploymentCommencement> employmentCommencement = employmentCommencementProvider.getEmploymentCommencements().stream()
                 .filter(currentEmploymentCommencement -> isSameAsNotification(currentEmploymentCommencement, notification))
@@ -79,7 +84,12 @@ public class MatchNotificationService {
 
         listener.handleTerminationMatch(fullNotification);
 
-        return employmentCommencement.map(EmploymentCommencement::getCapitalTransferInfo);
+        CapitalTransferInformation info = employmentCommencement.get().getCapitalTransferInfo();
+        if (info == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new CapitalTransferInfoEncrypter().encrypt(info, nodeConfigService.getPublicKey(notification.getPreviousRetirementFundUid())));
     }
 
     private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
