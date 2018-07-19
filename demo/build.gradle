@@ -63,6 +63,8 @@ def createTask(node) {
 
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
+        } else if (node.adapter == "adapter-pakt") {
+            from("src/config/pakt.properties")
         }
         from("src/data/${node.name}-config.yml")
 
@@ -104,6 +106,12 @@ def getJavaCommandLineForNode(nodeConfiguration) {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
     }
     cmd += " -jar ${project(":node").bootJar.archiveName}"
+
+    if (nodeConfiguration.adapter == "adapter-pakt") {
+        cmd += " --spring.config.location=file:pakt.properties"
+    }
+
+    return cmd
 }
 
 assemble.dependsOn(buildDemoZip)
