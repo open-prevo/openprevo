@@ -17,14 +17,19 @@ import ch.prevo.pakt.soap.SubmitFZLVerwendungRequestPopulator;
 @Service
 public class PAKTMatchNotificationListenerImpl implements MatchNotificationListener {
 
-	private static Logger LOG = LoggerFactory.getLogger(PAKTMatchNotificationListenerImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PAKTMatchNotificationListenerImpl.class);
 
-	@Inject
-	private PaktEnvironment config;
+	private final PaktEnvironment config;
+    private final RetirementFundRegistry retirementFundRegistry;
 
     @Inject
-	private RetirementFundRegistry retirementFundRegistry;
-    
+	public PAKTMatchNotificationListenerImpl(PaktEnvironment config,
+                                             RetirementFundRegistry retirementFundRegistry) {
+
+	    this.config = config;
+	    this.retirementFundRegistry = retirementFundRegistry;
+    }
+
 	@Override
 	public void handleTerminationMatch(FullTerminationNotification notification) {
 		LOG.info("Handling FullTerminationNotification notification for OASI [{}]", notification.getEmploymentCommencement().getEmploymentInfo().getOasiNumber());

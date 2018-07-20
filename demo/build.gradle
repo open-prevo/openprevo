@@ -64,18 +64,14 @@ def createTask(node) {
 
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
+        } else if (node.adapter == "adapter-pakt") {
+            from fileTree("src/adapter-pakt")
         }
+
         from("src/data/${node.name}-config.yml")
 
         into "${buildDir}/demo/${node.name}"
 
-        if (node.adapter == "adapter-pakt") {
-            copy {
-                from("src/config")
-                into "${buildDir}/demo/${node.name}/config"
-            }
-        }
-        
         doLast {
             def batFile = new File("${buildDir}/demo/${node.name}/start.bat")
             batFile.text = getJavaCommandLineForNode(node)
