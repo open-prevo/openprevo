@@ -87,25 +87,19 @@ subprojects { project ->
             }
         }
     }
+}
 
-    project.apply plugin: 'net.researchgate.release'
+build.dependsOn subprojects.findResults { it.tasks.findByName('build') }
 
-    release {
+project.apply plugin: 'net.researchgate.release'
 
-        preTagCommitMessage = '[OpenPrevo Release] - set current release version to: '
-        tagCommitMessage = '[OpenPrevo Release] - create tag for release: '
-        newVersionCommitMessage = '[OpenPrevo Release] - set new snapshot version to: '
-        tagTemplate = 'v${version}'
-        versionPropertyFile = 'gradle.properties'
-        buildTasks = ['build']
-
-        git {
-            // change to master later
-            requireBranch = ''
-            // change to origin later
-            pushToRemote = false
-        }
-    }
+release {
+    preTagCommitMessage = '[OpenPrevo Release] - set current release version to: '
+    tagCommitMessage = '[OpenPrevo Release] - create tag for release: '
+    newVersionCommitMessage = '[OpenPrevo Release] - set new snapshot version to: '
+    tagTemplate = 'v${version}'
+    versionPropertyFile = 'gradle.properties'
+    buildTasks = ['build']
 }
 
 assemble.dependsOn ':doc:publishDocumentation'
