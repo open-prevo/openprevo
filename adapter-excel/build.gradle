@@ -1,8 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = '0.0.1-SNAPSHOT'
-
 // only create the fat jar
 jar.enabled = false
 build.dependsOn(shadowJar)
