@@ -93,12 +93,11 @@ apply plugin: 'net.researchgate.release'
 
 release {
 
-    preTagCommitMessage = '[OpenPrevo Release] - set current release version commit '
-    tagCommitMessage = '[OpenPrevo Release] - create tag for release '
-    newVersionCommitMessage = '[Gradle Release Plugin] - set new snapshot version commit '
+    preTagCommitMessage = '[OpenPrevo Release] - set current release version to: '
+    tagCommitMessage = '[OpenPrevo Release] - create tag for release: '
+    newVersionCommitMessage = '[OpenPrevo Release] - set new snapshot version to: '
     tagTemplate = 'v${version}'
     versionPropertyFile = 'gradle.properties'
-    versionProperties = ['currentVersion']
     buildTasks = ['build']
 
     git {
