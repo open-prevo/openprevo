@@ -20,9 +20,9 @@ public interface RetirementFundRegistry {
 	}
 
 	public default RetirementFund getByUid(String uid) {
-		return Objects.nonNull(uid)
+		return Objects.nonNull(uid) 
 				? getCurrentRetirementFunds().stream()
-						.filter(retirementFund -> retirementFund.getUid().equals(retirementFund.getUid())).findFirst()
+						.filter(retirementFund -> uid.equals(retirementFund.getUid())).findFirst()
 						.orElse(null)
 				: null;
 	}
