@@ -1,6 +1,6 @@
 package ch.prevo.open.node.api;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.node.data.provider.error.NotificationException;
@@ -30,12 +30,12 @@ public class MatchNotificationController {
     }
 
     @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
-    public ResponseEntity<CapitalTransferInformation> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
+    public ResponseEntity<EncryptedData> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
         LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
                 matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
 
         try {
-            final Optional<CapitalTransferInformation> transferInformation = notificationService
+            final Optional<EncryptedData> transferInformation = notificationService
                     .handleTerminationMatch(matchNotification);
 
             return transferInformation.isPresent() ?

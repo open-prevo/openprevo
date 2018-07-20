@@ -1,0 +1,32 @@
+version: '2'
+services:
+  hub:
+    image: "openprevo/node-demo-base:staging"
+    ports:
+      - "8859:8859"
+    environment:
+      SPRING_APPLICATION_JSON: '{"open.prevo.hub.config.file": "file:demo-nodes-docker.yml"}'
+    volumes:
+      - ./build/demo/Hub:/opt/app
+    depends_on:
+      - node_baloise
+      - node_helvetia
+      - node_zurich
+  node_baloise:
+    image: "openprevo/node-demo-base:staging"
+    ports:
+      - "8851:8851"
+    volumes:
+      - ./build/demo/NodeBaloiseExcel:/opt/app
+  node_helvetia:
+    image: "openprevo/node-demo-base:staging"
+    ports:
+      - "8852:8852"
+    volumes:
+      - ./build/demo/NodeHelvetiaExcel:/opt/app
+  node_zurich:
+      image: "openprevo/node-demo-base:staging"
+      ports:
+        - "8853:8853"
+      volumes:
+        - ./build/demo/NodeZurichExcel:/opt/app

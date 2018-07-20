@@ -1,6 +1,6 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
@@ -41,8 +41,9 @@ public class NodeCallerTest {
     private static final String UID2 = "CHE-109.723.097";
     private static final String UID3 = "CHE-109.537.488";
 
-    private static final String RETIREMENT_FUND_NAME = "Baloise-Sammelstiftung";
-    private static final String IBAN = "CH53 0077 0016 02222 3334 4";
+    private static final String ENCRYPTED_DATA = "This is the encrypted data";
+    private static final String ENCRYPTED_KEY = "This is the encrypted key";
+    private static final String IV = "IV";
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
@@ -55,7 +56,8 @@ public class NodeCallerTest {
             "]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
-            = "{\"name\" : \"" + RETIREMENT_FUND_NAME + "\", \"iban\" : \"" + IBAN + "\"}";
+            = "{\"encryptedDataBase64\" : \"" + ENCRYPTED_DATA + "\", \"encryptedSymmetricKeyBase64\" : \"" + ENCRYPTED_KEY + "\"}";
+
 
     private static final String URL1 = "https://host.domain1/path";
     private static final String URL2 = "https://host.domain2/path";
@@ -71,7 +73,7 @@ public class NodeCallerTest {
     private NotificationDAO notificationDAO;
 
     @Test
-    public void getInsurantInformationList() throws Exception {
+    public void getInsurantInformationList() {
         server.expect(requestTo(URL1))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -125,13 +127,13 @@ public class NodeCallerTest {
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isEqualTo(ENCRYPTED_DATA);
+        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBase64()).isEqualTo(ENCRYPTED_KEY);
     }
 
     @Test
@@ -145,15 +147,14 @@ public class NodeCallerTest {
         when(notificationDAO.isMatchForCommencementAlreadyNotified(matchForCommencement)).thenReturn(false).thenReturn(true);
 
         // when
-        final CapitalTransferInformation capitalTransferInformation = nodeCaller
+        final EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement);
-        final CapitalTransferInformation secondCallTransferInfo = nodeCaller
+        final EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement);
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
+        assertThat(capitalTransferInformation).isNotNull();
         assertThat(secondCallTransferInfo).isNull();
         verify(notificationDAO).saveMatchForCommencement(matchForCommencement);
     }
@@ -174,17 +175,16 @@ public class NodeCallerTest {
         matchForCommencement_node3.setNewRetirementFundUid(UID3);
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement_node2);
-        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+        EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, matchForCommencement_node3);
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(capitalTransferInformation.getIban()).isEqualTo(IBAN);
-        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
+        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isNotBlank();
+        assertThat(secondCallTransferInfo.getEncryptedDataBase64()).isNotBlank();
+        assertThat(secondCallTransferInfo).isEqualTo(capitalTransferInformation);
     }
 
     @Test
@@ -198,22 +198,21 @@ public class NodeCallerTest {
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
 
         // when
-        CapitalTransferInformation capitalTransferInformation = nodeCaller
+        EncryptedData capitalTransferInformation = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
-        CapitalTransferInformation secondCallTransferInfo = nodeCaller
+        EncryptedData secondCallTransferInfo = nodeCaller
                 .postCommencementNotification(URL1, MatchForCommencement);
 
         // then
         server.verify();
         assertThat(capitalTransferInformation).isNull();
-        assertThat(secondCallTransferInfo.getName()).isEqualTo(RETIREMENT_FUND_NAME);
-        assertThat(secondCallTransferInfo.getIban()).isEqualTo(IBAN);
+        assertThat(secondCallTransferInfo).isNotNull();
     }
 
     @Test
     public void notifyTerminationMatch() {
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -230,7 +229,7 @@ public class NodeCallerTest {
         // given
         final MatchForTermination matchForTermination = createMatchForTermination();
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
         when(notificationDAO.isMatchForTerminationAlreadyNotified(matchForTermination)).thenReturn(false).thenReturn(true);
 
@@ -245,16 +244,18 @@ public class NodeCallerTest {
 
     @Test
     public void notifySeveralTerminationMatchesForSingleCommencement() {
+        EncryptedData transferInformation2 = new EncryptedData("Data2", "Key2", "Iv2)");
         server.expect(requestTo(URL1))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
         server.expect(requestTo(URL3))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(transferInformation2.getEncryptedSymmetricKeyBase64())))
                 .andRespond(withSuccess());
 
         MatchForTermination matchForTermination_node1 = createMatchForTermination();
         matchForTermination_node1.setPreviousRetirementFundUid(UID1);
         MatchForTermination matchForTermination_node3 = createMatchForTermination();
+        matchForTermination_node3.setTransferInformation(transferInformation2);
         matchForTermination_node3.setPreviousRetirementFundUid(UID3);
 
         // when
@@ -269,7 +270,7 @@ public class NodeCallerTest {
     public void verifyNotifyTerminationMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
         server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.iban", is(IBAN)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -307,14 +308,13 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        CapitalTransferInformation capitalTransferInformation = new CapitalTransferInformation(RETIREMENT_FUND_NAME,
-                IBAN);
+        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY, IV);
         MatchForTermination MatchForTermination = new MatchForTermination();
         MatchForTermination.setEncryptedOasiNumber(OASI1);
         MatchForTermination.setNewRetirementFundUid(UID2);
         MatchForTermination.setCommencementDate(of(2018, 7, 1));
         MatchForTermination.setTerminationDate(of(2018, 6, 30));
-        MatchForTermination.setTransferInformation(capitalTransferInformation);
+        MatchForTermination.setTransferInformation(transferInformation);
         return MatchForTermination;
     }
 

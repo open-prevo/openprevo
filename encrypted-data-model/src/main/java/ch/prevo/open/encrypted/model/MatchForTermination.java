@@ -10,23 +10,36 @@ import java.time.LocalDate;
  */
 public class MatchForTermination extends MatchNotification {
 
-    private CapitalTransferInformation transferInformation;
+    private EncryptedData transferInformation;
+
 
     public MatchForTermination() {
     }
 
-    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, CapitalTransferInformation transferInformation) {
+    public MatchForTermination(String encryptedOasiNumber, String previousRetirementFundUid, String newRetirementFundUid, LocalDate commencementDate, LocalDate terminationDate, EncryptedData transferInformation) {
         super(encryptedOasiNumber, previousRetirementFundUid, newRetirementFundUid, commencementDate, terminationDate);
         this.transferInformation = transferInformation;
     }
 
-    public CapitalTransferInformation getTransferInformation() {
+    public EncryptedData getTransferInformation() {
         return transferInformation;
     }
 
-    public void setTransferInformation(CapitalTransferInformation transferInformation) {
+    public void setTransferInformation(EncryptedData transferInformation) {
         this.transferInformation = transferInformation;
     }
+
+    /**
+     * I.E. are all attributes except the encrypted transfer info equal
+     */
+    public boolean isSameMatch(MatchForTermination o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .isEquals();    }
 
     @Override
     public boolean equals(Object o) {

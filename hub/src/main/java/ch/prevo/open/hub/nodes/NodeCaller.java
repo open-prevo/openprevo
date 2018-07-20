@@ -1,6 +1,6 @@
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
@@ -43,16 +43,16 @@ public class NodeCaller {
         }
     }
 
-    CapitalTransferInformation postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
+    EncryptedData postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             if (!notificationDAO.isMatchForCommencementAlreadyNotified(matchNotification)) {
                 LOGGER.debug("Send termination match notification for match: {}", matchNotification);
-                CapitalTransferInformation capitalTransferInformation = restTemplate
-                        .postForObject(commencementMatchNotifyUrl, matchNotification, CapitalTransferInformation.class);
+                EncryptedData encryptedCapitalTransferInfo = restTemplate
+                        .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedData.class);
 
                 notificationDAO.saveMatchForCommencement(matchNotification);
 
-                return capitalTransferInformation;
+                return encryptedCapitalTransferInfo;
             }
         } catch (Exception e) {
             // TODO persist information that match needs to be notified later
