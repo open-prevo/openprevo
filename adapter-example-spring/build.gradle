@@ -14,9 +14,8 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-devtools")
 }
 
-jar {
-    enabled = true
-}
+jar.enabled = false
+build.dependsOn(shadowJar)
 
 bootJar {
     enabled = false
