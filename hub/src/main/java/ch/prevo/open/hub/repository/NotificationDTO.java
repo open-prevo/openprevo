@@ -4,25 +4,39 @@ import ch.prevo.open.encrypted.model.MatchNotification;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "NOTIFICATION")
 public class NotificationDTO {
 
     @Id
     @GeneratedValue
+    @Column(name="ID")
     private long id;
 
+    @Column(name="ENCRYPTED_OASI_NUMBER")
     private String encryptedOasiNumber;
+
+    @Column(name="PREVIOUS_RETIREMENT_FUND_UID")
     private String previousRetirementFundUid;
+
+    @Column(name="NEW_RETIREMENT_FUND_UID")
     private String newRetirementFundUid;
+
+    @Column(name="COMMENCEMENT_DATE")
     private LocalDate commencementDate;
+
+    @Column(name="TERMINATION_DATE")
     private LocalDate terminationDate;
 
+    @Column(name="MATCH_FOR_COMMENCEMENT_NOTIFIED")
     private boolean matchForCommencementNotified;
+
+    @Column(name="MATCH_FOR_TERMINATION_NOTIFIED")
     private boolean matchForTerminationNotified;
 
     public NotificationDTO() {}
