@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public class HubService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(HubService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HubService.class);
 
     @Inject
     private MatcherService matcher;

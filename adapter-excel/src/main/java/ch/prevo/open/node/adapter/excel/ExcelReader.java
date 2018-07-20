@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 public class ExcelReader implements EmploymentCommencementProvider, EmploymentTerminationProvider {
 
-    private static Logger LOG = LoggerFactory.getLogger(ExcelReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelReader.class);
 
     private static final int OASI_COLUMN_INDEX = 0;
     private static final int DATE_COLUMN_INDEX = 1;
@@ -59,7 +59,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
                 employmentTerminations = mapRows(wb.getSheetAt(0), this::mapEmploymentTermination);
             }
         } catch (IOException e) {
-            LOG.error("An exception occurred while trying to read the employment terminations", e);
+            LOGGER.error("An exception occurred while trying to read the employment terminations", e);
         }
         return employmentTerminations;
     }
@@ -72,7 +72,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
                 employmentCommencements = mapRows(wb.getSheetAt(1), this::mapEmploymentCommencement);
             }
         } catch (IOException e) {
-            LOG.error("An exception occurred while trying to read the employment commencements", e);
+            LOGGER.error("An exception occurred while trying to read the employment commencements", e);
         }
         return employmentCommencements;
     }
@@ -82,7 +82,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
             final InputStream inputStream = getFileInput();
             return WorkbookFactory.create(inputStream);
         } catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
-            LOG.error("An exception occurred while trying to get the workbook", e);
+            LOGGER.error("An exception occurred while trying to get the workbook", e);
             return null;
         }
     }

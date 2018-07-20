@@ -69,7 +69,7 @@ public class NodeService {
                 .filter(insurant -> !nodeConfig.containsRetirementFundUid(insurant.getRetirementFundUid()))
                 .collect(toList());
 
-        if (invalidInsurants.size() > 0) {
+        if (!invalidInsurants.isEmpty()) {
             LOGGER.error(
                     "Invalid data received from node {} the following insurants have an invalid retirement fund {}",
                     nodeConfig, invalidInsurants);

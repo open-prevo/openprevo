@@ -29,7 +29,7 @@ import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFOR
 @Service
 public class NodeConfigurationService {
 
-    private static Logger LOG = LoggerFactory.getLogger(NodeConfigurationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NodeConfigurationService.class);
 
     private final ResourceLoader loader;
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -56,7 +56,7 @@ public class NodeConfigurationService {
             rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
             //Note: we ignore own public keys for now, they're not in use
         } catch (IOException e) {
-            LOG.warn("Unable to read bootstrap-data from " + configFile, e);
+            LOGGER.warn("Unable to read bootstrap-data from " + configFile, e);
         }
     }
 

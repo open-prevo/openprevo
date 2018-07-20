@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 @Profile("!docker")
 class ExternalizedNodeRegistry implements NodeRegistry {
 
-    private static Logger LOG = LoggerFactory.getLogger(ExternalizedNodeRegistry.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalizedNodeRegistry.class);
 
     private final ResourceLoader loader;
     private final ObjectMapper mapper;
@@ -46,7 +46,7 @@ class ExternalizedNodeRegistry implements NodeRegistry {
             final Resource resource = loader.getResource(configFile);
             nodes = mapper.readValue(resource.getInputStream(), new TypeReference<List<NodeConfiguration>>() {});
         } catch (IOException e) {
-            LOG.warn("Unable to read bootstrap-data from " + configFile, e);
+            LOGGER.warn("Unable to read bootstrap-data from " + configFile, e);
         }
     }
 
