@@ -32,7 +32,7 @@ public class MatchNotificationController {
     @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
     public ResponseEntity<EncryptedData> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
         LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
-                matchNotification.getEncryptedOasiNumber(), matchNotification.getRetirementFundUid());
+                matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
 
         try {
             final Optional<EncryptedData> transferInformation = notificationService

@@ -95,7 +95,7 @@ public class MatchNotificationService {
     private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
         EmploymentInfo employmentInfo = employmentCommencement.getEmploymentInfo();
         return Cryptography.digestOasiNumber(employmentInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
-                employmentInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
+                employmentInfo.getRetirementFundUid().equals(notification.getNewRetirementFundUid()) &&
                 employmentInfo.getDate().equals(notification.getCommencementDate());
     }
 

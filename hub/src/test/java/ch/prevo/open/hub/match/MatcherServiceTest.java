@@ -32,7 +32,7 @@ public class MatcherServiceTest {
     }
 
     @Test
-    public void findMatches() throws Exception {
+    public void findMatches() {
         Set<InsurantInformation> terminations = createSet(new InsurantInformation(OASI_1, UID_1));
         Set<InsurantInformation> commencements = createSet(new InsurantInformation(OASI_1, UID_2), new InsurantInformation(OASI_2, UID_3));
 
@@ -46,7 +46,7 @@ public class MatcherServiceTest {
     }
 
     @Test
-    public void findMatchesWithinSameRetirementFund() throws Exception {
+    public void findMatchesWithinSameRetirementFund() {
         Set<InsurantInformation> terminations = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 6, 1)));
         Set<InsurantInformation> commencements = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 8, 1)));
 
@@ -56,7 +56,7 @@ public class MatcherServiceTest {
     }
 
     @Test
-    public void findMatchesWithinSameRetirementFund_entryBeforeExit() throws Exception {
+    public void findMatchesWithinSameRetirementFund_entryBeforeExit() {
         Set<InsurantInformation> terminations = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 6, 1)));
         Set<InsurantInformation> commencements = createSet(new InsurantInformation(OASI_1, UID_1, of(2018, 1, 1)));
 
@@ -66,21 +66,18 @@ public class MatcherServiceTest {
     }
 
     @Test
-    public void findMatchesEmptyInput() throws Exception {
+    public void findMatchesEmptyInput() {
         assertTrue(matcherService.findMatches(emptySet(), emptySet()).isEmpty());
     }
 
     @Test
-    public void findMatchesWithDuplicates() throws Exception {
+    public void findMatchesWithDuplicates() {
         Set<InsurantInformation> terminations = createSet(new InsurantInformation(OASI_1, UID_1));
         Set<InsurantInformation> commencements = createSet(new InsurantInformation(OASI_1, UID_2), new InsurantInformation(OASI_1, UID_3));
 
         List<Match> matches = matcherService.findMatches(terminations, commencements);
 
-        assertThat(matches).containsAnyOf(
-                new Match(OASI_1, UID_1, UID_2, null, null),
-                new Match(OASI_1, UID_1, UID_3, null, null)
-        );
+        assertThat(matches).isEmpty();
     }
 
     @Test
