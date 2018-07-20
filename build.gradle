@@ -77,6 +77,7 @@ subprojects { project ->
             dependency("org.testcontainers:testcontainers:1.8.0")
             dependency("org.hibernate:hibernate-validator:6.0.10.Final")
             dependency("xerces:xerces:2.4.0")
+            dependency("commons-io:commons-io:2.6")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")
