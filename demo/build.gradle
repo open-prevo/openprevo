@@ -48,6 +48,7 @@ prepareHub.dependsOn { project(":hub").bootJar }
 
 def nodeConfiguration = [
         [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
+        [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
         [name: "NodeHelvetiaExcel", adapter: "adapter-excel", port: "8852"],
         [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"]
 ]
@@ -63,7 +64,10 @@ def createTask(node) {
 
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
+        } else if (node.adapter == "adapter-pakt") {
+            from fileTree("src/adapter-pakt")
         }
+
         from("src/data/${node.name}-config.yml")
 
         into "${buildDir}/demo/${node.name}"
@@ -84,19 +88,9 @@ nodeConfiguration.each { node ->
     createTask(node)
 }
 
-if (hasProperty("PREVO")) {
-    def nodeConfigurationPrevo = [
-            [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
-    ]
-
-    nodeConfigurationPrevo.each { node ->
-        createTask(node)
-    }
-}
-
 def getJavaCommandLineForNode(nodeConfiguration) {
 
-    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName} " +
+    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
             "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
 

@@ -1,7 +1,7 @@
 package ch.prevo.pakt.provider;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -16,8 +16,8 @@ import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
-import ch.prevo.pakt.PaktEnvironment;
-import ch.prevo.pakt.RetirementFund;
+import ch.prevo.pakt.config.PaktEnvironment;
+import ch.prevo.pakt.config.RetirementFundRegistry;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
@@ -25,26 +25,25 @@ import ch.prevo.pakt.zd.utils.CdMeld;
 @Service
 public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {
 
-    private static Logger LOG = LoggerFactory.getLogger(PAKTEmploymentEventProviderImpl.class);
-	
     private final PartnerVermittlungRepository repository;
 
     private final PaktEnvironment config;
-    
-	@Inject
-    public PAKTEmploymentEventProviderImpl(PaktEnvironment config, PartnerVermittlungRepository partnerVermittlungRepository) {
-        this.repository = partnerVermittlungRepository;
+
+    private final RetirementFundRegistry retirementFundRegistry;
+
+    @Inject
+    public PAKTEmploymentEventProviderImpl(PartnerVermittlungRepository repository,
+                                           PaktEnvironment config,
+                                           RetirementFundRegistry retirementFundRegistry) {
+        this.repository = repository;
         this.config = config;
+        this.retirementFundRegistry = retirementFundRegistry;
     }
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
-        final List<EmploymentTermination> employmentTerminations = new ArrayList<>();
-
-		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).forEach(ptVerm -> {
-			 employmentTerminations.add(buildEmploymentTermination(ptVerm));
-		});
-		return employmentTerminations;
+        return repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.DADURCHF.getCode()).stream()
+                .map(ptVerm -> buildEmploymentTermination(ptVerm)).collect(Collectors.toList());
     }
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
@@ -52,28 +51,24 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
     }
 
     private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
-    	EmploymentInfo employmentInfo = new EmploymentInfo();
-    	employmentInfo.setOasiNumber(ptVerm.getAhv());
-    	employmentInfo.setRetirementFundUid(getRetirementFundId(ptVerm));
-    	employmentInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
-    	employmentInfo.setInternalReferenz(ptVerm.getNameve());
-    	employmentInfo.setDate(ptVerm.getDtgueltab());
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setOasiNumber(ptVerm.getAhv());
+        employmentInfo.setRetirementFundUid(getRetirementFundUid(ptVerm));
+        employmentInfo.setInternalPersonId(ptVerm.getIdgeschaeftpol());
+        employmentInfo.setInternalReferenz(ptVerm.getNameve());
+        employmentInfo.setDate(ptVerm.getDtgueltab());
         return employmentInfo;
 
     }
 
-    private String getRetirementFundId(TozsPtverm ptVerm) {
-        return RetirementFund.getByCdStf(ptVerm.getCdstf()).getId();
+    private String getRetirementFundUid(TozsPtverm ptVerm) {
+        return retirementFundRegistry.getByCdStf(ptVerm.getCdstf()).getUid();
     }
 
     @Override
     public List<EmploymentCommencement> getEmploymentCommencements() {
-        final List<EmploymentCommencement> employmentCommencements = new ArrayList<>();
-
-		repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.NEUEINTRERF.getCode()).forEach(ptVerm -> {
-			employmentCommencements.add(buildEmploymentCommencement(ptVerm));
-		});
-        return employmentCommencements;
+        return repository.findByIdCdmandantAndCdmeld(getCdMandant(), CdMeld.NEUEINTRERF.getCode()).stream()
+                .map(ptVerm -> buildEmploymentCommencement(ptVerm)).collect(Collectors.toList());
     }
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
@@ -97,8 +92,8 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
         address.setStreet(ptVerm.getNamestrasse());
         return address;
     }
-    
-	private Short getCdMandant() {
-		return config.getCdMandant();
-	}
+
+    private Short getCdMandant() {
+        return config.getCdMandant();
+    }
 }
