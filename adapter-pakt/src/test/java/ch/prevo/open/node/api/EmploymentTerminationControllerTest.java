@@ -26,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 import javax.inject.Inject;
 
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class EmploymentTerminationControllerTest {
 	private MockMvc mockMvc;
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+			MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
 
 	@Inject
 	private WebApplicationContext webApplicationContext;
