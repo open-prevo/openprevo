@@ -65,6 +65,7 @@ image::../images/mvpBusinessContext.svg["MVP Business Context", title="OpenPrevo
 |Excel File| Could be a simple data exchange format for a small RF, if they're not able to provide an integration into their system.
 |===
 
+////
 === Technical Context
 
 [role="arc42help"]
@@ -86,3 +87,4 @@ together with a mapping table showing the relationships between channels and inp
 **<optionally: Explanation of technical interfaces>**
 
 **<Mapping Input/Output to Channels>**
+////
