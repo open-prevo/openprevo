@@ -75,6 +75,15 @@ asciidoctor {
     }
 }
 
+task buildZip(type: Zip) {
+    from "${targetDir}"
+    include('**/*')
+    archiveName 'doc.zip'
+    destinationDir file("${buildDir}/")
+}
+
+buildZip.dependsOn asciidoctor
+
 // =========== publishing ===============
 apply plugin: 'org.ajoberstar.git-publish'
 
