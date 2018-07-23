@@ -3,6 +3,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.services.AdapterDataValidationService;
 import ch.prevo.open.node.services.EmploymentCommencementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.inject.Inject;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -31,11 +33,12 @@ public class EmploymentCommencementControllerTest extends RestBaseTest {
 
     @TestConfiguration
     static class Config {
+
         @Bean
-        public EmploymentCommencementService employmentCommencementService() throws Exception {
+        public EmploymentCommencementService employmentCommencementService(AdapterDataValidationService adapterDataValidationService) throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new EmploymentCommencementService(factory);
+            return new EmploymentCommencementService(factory, adapterDataValidationService);
         }
     }
 

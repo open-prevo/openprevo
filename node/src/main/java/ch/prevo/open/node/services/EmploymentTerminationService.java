@@ -20,14 +20,18 @@ public class EmploymentTerminationService {
 
     private final EmploymentTerminationProvider employmentTerminationProvider;
 
+    private final AdapterDataValidationService adapterDataValidationService;
+
     @Inject
-    public EmploymentTerminationService(ServiceListFactoryBean factoryBean) {
+    public EmploymentTerminationService(ServiceListFactoryBean factoryBean, AdapterDataValidationService adapterDataValidationService) {
+        this.adapterDataValidationService = adapterDataValidationService;
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         this.employmentTerminationProvider = factory != null? factory.getEmploymentTerminationProvider() : null;
     }
 
 	public Set<InsurantInformation> getAllEmploymentTerminationData() {
 		return employmentTerminationProvider.getEmploymentTerminations().stream()
+                .filter(adapterDataValidationService::isValidEmploymentTermination)
 				.map(employmentTermination -> new InsurantInformation(Cryptography.digestOasiNumber(employmentTermination.getEmploymentInfo().getOasiNumber()),
 						employmentTermination.getEmploymentInfo().getRetirementFundUid(), employmentTermination.getEmploymentInfo().getDate()))
 				.collect(Collectors.toSet());

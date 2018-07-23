@@ -1,6 +1,7 @@
 package ch.prevo.open.node.data.provider;
 
 import ch.prevo.open.data.api.*;
+import ch.prevo.open.encrypted.model.Address;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.time.LocalDate;
@@ -9,7 +10,10 @@ import java.util.List;
 
 public class MockProvider implements EmploymentTerminationProvider, EmploymentCommencementProvider, MatchNotificationListener {
 
-    public static final CapitalTransferInformation CAPITAL_TRANSFER_INFO_1 = new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4");
+    private static final Address ADDRESS = new Address("Baslerstrasse 3", "4000", "Basel");
+
+    public static final CapitalTransferInformation CAPITAL_TRANSFER_INFO_1 = new CapitalTransferInformation("BKB_Test_Bank", null, ADDRESS, "CH53 0077 0016 02222 3334 4");
+
 
     @Override
     public List<EmploymentTermination> getEmploymentTerminations() {
@@ -28,9 +32,9 @@ public class MockProvider implements EmploymentTerminationProvider, EmploymentCo
                 new EmploymentCommencement(new EmploymentInfo("CHE-109.740.084", "", "756.1234.5678.97", "", startDate),
                         CAPITAL_TRANSFER_INFO_1),
                 new EmploymentCommencement(new EmploymentInfo("CHE-109.740.078", "", "756.5678.1234.17", "", startDate),
-                        new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")),
+                        new CapitalTransferInformation("BKB_Test_Bank", null, ADDRESS, "CH53 0077 0016 02222 3334 4")),
                 new EmploymentCommencement(new EmploymentInfo("CHE-109.537.488", "", "756.1298.6578.97", "", startDate),
-                        new CapitalTransferInformation("BKB_Test_Bank", "CH53 0077 0016 02222 3334 4")));
+                        new CapitalTransferInformation("BKB_Test_Bank", null, ADDRESS, "CH53 0077 0016 02222 3334 4")));
     }
 
     @Override
