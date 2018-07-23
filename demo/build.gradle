@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.*
-
 apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
