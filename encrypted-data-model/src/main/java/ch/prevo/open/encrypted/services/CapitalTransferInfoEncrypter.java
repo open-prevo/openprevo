@@ -22,15 +22,13 @@ import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class CapitalTransferInfoEncrypter extends DataEncrypter<CapitalTransferInformation> {
-
-    private static final String JSON_CHARSET = "UTF-8";
-
     @Override
     protected byte[] toByteArray(CapitalTransferInformation data) throws IOException {
         String json = new ObjectMapper().writeValueAsString(data);
-        return json.getBytes(JSON_CHARSET);
+        return json.getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
