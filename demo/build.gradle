@@ -29,7 +29,10 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
     from("demo-nodes.yml")
     into "${buildDir}/demo/Hub"
     doLast {
-        def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
+        def javaCmd = "java -Dserver.port=8859 " +
+                "-Dopen.prevo.hub.config.file=file:demo-nodes.yml " +
+                "-Dspring.profiles.active=demo " +
+                "-jar ${project(":hub").bootJar.archiveName}"
         def startBatFile = new File("${buildDir}/demo/Hub/start.bat")
         startBatFile.text = javaCmd
         startBatFile.executable = true
@@ -99,6 +102,7 @@ def getJavaCommandLineForNode(nodeConfiguration) {
 
     def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
+            "-Dspring.profiles.active=demo "
             "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
