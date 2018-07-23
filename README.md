@@ -9,6 +9,8 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 ## Introduction [Slides](https://gitpitch.com/open-prevo/slides/intro)
 
+## [Getting Started](doc/gettingStarted.md)
+
 ### Switching Employments
 
 #### The problem
