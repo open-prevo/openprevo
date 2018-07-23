@@ -10,7 +10,7 @@
 
 ## Acknowledgments
 
-The initial release of this repository was authored by [...]
+Thanks to all [contributors](https://github.com/open-prevo/openprevo/contributors)
 
 ## [Code of Conduct](../CODE_OF_CONDUCT.md)
 
