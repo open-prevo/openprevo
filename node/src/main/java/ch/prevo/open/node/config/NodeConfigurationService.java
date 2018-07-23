@@ -55,7 +55,7 @@ public class NodeConfigurationService {
             rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> otherRetirementFundsKeys.put(uid, convertPublicKey(uid, publicKeyString)));
             //Note: we ignore own public keys for now, they're not in use
             rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
-            LOG.info("Node configuration with encryption keys ok");
+            LOGGER.info("Node configuration with encryption keys ok");
         } catch (IOException e) {
             LOGGER.warn("Unable to read bootstrap-data from " + configFile, e);
         }
