@@ -1,39 +1,65 @@
 package ch.prevo.pakt.soap;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.function.Consumer;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
 import ch.prevo.pakt.utils.SoapUtil;
 
+@Service
 public class SoapRequest {
 
-	public final static String SUBMIT_FZL_VERWENDUNG = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:gen=\"http://generate.extern.update.meldung.service.prevo.ch\">\r\n"
-			+ "    <soapenv:Header/>\r\n" + "    <soapenv:Body>\r\n" + "       <gen:submitFZLVerwendung>\r\n"
-			+ "          <core>\r\n" + "             <cdMandant>%s</cdMandant>\r\n"
-			+ "             <cdSchicht>1</cdSchicht>\r\n" + "             <cdSprache>1</cdSprache>\r\n"
-			+ "             <cdProfil>1</cdProfil>\r\n" + "             <idUser>%s</idUser>\r\n"
-			+ "          </core>\r\n" + "          <idGeschaeft>%s</idGeschaeft>\r\n"
-			+ "          <nrMeld>0</nrMeld>\r\n" + "          <slFZLDatenChecked>true</slFZLDatenChecked>\r\n"
-			+ "          <fzlVerwendungen>\r\n" + "             <!--1 to 2 repetitions:-->\r\n"
-			+ "             <fzlVerwendung>\r\n" + "                <idPartner>%s</idPartner>\r\n"
-			+ "                <cdZweck>1</cdZweck>\r\n" + "                <idGeschaeft></idGeschaeft>\r\n"
-			+ "                <slPartnerChecked>true</slPartnerChecked>\r\n" + "                <cdWhg>1</cdWhg>\r\n"
-			+ "                <cdGrdAusz>0</cdGrdAusz>\r\n" + "                <dtUnterVoll>%s</dtUnterVoll>\r\n"
-			+ "                <txtUebw>%s</txtUebw>\r\n" + "                <cdAntFzl>3</cdAntFzl>\r\n"
-			+ "             </fzlVerwendung>\r\n" + "          </fzlVerwendungen>\r\n"
-			+ "          <!--Optional:-->\r\n" + "          <idAuftrag></idAuftrag>\r\n"
-			+ "       </gen:submitFZLVerwendung>\r\n" + "    </soapenv:Body>\r\n" + " </soapenv:Envelope>";
+	private static Logger LOG = LoggerFactory.getLogger(SoapRequest.class);
 
-	public static void callSubmitFZLVerwendung(String serviceBaseUrl,
+	private final SoapUtil soapUtil = new SoapUtil();
+	
+	@Inject
+	private ResourceLoader loader;
+
+	@Value("${pakt.service.template.file.submitFzlVerwendung}")
+	private String submitFzlVerwendungFile;
+
+	private String submitFzlVerwendungTemplate;
+
+	@PostConstruct
+	public void init() {
+		submitFzlVerwendungTemplate = initTemplate(submitFzlVerwendungFile);
+	}
+
+	private String initTemplate(String file) {
+		String template = "";
+		try {
+			template = IOUtils.toString(loader.getResource(file).getInputStream(), Charset.defaultCharset());
+		} catch (IOException e) {
+			LOG.warn("Unable to read template from " + file, e);
+		}
+		return template;
+	}
+
+	public void callSubmitFZLVerwendung(String serviceBaseUrl,
 			SubmitFZLVerwendungRequestPopulator soapRequestPopulator, Consumer<Document> responseConsumer)
 			throws IOException {
-		getSoapUtil().callSoapRequest(serviceBaseUrl + "MeldungUpdate?wsdl", "http://generate.extern.update.meldung.service.prevo.ch/submitFZLVerwendung", SUBMIT_FZL_VERWENDUNG,
+		getSoapUtil().callSoapRequest(serviceBaseUrl + "MeldungUpdate?wsdl",
+				"http://generate.extern.update.meldung.service.prevo.ch/submitFZLVerwendung", getSubmitFzlVerwendungTemplate(),
 				soapRequestPopulator, responseConsumer);
 	}
 
-	private static SoapUtil getSoapUtil() {
-		return new SoapUtil();
+	private SoapUtil getSoapUtil() {
+		return soapUtil;
+	}
+
+	private String getSubmitFzlVerwendungTemplate() {
+		return submitFzlVerwendungTemplate;
 	}
 }

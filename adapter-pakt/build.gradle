@@ -23,6 +23,7 @@ dependencies {
     compile("xerces:xerces")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    compile("commons-io:commons-io")
     runtime("com.ibm.db2.jcc:db2jcc4:10.1")
 
     // TODO think of how to write tests with adapters

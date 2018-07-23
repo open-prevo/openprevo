@@ -21,13 +21,16 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 
 	private final PaktEnvironment config;
     private final RetirementFundRegistry retirementFundRegistry;
-
+	private final SoapRequest soapRequest;
+    
     @Inject
 	public PAKTMatchNotificationListenerImpl(PaktEnvironment config,
-                                             RetirementFundRegistry retirementFundRegistry) {
+                                             RetirementFundRegistry retirementFundRegistry,
+                                             SoapRequest soapRequest) {
 
 	    this.config = config;
 	    this.retirementFundRegistry = retirementFundRegistry;
+	    this.soapRequest = soapRequest;
     }
 
 	@Override
@@ -39,7 +42,7 @@ public class PAKTMatchNotificationListenerImpl implements MatchNotificationListe
 	public void handleCommencementMatch(FullCommencementNotification notification) {
 		try {
 			LOG.info("Submitting FullCommencementNotification message to PAKT for OASI [{}]", notification.getEmploymentTermination().getEmploymentInfo().getOasiNumber());
-			SoapRequest.callSubmitFZLVerwendung(config.getServiceBaseUrl(),
+			soapRequest.callSubmitFZLVerwendung(config.getServiceBaseUrl(),
 					new SubmitFZLVerwendungRequestPopulator(this.getCdMandant(), this.getUserId(),
 							notification.getEmploymentTermination().getEmploymentInfo().getInternalPersonId(),
 							retirementFundRegistry.getByUid(notification.getNewRetirementFundUid()).getIdPartner(),
