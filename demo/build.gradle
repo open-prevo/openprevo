@@ -44,11 +44,15 @@ task prepareHubDockerConfig(type: Copy) {
 }
 
 task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
-    from("${project(':hub').buildDir}/libs")
-    from("demo-nodes.yml")
     into "${buildDir}/demo/Hub"
+    from("${project(':hub').buildDir}/libs") {
+        into "lib"
+    }
+    from("demo-nodes.yml") {
+        into "config"
+    }
     doLast {
-        def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:demo-nodes.yml -jar ${project(":hub").bootJar.archiveName}"
+        def javaCmd = "java -Dserver.port=8859 -Dopen.prevo.hub.config.file=file:config/demo-nodes.yml -jar lib/${project(":hub").bootJar.archiveName}"
         def startBatFile = new File("${buildDir}/demo/Hub/start.bat")
         startBatFile.text = javaCmd
         startBatFile.executable = true
@@ -84,8 +88,14 @@ def createTask(node) {
         dependsOn { project(":${node.adapter}").shadowJar }
         dependsOn { project(":node").bootJar }
 
-        from(project(":${node.adapter}").shadowJar)
-        from("${project(':node').buildDir}/libs")
+        into "${buildDir}/demo/${node.name}"
+
+        from(project(":${node.adapter}").shadowJar) {
+            into "lib"
+        }
+        from("${project(':node').buildDir}/libs") {
+            into "lib"
+        }
 
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
@@ -93,9 +103,9 @@ def createTask(node) {
             from fileTree("src/adapter-pakt")
         }
 
-        from("src/data/${node.name}-config.yml")
-
-        into "${buildDir}/demo/${node.name}"
+        from("src/data/${node.name}-config.yml") {
+            into "config"
+        }
 
         doLast {
             def javaCmd = getJavaCommandLineForNode(node)
@@ -116,14 +126,14 @@ nodeConfiguration.each { node ->
 
 def getJavaCommandLineForNode(nodeConfiguration) {
 
-    def cmd = "java -Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
+    def cmd = "java -Dloader.path=lib/${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
-            "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
+            "-Dopen.prevo.node.config.file=file:config/${nodeConfiguration.name}-config.yml"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
     }
-    cmd += " -jar ${project(":node").bootJar.archiveName}"
+    cmd += " -jar lib/${project(":node").bootJar.archiveName}"
 }
 
 assemble.dependsOn(buildDemoZip)
