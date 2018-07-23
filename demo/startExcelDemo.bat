@@ -1,4 +1,4 @@
-FOR %%A IN (hub,NodeBaloiseExcel,NodeHelvetiaExcel,NodeZurichExcel) DO (
+FOR %%A IN (NodeBaloiseExcel,NodeHelvetiaExcel,NodeZurichExcel,hub) DO (
 	pushd %%A
 	call start.bat
 	popd
