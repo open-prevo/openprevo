@@ -44,8 +44,6 @@ ext {
     currentDate = new Date().format("MMM d. yyyy")
 }
 
-version = '0.0.1-SNAPSHOT'
-
 // =========== asciidoctor ===============
 apply plugin: 'org.asciidoctor.convert'
 

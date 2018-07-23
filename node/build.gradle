@@ -22,9 +22,6 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.palantir.docker'
 
-version = '0.0.1-SNAPSHOT'
-
-
 dependencies {
     compile(project(":data-model"))
     compile(project(":encrypted-data-model"))

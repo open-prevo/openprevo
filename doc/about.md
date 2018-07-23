@@ -1,6 +1,6 @@
 # About
 
-## Contributing
+## [Getting started](gettingStarted.md)
 
 ## Language
 
