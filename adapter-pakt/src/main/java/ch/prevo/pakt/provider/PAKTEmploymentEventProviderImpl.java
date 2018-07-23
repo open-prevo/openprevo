@@ -47,7 +47,7 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
     }
 
     private EmploymentTermination buildEmploymentTermination(TozsPtverm ptVerm) {
-        return new EmploymentTermination(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm));
+        return new EmploymentTermination(buildEmploymentInfo(ptVerm));
     }
 
     private EmploymentInfo buildEmploymentInfo(TozsPtverm ptVerm) {
@@ -72,7 +72,7 @@ public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationPro
     }
 
     private EmploymentCommencement buildEmploymentCommencement(TozsPtverm ptVerm) {
-        return new EmploymentCommencement(Integer.toString(ptVerm.getId().getId()), buildEmploymentInfo(ptVerm),
+        return new EmploymentCommencement(buildEmploymentInfo(ptVerm),
                 buildCapitalTransferInformation(ptVerm));
     }
 

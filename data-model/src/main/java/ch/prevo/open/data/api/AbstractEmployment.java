@@ -1,28 +1,23 @@
 package ch.prevo.open.data.api;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-abstract class AbstractEmploymentEvent {
+abstract class AbstractEmployment {
 
-    private String techId;
+    @NotNull
+    @Valid
     private EmploymentInfo employmentInfo;
 
-    AbstractEmploymentEvent() {
+    AbstractEmployment() {
     }
 
-    AbstractEmploymentEvent(String techId, EmploymentInfo employmentInfo) {
-        this.techId = techId;
+    AbstractEmployment(EmploymentInfo employmentInfo) {
         this.employmentInfo = employmentInfo;
-    }
-
-    public String getTechId() {
-        return techId;
-    }
-
-    public void setTechId(String techId) {
-        this.techId = techId;
     }
 
     public EmploymentInfo getEmploymentInfo() {
@@ -36,7 +31,6 @@ abstract class AbstractEmploymentEvent {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("techId", techId)
                 .append("employmentInfo", employmentInfo)
                 .toString();
     }

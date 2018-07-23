@@ -121,7 +121,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         capititalTransferInfo.setAdditionalName(getString(row, ADDITIONAL_NAME_COLUMN_INDEX));
         capititalTransferInfo.setIban(getString(row, IBAN_COLUMN_INDEX));
 
-        return Optional.of(new EmploymentCommencement(null, employmentInfo, capititalTransferInfo));
+        return Optional.of(new EmploymentCommencement(employmentInfo, capititalTransferInfo));
     }
 
     private Optional<EmploymentTermination> mapEmploymentTermination(Row row) {
@@ -129,7 +129,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         if (employmentInfo == null) {
             return Optional.empty();
         }
-        return Optional.of(new EmploymentTermination(null, employmentInfo));
+        return Optional.of(new EmploymentTermination(employmentInfo));
     }
 
     private EmploymentInfo mapEmploymentInfo(Row row) {

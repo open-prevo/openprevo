@@ -1,5 +1,8 @@
 package ch.prevo.open.data.api;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -7,14 +10,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @SuppressWarnings("unused")
-public class EmploymentCommencement extends AbstractEmploymentEvent {
+public class EmploymentCommencement extends AbstractEmployment {
 
+    @Valid
+    @NotNull
     private CapitalTransferInformation capitalTransferInfo;
 
     public EmploymentCommencement() {}
 
-    public EmploymentCommencement(String techId, EmploymentInfo employmentInfo, CapitalTransferInformation capitalTransferInfo) {
-		super(techId, employmentInfo);
+    public EmploymentCommencement(EmploymentInfo employmentInfo, CapitalTransferInformation capitalTransferInfo) {
+		super(employmentInfo);
 		this.capitalTransferInfo = capitalTransferInfo;
 	}
 

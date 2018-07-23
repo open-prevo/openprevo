@@ -6,14 +6,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @SuppressWarnings("unused")
 public class EmploymentInfo {
 
+    @NotNull
+    @Pattern(regexp = "CHE-([0-9]{3}\\.){2}[0-9]{3}")
     private String retirementFundUid;
     private String internalReferenz;
+    @NotNull
     private String oasiNumber;
     private String internalPersonId;
+    @NotNull
     private LocalDate date;
 
     public EmploymentInfo() {
