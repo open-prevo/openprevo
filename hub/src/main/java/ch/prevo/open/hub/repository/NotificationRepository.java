@@ -1,35 +1,19 @@
 package ch.prevo.open.hub.repository;
 
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
-@Repository
-public class NotificationRepository {
+public interface NotificationRepository extends JpaRepository<NotificationDTO, Long> {
 
-    private final List<MatchForTermination> matchesForTerminations = Collections
-            .synchronizedList(new ArrayList<>());
+    Optional<NotificationDTO> findByEncryptedOasiNumberAndPreviousRetirementFundUidAndNewRetirementFundUidAndCommencementDateAndTerminationDate(
+            String encryptedOasiNumber,
+            String previousRetirementFundUid,
+            String newRetirementFundUid,
+            LocalDate commencementDate,
+            LocalDate terminationDate
+    );
 
-    private final List<MatchForCommencement> matchesForCommencements = Collections
-            .synchronizedList(new ArrayList<>());
 
-    public void saveMatchForTermination(MatchForTermination notification) {
-        this.matchesForTerminations.add(notification);
-    }
-
-    public void saveMatchForCommencement(MatchForCommencement notification) {
-        this.matchesForCommencements.add(notification);
-    }
-
-    public boolean isMatchForTerminationAlreadyNotified(MatchForTermination notification) {
-        return matchesForTerminations.stream().anyMatch(existing -> existing.isSameMatch(notification));
-    }
-
-    public boolean isMatchForCommencementAlreadyNotified(MatchForCommencement notification) {
-        return matchesForCommencements.contains(notification);
-    }
 }

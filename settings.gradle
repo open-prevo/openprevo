@@ -9,6 +9,4 @@ include 'adapter-excel'
 include 'adapter-dummy'
 include 'adapter-example-spring'
 include 'demo'
-if (hasProperty("PREVO")) {
-    include 'adapter-pakt'
-} 
+include 'adapter-pakt'

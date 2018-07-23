@@ -79,7 +79,7 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         // given
         MatchForCommencement commencementMatchNotification = new MatchForCommencement();
         commencementMatchNotification.setEncryptedOasiNumber(Cryptography.digestOasiNumber("756.1234.5678.97"));
-        commencementMatchNotification.setRetirementFundUid(OWN_UID);
+        commencementMatchNotification.setNewRetirementFundUid(OWN_UID);
         commencementMatchNotification.setPreviousRetirementFundUid(OTHER_UID);
         commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));
         commencementMatchNotification.setTerminationDate(LocalDate.of(2018, 6, 30));

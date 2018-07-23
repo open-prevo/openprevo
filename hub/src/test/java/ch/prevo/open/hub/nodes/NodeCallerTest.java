@@ -4,10 +4,11 @@ import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.hub.repository.NotificationRepository;
+import ch.prevo.open.hub.repository.NotificationDAO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,13 +23,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({NodeCaller.class, NotificationRepository.class})
+@RestClientTest({ NodeCaller.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeCallerTest {
 
@@ -66,8 +69,11 @@ public class NodeCallerTest {
     @Inject
     private NodeCaller nodeCaller;
 
+    @MockBean
+    private NotificationDAO notificationDAO;
+
     @Test
-    public void getInsurantInformationList() throws Exception {
+    public void getInsurantInformationList() {
         server.expect(requestTo(URL1))
                 .andRespond(withSuccess(INSURANT_INFORMATION_JSON_ARRAY, MediaType.APPLICATION_JSON));
 
@@ -115,7 +121,7 @@ public class NodeCallerTest {
     public void notifyCommencementMatch() {
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
@@ -132,39 +138,41 @@ public class NodeCallerTest {
 
     @Test
     public void notifyCommencementMatchOnlyOnce() {
+        // given
+        final MatchForCommencement matchForCommencement = createMatchForCommencement();
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
-
-        MatchForCommencement MatchForCommencement = createMatchForCommencement();
+        when(notificationDAO.isMatchForCommencementAlreadyNotified(matchForCommencement)).thenReturn(false).thenReturn(true);
 
         // when
-        EncryptedData capitalTransferInformation = nodeCaller
-                .postCommencementNotification(URL1, MatchForCommencement);
-        EncryptedData secondCallTransferInfo = nodeCaller
-                .postCommencementNotification(URL1, MatchForCommencement);
+        final EncryptedData capitalTransferInformation = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement);
+        final EncryptedData secondCallTransferInfo = nodeCaller
+                .postCommencementNotification(URL1, matchForCommencement);
 
         // then
         server.verify();
         assertThat(capitalTransferInformation).isNotNull();
         assertThat(secondCallTransferInfo).isNull();
+        verify(notificationDAO).saveMatchForCommencement(matchForCommencement);
     }
 
     @Test
     public void notifySingleCommencementMatchForSeveralTerminationMatches() {
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID3)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID3)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement matchForCommencement_node2 = createMatchForCommencement();
         MatchForCommencement matchForCommencement_node3 = createMatchForCommencement();
-        matchForCommencement_node3.setRetirementFundUid(UID3);
+        matchForCommencement_node3.setNewRetirementFundUid(UID3);
 
         // when
         EncryptedData capitalTransferInformation = nodeCaller
@@ -184,7 +192,7 @@ public class NodeCallerTest {
         server.expect(requestTo(URL1)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL1))
                 .andExpect(jsonPath("$.encryptedOasiNumber", is(OASI1)))
-                .andExpect(jsonPath("$.retirementFundUid", is(UID2)))
+                .andExpect(jsonPath("$.newRetirementFundUid", is(UID2)))
                 .andRespond(withSuccess(CAPITAL_TRANSFER_INFORMATION, MediaType.APPLICATION_JSON));
 
         MatchForCommencement MatchForCommencement = createMatchForCommencement();
@@ -218,18 +226,20 @@ public class NodeCallerTest {
 
     @Test
     public void notifyTerminationMatchOnlyOnce() {
+        // given
+        final MatchForTermination matchForTermination = createMatchForTermination();
         server.expect(requestTo(URL2))
                 .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
                 .andRespond(withSuccess());
-
-        MatchForTermination MatchForTermination = createMatchForTermination();
+        when(notificationDAO.isMatchForTerminationAlreadyNotified(matchForTermination)).thenReturn(false).thenReturn(true);
 
         // when
-        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
-        nodeCaller.postTerminationNotification(URL2, MatchForTermination);
+        nodeCaller.postTerminationNotification(URL2, matchForTermination);
+        nodeCaller.postTerminationNotification(URL2, matchForTermination);
 
         // then
         server.verify();
+        verify(notificationDAO).saveMatchForTermination(matchForTermination);
     }
 
     @Test
@@ -314,7 +324,7 @@ public class NodeCallerTest {
         MatchForCommencement.setCommencementDate(of(2018, 7, 1));
         MatchForCommencement.setTerminationDate(of(2018, 6, 30));
         MatchForCommencement.setPreviousRetirementFundUid(UID1);
-        MatchForCommencement.setRetirementFundUid(UID2);
+        MatchForCommencement.setNewRetirementFundUid(UID2);
         return MatchForCommencement;
     }
 

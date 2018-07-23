@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 public class MatchNotificationController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(MatchNotificationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatchNotificationController.class);
 
     private final MatchNotificationService notificationService;
 
@@ -32,7 +32,7 @@ public class MatchNotificationController {
     @RequestMapping(value = "/commencement-match-notification", method = RequestMethod.POST)
     public ResponseEntity<EncryptedData> receiveCommencementMatchNotification(@RequestBody MatchForCommencement matchNotification) {
         LOGGER.debug("Receive commencement match notification for OASI {}, switching to new retirement fund: {}",
-                matchNotification.getEncryptedOasiNumber(), matchNotification.getRetirementFundUid());
+                matchNotification.getEncryptedOasiNumber(), matchNotification.getNewRetirementFundUid());
 
         try {
             final Optional<EncryptedData> transferInformation = notificationService

@@ -1,19 +1,21 @@
 package ch.prevo.open.hub.nodes;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import javax.inject.Inject;
-
-import ch.prevo.open.encrypted.model.*;
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.match.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ch.prevo.open.hub.match.Match;
+import javax.inject.Inject;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class NodeService {
@@ -69,7 +71,7 @@ public class NodeService {
                 .filter(insurant -> !nodeConfig.containsRetirementFundUid(insurant.getRetirementFundUid()))
                 .collect(toList());
 
-        if (invalidInsurants.size() > 0) {
+        if (!invalidInsurants.isEmpty()) {
             LOGGER.error(
                     "Invalid data received from node {} the following insurants have an invalid retirement fund {}",
                     nodeConfig, invalidInsurants);
@@ -100,7 +102,7 @@ public class NodeService {
     private EncryptedData tryNotifyNewRetirementFundAboutMatch(NodeConfiguration nodeConfig, Match match) {
         MatchForCommencement matchNotification = new MatchForCommencement();
         matchNotification.setEncryptedOasiNumber(match.getEncryptedOasiNumber());
-        matchNotification.setRetirementFundUid(match.getNewRetirementFundUid());
+        matchNotification.setNewRetirementFundUid(match.getNewRetirementFundUid());
         matchNotification.setPreviousRetirementFundUid(match.getPreviousRetirementFundUid());
         matchNotification.setCommencementDate(match.getEntryDate());
         matchNotification.setTerminationDate(match.getExitDate());

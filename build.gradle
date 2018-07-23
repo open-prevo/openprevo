@@ -21,10 +21,12 @@
 buildscript {
     ext {
         springBootVersion = '2.0.3.RELEASE'
-        gradleDockerVersion = '0.13.0'
+        gradleDockerVersion = '0.20.1'
+        gradleDockerComposeVersion = '0.8.0'
         shadowPluginVersion = '2.0.4'
     }
     repositories {
+        jcenter()
         mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -33,6 +35,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}")
+        classpath("com.avast.gradle:gradle-docker-compose-plugin:${gradleDockerComposeVersion}")
         classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
     }
 }
@@ -73,6 +76,7 @@ subprojects { project ->
             dependency("org.modelmapper:modelmapper:2.1.0")
             dependency("org.testcontainers:testcontainers:1.8.0")
             dependency("org.hibernate:hibernate-validator:6.0.10.Final")
+            dependency("xerces:xerces:2.4.0")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")

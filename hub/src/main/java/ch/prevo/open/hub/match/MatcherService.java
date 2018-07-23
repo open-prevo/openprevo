@@ -1,15 +1,20 @@
 package ch.prevo.open.hub.match;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MatcherService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MatcherService.class);
 
     public List<Match> findMatches(Set<InsurantInformation> retirementFundTerminations, Set<InsurantInformation> retirementFundCommencements) {
         final List<Match> matches = new ArrayList<>();
@@ -29,7 +34,12 @@ public class MatcherService {
     }
 
     private Optional<InsurantInformation> findMatchingEntry(Set<InsurantInformation> retirementFundEntries, InsurantInformation termination) {
-        return retirementFundEntries.stream().filter(commencement -> isMatching(commencement, termination)).findAny();
+        final List<InsurantInformation> result = retirementFundEntries.stream().filter(commencement -> isMatching(commencement, termination)).collect(Collectors.toList());
+        if (result.size() > 1) {
+            LOG.warn("Found more than one commencement for termination " + termination + ". Commencements: " + result);
+            return Optional.empty();
+        }
+        return result.stream().findAny();
     }
 
     private boolean isMatching(InsurantInformation entry, InsurantInformation exit) {

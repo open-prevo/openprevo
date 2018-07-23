@@ -48,7 +48,7 @@ public class MatchNotificationService {
                 .findAny();
 
         if (!employmentTermination.isPresent()) {
-            LOG.warn("Termination notification received which does not correlate with any employment start: " + notification);
+            LOG.warn("Termination notification received which does not correlate with any employment start: {}", notification);
             return;
         }
 
@@ -73,7 +73,7 @@ public class MatchNotificationService {
                 .findAny();
 
         if (!employmentCommencement.isPresent()) {
-            LOG.warn("Termination notification received which does not correlate with any employment start: " + notification);
+            LOG.warn("Termination notification received which does not correlate with any employment start: {}", notification);
             return Optional.empty();
         }
 
@@ -95,7 +95,7 @@ public class MatchNotificationService {
     private boolean isSameAsNotification(EmploymentCommencement employmentCommencement, MatchForCommencement notification) {
         EmploymentInfo employmentInfo = employmentCommencement.getEmploymentInfo();
         return Cryptography.digestOasiNumber(employmentInfo.getOasiNumber()).equals(notification.getEncryptedOasiNumber()) &&
-                employmentInfo.getRetirementFundUid().equals(notification.getRetirementFundUid()) &&
+                employmentInfo.getRetirementFundUid().equals(notification.getNewRetirementFundUid()) &&
                 employmentInfo.getDate().equals(notification.getCommencementDate());
     }
 

@@ -34,8 +34,9 @@ public class HubServiceTest {
     @Inject
     private HubService hubService;
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void matchAndNotify() throws Exception {
+    public void matchAndNotify() {
         InsurantInformation entry = new InsurantInformation("123", "1");
         InsurantInformation exit = new InsurantInformation("123", "2");
         when(nodeService.getCurrentCommencements()).thenReturn(singleton(entry));
@@ -51,6 +52,7 @@ public class HubServiceTest {
         assertEquals(entry.getRetirementFundUid(), notifiedMatches.get(0).getNewRetirementFundUid());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void matchAndNotifySeveralTerminationsForSingleCommencement() {
         // given
