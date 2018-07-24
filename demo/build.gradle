@@ -30,6 +30,10 @@ task buildDemoZip(type: Zip) {
     destinationDir file("${buildDir}/")
 }
 
+//
+// Hub
+//
+
 task prepareHubDockerConfig(type: Copy) {
     from("demo-nodes.yml")
 
@@ -75,10 +79,13 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
 buildDemoZip.dependsOn(prepareHub)
 prepareHub.dependsOn { project(":hub").bootJar }
 
+//
+// Node
+//
+
 // Define Node Configuration Here
 // For each configuration gradle will automatically create a prepare${NodeName} task
 // which copies all files needed into a sub-directory named the same as the node
-
 def nodeConfiguration = [
         [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
         [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
@@ -128,7 +135,6 @@ nodeConfiguration.each { node ->
 
 
 def getJavaCommandLineForNode(nodeConfiguration) {
-
     def cmd = "java " +
             "-Dloader.path=lib/${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
@@ -142,6 +148,11 @@ def getJavaCommandLineForNode(nodeConfiguration) {
 }
 
 assemble.dependsOn(buildDemoZip)
+
+
+//
+// Integration test with docker
+//
 
 docker {
     dependsOn buildDemoZip
