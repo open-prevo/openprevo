@@ -18,6 +18,7 @@
  ******************************************************************************/
 package ch.prevo.open.hub;
 
+import ch.prevo.open.hub.match.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -25,6 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Component
 @Profile("!test")
@@ -35,9 +37,10 @@ public class HubScheduler {
     @Inject
     private HubService hubService;
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 120000)
+    @Scheduled(initialDelayString = "${open.prevo.hub.config.scheduler.initialDelay.seconds}000", fixedDelayString = "${open.prevo.hub.config.scheduler.fixedDelay.seconds}000")
     public void run() {
-        LOGGER.debug("Start matching task");
-        this.hubService.matchAndNotify();
+        LOGGER.info("Start matching task");
+        List<Match> matches = hubService.matchAndNotify();
+        LOGGER.info("Matching task ended, found {} matches", matches.size());
     }
 }

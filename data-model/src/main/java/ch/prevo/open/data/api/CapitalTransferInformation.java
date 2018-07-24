@@ -18,6 +18,9 @@
  ******************************************************************************/
 package ch.prevo.open.data.api;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import ch.prevo.open.encrypted.model.Address;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,10 +30,18 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @SuppressWarnings("unused")
 public class CapitalTransferInformation {
 
+    @NotNull
     private String name;
+
     private String additionalName;
+
+    @Valid
+    @NotNull
     private Address address;
+
+    @NotNull
     private String iban;
+
     private String referenceId;
 
     public CapitalTransferInformation() {

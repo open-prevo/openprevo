@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
@@ -61,10 +63,11 @@ public class NodeCaller {
         }
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     EncryptedData postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             if (!notificationDAO.isMatchForCommencementAlreadyNotified(matchNotification)) {
-                LOGGER.debug("Send termination match notification for match: {}", matchNotification);
+                LOGGER.info("Send termination match notification for commencement: {}", matchNotification);
                 EncryptedData encryptedCapitalTransferInfo = restTemplate
                         .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedData.class);
 
@@ -80,10 +83,11 @@ public class NodeCaller {
         return null;
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
             if (!notificationDAO.isMatchForTerminationAlreadyNotified(matchNotification)) {
-                LOGGER.debug("Send commencement match notification for match: {}", matchNotification);
+                LOGGER.info("Send commencement match notification for termination: {}", matchNotification);
                 restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
                 notificationDAO.saveMatchForTermination(matchNotification);
             }

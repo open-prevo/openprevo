@@ -18,6 +18,9 @@
  ******************************************************************************/
 package ch.prevo.open.encrypted.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,8 +29,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @SuppressWarnings("unused")
 public class Address {
 
+    @NotNull
     private String street;
+
+    @NotNull
+    @Pattern(regexp = "[0-9]{4}")
     private String postalCode;
+
+    @NotNull
     private String city;
 
     public Address() {

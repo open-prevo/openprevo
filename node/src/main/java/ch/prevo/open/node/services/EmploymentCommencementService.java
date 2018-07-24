@@ -38,14 +38,18 @@ public class EmploymentCommencementService {
 
     private final EmploymentCommencementProvider employmentCommencementProvider;
 
+    private final AdapterDataValidationService adapterDataValidationService;
+
     @Inject
-    public EmploymentCommencementService(ServiceListFactoryBean factoryBean) {
+    public EmploymentCommencementService(ServiceListFactoryBean factoryBean, AdapterDataValidationService adapterDataValidationService) {
+        this.adapterDataValidationService = adapterDataValidationService;
         final ProviderFactory factory = AdapterServiceConfiguration.getAdapterService(factoryBean);
         employmentCommencementProvider = factory != null? factory.getEmploymentCommencementProvider() : null;
     }
 
 	public Set<InsurantInformation> getAllEmploymentCommencementData() {
 		return employmentCommencementProvider.getEmploymentCommencements().stream()
+                .filter(adapterDataValidationService::isValidEmploymentCommencement)
 				.map(employmentTermination -> new InsurantInformation(Cryptography.digestOasiNumber(employmentTermination.getEmploymentInfo().getOasiNumber()),
 						employmentTermination.getEmploymentInfo().getRetirementFundUid(), employmentTermination.getEmploymentInfo().getDate()))
 				.collect(Collectors.toSet());
