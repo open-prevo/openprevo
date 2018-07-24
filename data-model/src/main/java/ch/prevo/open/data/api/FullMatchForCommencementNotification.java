@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDate;
 
-public class FullTerminationNotification {
+public class FullMatchForCommencementNotification {
 
     private String previousRetirementFundUid;
     private LocalDate terminationDate;

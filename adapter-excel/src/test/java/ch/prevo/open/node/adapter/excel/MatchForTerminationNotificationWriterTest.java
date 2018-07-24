@@ -1,6 +1,6 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.FullCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.encrypted.model.Address;
@@ -12,12 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static ch.prevo.open.node.adapter.excel.AbstractNotificationWriter.FILE_PROPERTY;
 import static ch.prevo.open.node.adapter.excel.ExcelAssertions.assertRow;
 
-public class CommencementNotificationWriterTest {
+public class MatchForTerminationNotificationWriterTest {
 
     @Test
-    public void commencementNotificationShouldGenerateExcelFile() throws IOException, InvalidFormatException {
+    public void matchForTerminationNotificationShouldGenerateExcelFile() throws IOException, InvalidFormatException {
         // given
         final Address address = new Address();
         address.setStreet("St. Alban-Anlage 26");
@@ -40,16 +41,19 @@ public class CommencementNotificationWriterTest {
         final EmploymentTermination employmentTermination = new EmploymentTermination();
         employmentTermination.setEmploymentInfo(employmentInfo);
 
-        final FullCommencementNotification notification = new FullCommencementNotification();
+        final FullMatchForTerminationNotification notification = new FullMatchForTerminationNotification();
         notification.setNewRetirementFundUid("CHE-109.537.488-Helvetia-Prisma-Sammelstiftung");
         notification.setCommencementDate(LocalDate.of(2018, 7, 1));
         notification.setTransferInformation(transferInformation);
         notification.setEmploymentTermination(employmentTermination);
 
-        final String filename = File.createTempFile("openprevo_text", ".xlsx").getAbsolutePath();
+        final String filenamePrefix = File.createTempFile("openprevo_text", "").getAbsolutePath();
+        System.setProperty(FILE_PROPERTY, filenamePrefix);
+        final String filename = String.format("%1$s_%2$tY-%2$tm-%2$td.xlsx", filenamePrefix, LocalDate.now());
+        new File(filename).deleteOnExit();
 
         // when
-        final CommencementNotificationWriter writer = new CommencementNotificationWriter(filename);
+        final MatchForTerminationNotificationWriter writer = new MatchForTerminationNotificationWriter();
         writer.append(notification);
         writer.close();
 
