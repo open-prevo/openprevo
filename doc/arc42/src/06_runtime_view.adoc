@@ -52,8 +52,12 @@ image::../images/matchFlow.svg["Match Flow sequence diagram", title="OpenPrevo h
 ... pass the public key on notify from node B to A
 ... pass encrypted response from A to B
 
+////
+
 === <Runtime Scenario 2>
 
 === ...
 
 === <Runtime Scenario n>
+
+////

@@ -151,9 +151,3 @@ Werden Datensammlungen mit Datensätzen, welche die Versichertennummer enthalten
 .Minimale Sicherheitsvorgaben für den Betrieb von Informatikmitteln und Datenspeichern, die bei der systematischen Verwendung der Versichertennummern eingesetzt werden
 [quote, Verordnung des EDI, 'https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#app2ahref0[Anhang 2]']     
 1) [...] Beim Einsatz mobiler Informatikmittel und Datenspeicher muss mit Hilfe von dem Stand der Technik entsprechenden kryptografischen Verfahren (Datenverschlüsselung) sichergestellt sein, dass die Nutzung bzw. der Zugriff für Unberechtigte nicht möglich ist. 2) Der Zugriff auf Informatikmittel und Datenspeicher muss mit Hilfe von angemessenen, dem Stand der Technik und der Risikolage entsprechenden Informatiksicherheitsmassnahmen geschützt sein. [...] 3) Benutzer und Benutzerinnen, die auf Informatikmittel und Datenspeicher zugreifen, müssen authentifiziert werden. [...] 5) Auf Informatiksystemen sind wichtige Aktivitäten und Ereignisse aufzuzeichnen und regelmässig auszuwerten. [...]
-
-=== _<Concept n>_
-
-_<explanation>_
-
-...
