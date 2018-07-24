@@ -7,7 +7,7 @@ Please feel free to
 Required is at least version 8, with "unlimited strength" encryption enabled. Depending on Java version, this is already available on your machine. For Java 8, it can be [downloaded from here](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html) 
 
 ## download the lastest release
-[Download](https://github.com/open-prevo/openprevo/releases), unzip and follow the instuctions in the readme.md
+[Download the runnable demo](https://github.com/open-prevo/openprevo/releases), unzip and follow the instuctions in the readme.md
 
 # check out the backlog
 
