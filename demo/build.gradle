@@ -55,12 +55,15 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
     from("demo-nodes.yml") {
         into "config"
     }
+    from("src/hub")
     doLast {
         def javaCmd = "java " +
+                "-Dloader.path=config " +
                 "-Dserver.port=8859 " +
                 "-Dopen.prevo.hub.config.file=file:config/demo-nodes.yml " +
                 "-Dspring.profiles.active=demo " +
                 "-jar lib/${project(":hub").bootJar.archiveName}"
+
         def startBatFile = new File("${buildDir}/demo/Hub/start.bat")
         startBatFile.text = "start \"OpenPrevo - demo hub\" " + javaCmd
         startBatFile.executable = true
