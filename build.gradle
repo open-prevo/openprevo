@@ -24,6 +24,7 @@ buildscript {
         gradleDockerVersion = '0.20.1'
         gradleDockerComposeVersion = '0.8.0'
         shadowPluginVersion = '2.0.4'
+        gradleReleasePluginVersion = '2.6.0'
     }
     repositories {
         jcenter()
@@ -37,6 +38,7 @@ buildscript {
         classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}")
         classpath("com.avast.gradle:gradle-docker-compose-plugin:${gradleDockerComposeVersion}")
         classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
+        classpath("net.researchgate:gradle-release:${gradleReleasePluginVersion}")
     }
 }
 
@@ -46,6 +48,7 @@ allprojects { project ->
     project.apply plugin: 'eclipse'
 
     project.group = 'ch.prevo.open'
+    project.version = version
 }
 
 subprojects { project ->
@@ -77,6 +80,7 @@ subprojects { project ->
             dependency("org.testcontainers:testcontainers:1.8.0")
             dependency("org.hibernate:hibernate-validator:6.0.10.Final")
             dependency("xerces:xerces:2.4.0")
+            dependency("commons-io:commons-io:2.6")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")
@@ -85,6 +89,19 @@ subprojects { project ->
             }
         }
     }
+}
+
+build.dependsOn subprojects.findResults { it.tasks.findByName('build') }
+
+project.apply plugin: 'net.researchgate.release'
+
+release {
+    preTagCommitMessage = '[OpenPrevo Release] - set current release version to: '
+    tagCommitMessage = '[OpenPrevo Release] - create tag for release: '
+    newVersionCommitMessage = '[OpenPrevo Release] - set new snapshot version to: '
+    tagTemplate = 'v${version}'
+    versionPropertyFile = 'gradle.properties'
+    buildTasks = ['build']
 }
 
 assemble.dependsOn ':doc:publishDocumentation'

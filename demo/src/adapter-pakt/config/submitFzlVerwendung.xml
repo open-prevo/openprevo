@@ -1,0 +1,9 @@
+<!-- TODO 
+    Provide a valid template as <soapenv:Envelope> using the following given parameters: 
+		<cdMandant>%s</cdMandant> 
+		<idUser>%s</idUser>
+		<idGeschaeft>%s</idGeschaeft>
+		<idPartner>%s</idPartner>
+		<dtUnterVoll>%s</dtUnterVoll>
+		<txtUebw>%s</txtUebw>
+ -->
