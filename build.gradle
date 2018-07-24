@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2018 Prevo-System AG and others
+ * Copyright (c) 2018 - Prevo-System AG and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0
  *
  * Contributors:
+ *     Prevo-System AG - initial API and implementation
  *     Michael Kalt <michael.kalt@karakun.com> - initial contribution
  *     Markus Tiede <markus.tiede@open-co.de> - initial contribution
  ********************************************************************************/
@@ -25,6 +26,7 @@ buildscript {
         gradleDockerComposeVersion = '0.8.0'
         shadowPluginVersion = '2.0.4'
         gradleReleasePluginVersion = '2.6.0'
+        gradleLicensePluginVersion = '0.14.0'
     }
     repositories {
         jcenter()
@@ -39,6 +41,7 @@ buildscript {
         classpath("com.avast.gradle:gradle-docker-compose-plugin:${gradleDockerComposeVersion}")
         classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
         classpath("net.researchgate:gradle-release:${gradleReleasePluginVersion}")
+        classpath("gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${gradleLicensePluginVersion}")
     }
 }
 
@@ -58,6 +61,7 @@ subprojects { project ->
     }
 
     project.apply plugin: 'io.spring.dependency-management'
+    project.apply plugin: "com.github.hierynomus.license"
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
@@ -68,6 +72,12 @@ subprojects { project ->
         project.targetCompatibility = 1.8
     }
 
+    license { 
+        header = file('../license.header')
+        includes (["**/*.java", "**/*.gradle"])
+        ext.year = Calendar.getInstance().get(Calendar.YEAR)
+        ext.name = 'Prevo-System AG'
+    }
 
     dependencyManagement {
         imports {
@@ -94,6 +104,11 @@ subprojects { project ->
 build.dependsOn subprojects.findResults { it.tasks.findByName('build') }
 
 project.apply plugin: 'net.researchgate.release'
+project.apply plugin: "com.github.hierynomus.license-report"
+
+downloadLicenses {
+    includeProjectDependencies = true
+}
 
 release {
     preTagCommitMessage = '[OpenPrevo Release] - set current release version to: '
