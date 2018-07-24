@@ -37,7 +37,7 @@ public class HubScheduler {
     @Inject
     private HubService hubService;
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 120000)
+    @Scheduled(initialDelayString = "${open.prevo.hub.config.scheduler.initialDelay.seconds}000", fixedDelayString = "${open.prevo.hub.config.scheduler.fixedDelay.seconds}000")
     public void run() {
         LOGGER.info("Start matching task");
         List<Match> matches = hubService.matchAndNotify();

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2018 - Prevo-System AG and others.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * This Source Code may also be made available under the following Secondary
  * Licenses when the conditions for such availability set forth in the Eclipse
  * Public License, v. 2.0 are satisfied: GNU General Public License, version 3
  * with the GNU Classpath Exception which is
  * available at https://www.gnu.org/software/classpath/license.html.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0
- * 
+ *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  ******************************************************************************/
@@ -35,8 +35,8 @@ task prepareHubDockerConfig(type: Copy) {
 
     filter { line ->
         line.replaceAll('localhost:8851', 'node_baloise:8851')
-            .replaceAll('localhost:8852', 'node_helvetia:8852')
-            .replaceAll('localhost:8853', 'node_zurich:8853')
+                .replaceAll('localhost:8852', 'node_helvetia:8852')
+                .replaceAll('localhost:8853', 'node_zurich:8853')
     }
 
     rename("demo-nodes.yml", "demo-nodes-docker.yml")
@@ -44,17 +44,21 @@ task prepareHubDockerConfig(type: Copy) {
 }
 
 task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
-    from("${project(':hub').buildDir}/libs")
-    from("demo-nodes.yml")
     into "${buildDir}/demo/Hub"
+    from("${project(':hub').buildDir}/libs") {
+        into "lib"
+    }
+    from("demo-nodes.yml") {
+        into "config"
+    }
     doLast {
         def javaCmd = "java " +
                 "-Dserver.port=8859 " +
-                "-Dopen.prevo.hub.config.file=file:demo-nodes.yml " +
+                "-Dopen.prevo.hub.config.file=file:config/demo-nodes.yml " +
                 "-Dspring.profiles.active=demo " +
-                "-jar ${project(":hub").bootJar.archiveName}"
+                "-jar lib/${project(":hub").bootJar.archiveName}"
         def startBatFile = new File("${buildDir}/demo/Hub/start.bat")
-        startBatFile.text = "start \"OpenPrevo - demo hub\" "  + javaCmd
+        startBatFile.text = "start \"OpenPrevo - demo hub\" " + javaCmd
         startBatFile.executable = true
         def cleanBatFile = new File("${buildDir}/demo/Hub/clean-db.bat")
         cleanBatFile.text = 'del openprevo.mv.db'
@@ -82,25 +86,25 @@ def nodeConfiguration = [
         [name: "NodeZurichExcel", adapter: "adapter-excel", port: "8853"]
 ]
 
-def createTask(node) {
-    task "prepare${node.name}"(type: Copy) {
-
-        dependsOn { project(":${node.adapter}").shadowJar }
-        dependsOn { project(":node").bootJar }
-
+nodeConfiguration.each { node ->
+    task "copyLibs${node.name}"(type: Copy) {
         from(project(":${node.adapter}").shadowJar)
         from("${project(':node').buildDir}/libs")
-
+        into "${buildDir}/demo/${node.name}/lib"
+    }
+    task "copyConfig${node.name}"(type: Copy) {
+        from("src/data/${node.name}-config.yml")
+        into "${buildDir}/demo/${node.name}/config"
+    }
+    task "copyDemoData${node.name}"(type: Copy) {
         if (node.adapter == "adapter-excel") {
             from("src/data/${node.name}-Input.xlsx")
         } else if (node.adapter == "adapter-pakt") {
             from fileTree("src/adapter-pakt")
         }
-
-        from("src/data/${node.name}-config.yml")
-
         into "${buildDir}/demo/${node.name}"
-
+    }
+    task "createStartScripts${node.name}" {
         doLast {
             def javaCmd = getJavaCommandLineForNode(node)
             def batFile = new File("${buildDir}/demo/${node.name}/start.bat")
@@ -111,25 +115,30 @@ def createTask(node) {
             shFile.executable = true
         }
     }
-    buildDemoZip.dependsOn("prepare${node.name}")
+
+    buildDemoZip.dependsOn({[
+            project(":${node.adapter}").shadowJar,
+            project(":node").bootJar,
+            "copyLibs${node.name}",
+            "copyConfig${node.name}",
+            "copyDemoData${node.name}",
+            "createStartScripts${node.name}"
+    ]})
 }
 
-nodeConfiguration.each { node ->
-    createTask(node)
-}
 
 def getJavaCommandLineForNode(nodeConfiguration) {
 
     def cmd = "java " +
-            "-Dloader.path=${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
+            "-Dloader.path=lib/${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
-            "-Dspring.profiles.active=demo " +
-            "-Dopen.prevo.node.config.file=file:${nodeConfiguration.name}-config.yml"
+            "-Dopen.prevo.node.config.file=file:config/${nodeConfiguration.name}-config.yml " +
+            "-Dspring.profiles.active=demo"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
     }
-    cmd += " -jar ${project(":node").bootJar.archiveName}"
+    cmd += " -jar lib/${project(":node").bootJar.archiveName}"
 }
 
 assemble.dependsOn(buildDemoZip)
