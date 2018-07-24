@@ -64,7 +64,7 @@ public class NodeCaller {
     EncryptedData postCommencementNotification(String commencementMatchNotifyUrl, MatchForCommencement matchNotification) {
         try {
             if (!notificationDAO.isMatchForCommencementAlreadyNotified(matchNotification)) {
-                LOGGER.debug("Send termination match notification for match: {}", matchNotification);
+                LOGGER.info("Send termination match notification for commencement: {}", matchNotification);
                 EncryptedData encryptedCapitalTransferInfo = restTemplate
                         .postForObject(commencementMatchNotifyUrl, matchNotification, EncryptedData.class);
 
@@ -83,7 +83,7 @@ public class NodeCaller {
     void postTerminationNotification(String terminationMatchNotifyUrl, MatchForTermination matchNotification) {
         try {
             if (!notificationDAO.isMatchForTerminationAlreadyNotified(matchNotification)) {
-                LOGGER.debug("Send commencement match notification for match: {}", matchNotification);
+                LOGGER.info("Send commencement match notification for termination: {}", matchNotification);
                 restTemplate.postForEntity(terminationMatchNotifyUrl, matchNotification, Void.class);
                 notificationDAO.saveMatchForTermination(matchNotification);
             }
