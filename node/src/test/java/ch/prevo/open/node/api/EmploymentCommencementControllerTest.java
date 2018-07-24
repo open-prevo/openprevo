@@ -21,6 +21,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.services.AdapterDataValidationService;
 import ch.prevo.open.node.services.EmploymentCommencementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.inject.Inject;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -49,11 +51,12 @@ public class EmploymentCommencementControllerTest extends RestBaseTest {
 
     @TestConfiguration
     static class Config {
+
         @Bean
-        public EmploymentCommencementService employmentCommencementService() throws Exception {
+        public EmploymentCommencementService employmentCommencementService(AdapterDataValidationService adapterDataValidationService) throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
-            return new EmploymentCommencementService(factory);
+            return new EmploymentCommencementService(factory, adapterDataValidationService);
         }
     }
 
@@ -65,9 +68,9 @@ public class EmploymentCommencementControllerTest extends RestBaseTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1234.5678.97"))))
                 .andExpect(jsonPath("$[0].retirementFundUid", is("CHE-109.740.084")))
-                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.5678.1234.17"))))
+                .andExpect(jsonPath("$[1].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.5678.1234.11"))))
                 .andExpect(jsonPath("$[1].retirementFundUid", is("CHE-109.740.078")))
-                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1298.6578.97"))))
+                .andExpect(jsonPath("$[2].encryptedOasiNumber", is(Cryptography.digestOasiNumber("756.1298.6578.93"))))
                 .andExpect(jsonPath("$[2].retirementFundUid", is("CHE-109.537.488")));
     }
 }
