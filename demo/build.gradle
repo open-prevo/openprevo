@@ -133,8 +133,8 @@ def getJavaCommandLineForNode(nodeConfiguration) {
     def cmd = "java " +
             "-Dloader.path=lib/${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
-            "-Dopen.prevo.node.config.file=file:config/${nodeConfiguration.name}-config.yml" +
-            "-Dspring.profiles.active=demo " +
+            "-Dopen.prevo.node.config.file=file:config/${nodeConfiguration.name}-config.yml " +
+            "-Dspring.profiles.active=demo"
 
     if (nodeConfiguration.adapter == "adapter-excel") {
         cmd += " -Dnode.adapter.excel.in.file=${nodeConfiguration.name}-Input.xlsx"
