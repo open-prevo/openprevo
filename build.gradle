@@ -120,5 +120,6 @@ release {
 }
 
 assemble.dependsOn ':doc:publishDocumentation'
+assemble.dependsOn 'downloadLicenses'
 
 defaultTasks 'assemble'
