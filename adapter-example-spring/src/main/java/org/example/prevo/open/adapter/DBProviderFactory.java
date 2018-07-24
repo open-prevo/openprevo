@@ -19,7 +19,6 @@
 package org.example.prevo.open.adapter;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
@@ -35,7 +34,7 @@ public class DBProviderFactory implements ProviderFactory {
 
 
     public DBProviderFactory() {
-        final ApplicationContext context = new AnnotationConfigApplicationContext("org.example.prevo.open.adapter");
+        ApplicationContext context = DBApplicationContext.INSTANCE.getContext();
         this.employmentCommencementProvider = context.getBean(EmploymentCommencementProvider.class);
         this.employmentTerminationProvider = context.getBean(EmploymentTerminationProvider.class);
     }

@@ -19,7 +19,6 @@
 package ch.prevo.pakt;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
@@ -34,11 +33,10 @@ public class PaktProviderFactory implements ProviderFactory {
 
 
     public PaktProviderFactory() {
-        final ApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);
+        final ApplicationContext context = PaktApplicationContext.INSTANCE.getContext();
         this.employmentCommencementProvider = context.getBean(EmploymentCommencementProvider.class);
         this.employmentTerminationProvider = context.getBean(EmploymentTerminationProvider.class);
         this.matchNotificationListener = context.getBean(MatchNotificationListener.class);
-        
     }
 
     @Override
