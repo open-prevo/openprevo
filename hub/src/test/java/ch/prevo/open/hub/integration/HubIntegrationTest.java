@@ -83,19 +83,19 @@ public class HubIntegrationTest {
         Match expectedMatchFromHelvetia1ToBaloise1 = new Match(Cryptography.digestOasiNumber("756.1234.5678.97"),
                 "CHE-109.537.519",
                 "CHE-109.740.084", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromHelvetia1ToBaloise2 = new Match(Cryptography.digestOasiNumber("756.3324.5678.58"),
+        Match expectedMatchFromHelvetia1ToBaloise2 = new Match(Cryptography.digestOasiNumber("756.3324.5678.55"),
                 "CHE-109.537.519",
                 "CHE-223.471.073", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromHelvetia2ToBaloise1 = new Match(Cryptography.digestOasiNumber("756.5678.1234.17"),
+        Match expectedMatchFromHelvetia2ToBaloise1 = new Match(Cryptography.digestOasiNumber("756.5678.1234.11"),
                 "CHE-109.633.927",
                 "CHE-109.740.084", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise1ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.1335.5778.23"),
+        Match expectedMatchFromBaloise1ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.1335.5778.25"),
                 "CHE-109.740.084",
                 "CHE-109.537.519", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise1ToHelvetia2 = new Match(Cryptography.digestOasiNumber("756.9534.5271.94"),
+        Match expectedMatchFromBaloise1ToHelvetia2 = new Match(Cryptography.digestOasiNumber("756.9534.5271.91"),
                 "CHE-109.740.084",
                 "CHE-109.633.927", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
-        Match expectedMatchFromBaloise2ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.9874.5778.58"),
+        Match expectedMatchFromBaloise2ToHelvetia1 = new Match(Cryptography.digestOasiNumber("756.9874.5778.56"),
                 "CHE-223.471.073",
                 "CHE-109.537.519", LocalDate.of(2018, 7, 1), LocalDate.of(2018, 6, 30));
 
