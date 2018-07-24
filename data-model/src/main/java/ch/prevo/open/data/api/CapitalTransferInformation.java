@@ -16,8 +16,9 @@
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  ******************************************************************************/
-package ch.prevo.open.encrypted.model;
+package ch.prevo.open.data.api;
 
+import ch.prevo.open.encrypted.model.Address;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

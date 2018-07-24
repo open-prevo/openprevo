@@ -18,7 +18,6 @@
  ******************************************************************************/
 package ch.prevo.open.data.api;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDate;

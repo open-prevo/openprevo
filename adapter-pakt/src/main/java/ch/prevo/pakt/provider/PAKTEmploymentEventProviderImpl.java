@@ -18,18 +18,11 @@
  ******************************************************************************/
 package ch.prevo.pakt.provider;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.pakt.config.PaktEnvironment;
@@ -37,6 +30,11 @@ import ch.prevo.pakt.config.RetirementFundRegistry;
 import ch.prevo.pakt.entities.TozsPtverm;
 import ch.prevo.pakt.repository.PartnerVermittlungRepository;
 import ch.prevo.pakt.zd.utils.CdMeld;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PAKTEmploymentEventProviderImpl implements EmploymentTerminationProvider, EmploymentCommencementProvider {

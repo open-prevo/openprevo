@@ -16,9 +16,9 @@
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  ******************************************************************************/
-package ch.prevo.open.encrypted.services;
+package ch.prevo.open.node.crypto;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
