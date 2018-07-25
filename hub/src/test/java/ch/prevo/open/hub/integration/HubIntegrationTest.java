@@ -18,15 +18,19 @@
  *===========================================================================*/
 package ch.prevo.open.hub.integration;
 
-import ch.prevo.open.hub.HubService;
-import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.nodes.NodeCaller;
-import ch.prevo.open.hub.nodes.NodeConfiguration;
-import ch.prevo.open.hub.nodes.NodeRegistry;
-import ch.prevo.open.hub.nodes.NodeService;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.hub.repository.NotificationDAO;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -41,17 +45,13 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-import javax.inject.Inject;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.hub.HubService;
+import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.nodes.NodeConfiguration;
+import ch.prevo.open.hub.nodes.NodeRegistry;
+import ch.prevo.open.hub.nodes.NodeService;
+import ch.prevo.open.hub.repository.NotificationDAO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

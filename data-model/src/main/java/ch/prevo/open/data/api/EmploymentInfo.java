@@ -18,15 +18,17 @@
  *===========================================================================*/
 package ch.prevo.open.data.api;
 
-import ch.prevo.open.data.api.validation.OASI;
+import java.time.LocalDate;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import ch.prevo.open.data.api.validation.OASI;
 
 @SuppressWarnings("unused")
 public class EmploymentInfo {

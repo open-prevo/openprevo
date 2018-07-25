@@ -18,13 +18,13 @@
  *===========================================================================*/
 package ch.prevo.open.encrypted.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Cryptography {
 

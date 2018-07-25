@@ -18,15 +18,17 @@
  *===========================================================================*/
 package org.example.prevo.open.adapter.dao;
 
-import ch.prevo.open.data.api.EmploymentCommencement;
-import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.example.prevo.open.adapter.repository.EmploymentCommencementRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.stream.Collectors;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 
 @Service
 public class EmploymentCommencementDAO implements EmploymentCommencementProvider {

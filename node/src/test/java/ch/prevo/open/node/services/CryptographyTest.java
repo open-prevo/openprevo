@@ -18,10 +18,11 @@
  *===========================================================================*/
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.encrypted.services.Cryptography;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import ch.prevo.open.encrypted.services.Cryptography;
 
 public class CryptographyTest {
 

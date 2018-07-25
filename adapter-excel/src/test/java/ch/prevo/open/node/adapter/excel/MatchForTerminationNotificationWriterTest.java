@@ -18,20 +18,21 @@
  *===========================================================================*/
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.FullMatchForTerminationNotification;
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.junit.Test;
+import static ch.prevo.open.node.adapter.excel.AbstractNotificationWriter.FILE_PROPERTY;
+import static ch.prevo.open.node.adapter.excel.ExcelAssertions.assertRow;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static ch.prevo.open.node.adapter.excel.AbstractNotificationWriter.FILE_PROPERTY;
-import static ch.prevo.open.node.adapter.excel.ExcelAssertions.assertRow;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.junit.Test;
+
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
+import ch.prevo.open.encrypted.model.Address;
 
 public class MatchForTerminationNotificationWriterTest {
 

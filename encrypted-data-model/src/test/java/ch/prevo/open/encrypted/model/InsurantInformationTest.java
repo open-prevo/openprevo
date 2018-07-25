@@ -18,14 +18,14 @@
  *===========================================================================*/
 package ch.prevo.open.encrypted.model;
 
-import org.junit.Test;
+import static java.time.LocalDate.of;
+import static org.junit.Assert.assertSame;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static java.time.LocalDate.of;
-import static org.junit.Assert.assertSame;
+import org.junit.Test;
 
 public class InsurantInformationTest {
 

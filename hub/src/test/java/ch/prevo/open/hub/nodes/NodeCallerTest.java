@@ -18,24 +18,6 @@
  *===========================================================================*/
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.hub.repository.NotificationDAO;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-
-import javax.inject.Inject;
-import java.util.List;
-
 import static java.time.LocalDate.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -47,6 +29,26 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.MockRestServiceServer;
+
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.repository.NotificationDAO;
 
 @RunWith(SpringRunner.class)
 @RestClientTest({ NodeCaller.class })

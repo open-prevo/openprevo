@@ -18,22 +18,24 @@
  *===========================================================================*/
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.hub.match.Match;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import static java.util.stream.Collectors.toList;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static java.util.stream.Collectors.toList;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.match.Match;
 
 @Service
 public class NodeService {

@@ -18,15 +18,17 @@
  *===========================================================================*/
 package ch.prevo.open.hub.repository;
 
-import ch.prevo.open.encrypted.model.MatchNotification;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalDate;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import ch.prevo.open.encrypted.model.MatchNotification;
 
 @Entity(name = "NOTIFICATION")
 public class NotificationDTO {

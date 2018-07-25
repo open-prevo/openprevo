@@ -1,8 +1,9 @@
 package ch.prevo.open.data.api.validation;
 
+import java.util.stream.IntStream;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.stream.IntStream;
 
 /**
  * Validator for OASI numbers according to the following explanation:

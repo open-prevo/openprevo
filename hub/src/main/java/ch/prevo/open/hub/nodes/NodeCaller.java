@@ -18,11 +18,13 @@
  *===========================================================================*/
 package ch.prevo.open.hub.nodes;
 
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.hub.repository.NotificationDAO;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -31,11 +33,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.repository.NotificationDAO;
 
 @Service
 public class NodeCaller {

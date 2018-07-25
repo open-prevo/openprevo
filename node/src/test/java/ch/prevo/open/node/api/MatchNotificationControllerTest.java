@@ -18,17 +18,24 @@
  *===========================================================================*/
 package ch.prevo.open.node.api;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.node.NodeApplication;
-import ch.prevo.open.node.config.NodeConfigurationService;
-import ch.prevo.open.node.crypto.CapitalTransferInfoEncrypter;
-import ch.prevo.open.node.data.provider.MockProvider;
-import ch.prevo.open.node.data.provider.MockProviderFactory;
-import ch.prevo.open.node.services.MatchNotificationService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.IOException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.time.LocalDate;
+import java.util.Collections;
+
+import javax.inject.Inject;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -40,22 +47,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 
-import javax.inject.Inject;
-import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.time.LocalDate;
-import java.util.Collections;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.NodeApplication;
+import ch.prevo.open.node.config.NodeConfigurationService;
+import ch.prevo.open.node.crypto.CapitalTransferInfoEncrypter;
+import ch.prevo.open.node.data.provider.MockProvider;
+import ch.prevo.open.node.data.provider.MockProviderFactory;
+import ch.prevo.open.node.services.MatchNotificationService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeApplication.class, MatchNotificationControllerTest.Config.class})

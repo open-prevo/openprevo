@@ -18,13 +18,15 @@
  *===========================================================================*/
 package ch.prevo.open.hub.repository;
 
+import java.util.Optional;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.model.MatchNotification;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import java.util.Optional;
 
 @Service
 public class NotificationDAO {

@@ -18,14 +18,13 @@
  *===========================================================================*/
 package ch.prevo.open.data.api;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("unused")
 public class EmploymentCommencement extends AbstractEmployment {

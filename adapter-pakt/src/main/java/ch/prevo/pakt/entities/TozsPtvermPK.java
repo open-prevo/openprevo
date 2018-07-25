@@ -19,7 +19,8 @@
 package ch.prevo.pakt.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Embeddable;
 
 /**
  * The primary key class for the TOZS_PTVERM database table.

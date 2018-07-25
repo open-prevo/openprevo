@@ -18,15 +18,17 @@
  *===========================================================================*/
 package ch.prevo.open.hub;
 
-import ch.prevo.open.hub.match.Match;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import java.util.List;
+import ch.prevo.open.hub.match.Match;
 
 @Component
 @Profile("!test")

@@ -18,11 +18,10 @@
  *===========================================================================*/
 package ch.prevo.open.node.api;
 
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.node.data.provider.error.NotificationException;
-import ch.prevo.open.node.services.MatchNotificationService;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,8 +31,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.util.Optional;
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.node.data.provider.error.NotificationException;
+import ch.prevo.open.node.services.MatchNotificationService;
 
 @RestController
 public class MatchNotificationController {

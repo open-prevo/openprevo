@@ -20,12 +20,12 @@ package ch.prevo.pakt.provider;
 
 import javax.inject.Inject;
 
-import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.pakt.config.PaktEnvironment;
 import ch.prevo.pakt.config.RetirementFundRegistry;

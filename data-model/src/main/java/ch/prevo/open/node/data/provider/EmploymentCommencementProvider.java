@@ -18,9 +18,9 @@
  *===========================================================================*/
 package ch.prevo.open.node.data.provider;
 
-import ch.prevo.open.data.api.EmploymentCommencement;
-
 import java.util.List;
+
+import ch.prevo.open.data.api.EmploymentCommencement;
 
 public interface EmploymentCommencementProvider {
 

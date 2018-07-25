@@ -18,17 +18,18 @@
  *===========================================================================*/
 package ch.prevo.open.node.crypto;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.EncryptedData;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.Test;
+
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.encrypted.model.EncryptedData;
 
 public class CapitalTransferInfoEncrypterTest {
 

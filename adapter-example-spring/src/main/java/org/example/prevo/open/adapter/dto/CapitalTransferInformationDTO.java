@@ -18,12 +18,12 @@
  *===========================================================================*/
 package org.example.prevo.open.adapter.dto;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 public class CapitalTransferInformationDTO {

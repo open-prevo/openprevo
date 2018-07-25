@@ -18,11 +18,11 @@
  *===========================================================================*/
 package ch.prevo.open.node.config;
 
+import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.Base64;
-
-import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 public class TestKeyGenerator {
 

@@ -25,8 +25,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentTermination;
 
 public class JsonAdapterTest {
 

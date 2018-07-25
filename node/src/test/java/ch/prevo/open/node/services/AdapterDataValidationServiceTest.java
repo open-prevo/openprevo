@@ -6,13 +6,13 @@ import java.time.LocalDate;
 
 import javax.inject.Inject;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;

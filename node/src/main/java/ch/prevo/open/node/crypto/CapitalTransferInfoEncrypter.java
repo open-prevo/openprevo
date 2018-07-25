@@ -18,11 +18,12 @@
  *===========================================================================*/
 package ch.prevo.open.node.crypto;
 
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ch.prevo.open.data.api.CapitalTransferInformation;
 
 public class CapitalTransferInfoEncrypter extends DataEncrypter<CapitalTransferInformation> {
     @Override
