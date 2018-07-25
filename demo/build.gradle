@@ -178,13 +178,13 @@ task demoIntegrationTest {
         sleep(20000)
 
         //assert that all nodes are notified with the expected amount of matches
-        assert 10 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
-        assert 18 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
-        assert 8 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
     }
