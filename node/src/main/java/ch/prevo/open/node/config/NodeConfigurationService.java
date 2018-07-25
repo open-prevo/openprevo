@@ -44,6 +44,7 @@ import java.util.Map;
 
 import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
+
 @Service
 public class NodeConfigurationService {
 

@@ -1,9 +1,9 @@
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

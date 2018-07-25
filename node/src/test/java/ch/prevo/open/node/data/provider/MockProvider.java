@@ -20,6 +20,7 @@ package ch.prevo.open.node.data.provider;
 
 import ch.prevo.open.data.api.*;
 import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.time.LocalDate;
 import java.util.Arrays;

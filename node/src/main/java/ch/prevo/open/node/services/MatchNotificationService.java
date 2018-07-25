@@ -19,6 +19,7 @@
 package ch.prevo.open.node.services;
 
 import ch.prevo.open.data.api.*;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
