@@ -73,7 +73,6 @@ public class NodeConfigurationService {
             NodeConfigurationRawData rawConfig = mapper.readValue(resource.getInputStream(), new TypeReference<NodeConfigurationRawData>() {
             });
             rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> otherRetirementFundsKeys.put(uid, convertPublicKey(uid, publicKeyString)));
-            //Note: we ignore own public keys for now, they're not in use
             rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
             LOGGER.info("Node configuration with encryption keys ok");
         } catch (IOException e) {
