@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,16 +15,18 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.integration;
 
 import ch.prevo.open.hub.HubService;
 import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.nodes.NodeCaller;
 import ch.prevo.open.hub.nodes.NodeConfiguration;
 import ch.prevo.open.hub.nodes.NodeRegistry;
 import ch.prevo.open.hub.nodes.NodeService;
 
 import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.hub.repository.NotificationDAO;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -46,6 +48,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -62,6 +66,9 @@ public class HubIntegrationTest {
 
     @SpyBean
     private NodeService nodeService;
+
+    @SpyBean
+    private NotificationDAO notificationDAO;
 
     @MockBean
     private NodeRegistry nodeRegistry;
@@ -131,5 +138,7 @@ public class HubIntegrationTest {
                         expectedMatchFromBaloise2ToHelvetia1
                 );
         verify(nodeService).notifyMatches(matches);
+        verify(notificationDAO, times(6)).saveMatchForCommencement(any());
+        verify(notificationDAO, times(6)).saveMatchForTermination(any());
     }
 }

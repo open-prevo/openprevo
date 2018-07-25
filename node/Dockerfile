@@ -1,5 +1,7 @@
 FROM openjdk:8
 RUN mkdir /opt/app
+RUN mkdir /opt/app/config
+VOLUME /opt/app/config
 ARG NODE_JAR
 ARG ADAPTER_JAR
 COPY ${NODE_JAR} /opt/app/app.jar

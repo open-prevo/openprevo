@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,8 +15,8 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
-package ch.prevo.open.node.crypto;
+ *===========================================================================*/
+package ch.prevo.open.encrypted.services;
 
 import ch.prevo.open.data.api.CapitalTransferInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
