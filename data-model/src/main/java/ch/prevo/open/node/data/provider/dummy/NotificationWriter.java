@@ -22,12 +22,16 @@ import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.FullCommencementNotification;
 import ch.prevo.open.data.api.FullTerminationNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.io.PrintWriter;
 
 class NotificationWriter {
 
-    void write(PrintWriter writer, FullTerminationNotification notification) {
+    void write(PrintWriter writer, FullMatchForCommencementNotification notification) {
 
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment commencement: ");
@@ -50,7 +54,7 @@ class NotificationWriter {
         writer.flush();
     }
 
-    void write(PrintWriter writer, FullCommencementNotification notification) {
+    void write(PrintWriter writer, FullMatchForTerminationNotification notification) {
         writer.println("\n\n---------------------------------------");
         writer.println("Match found for employment termination");
 

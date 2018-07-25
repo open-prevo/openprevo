@@ -69,7 +69,7 @@ public class MatchNotificationService {
             return;
         }
 
-        final FullCommencementNotification fullNotification = new FullCommencementNotification();
+        final FullMatchForTerminationNotification fullNotification = new FullMatchForTerminationNotification();
         fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
         fullNotification.setCommencementDate(notification.getCommencementDate());
         fullNotification.setEmploymentTermination(employmentTermination.get());
@@ -80,7 +80,7 @@ public class MatchNotificationService {
             fullNotification.setTransferInformation(new CapitalTransferInfoEncrypter().decrypt(encryptedCapitalTransferInfo, nodeConfigService.getPrivateKey(retirementFundUid)));
         }
 
-        listener.handleCommencementMatch(fullNotification);
+        listener.handleMatchForTerminationNotification(fullNotification);
     }
 
     public Optional<EncryptedData> handleTerminationMatch(MatchForCommencement notification)
@@ -94,12 +94,12 @@ public class MatchNotificationService {
             return Optional.empty();
         }
 
-        final FullTerminationNotification fullNotification = new FullTerminationNotification();
+        final FullMatchForCommencementNotification fullNotification = new FullMatchForCommencementNotification();
         fullNotification.setPreviousRetirementFundUid(notification.getPreviousRetirementFundUid());
         fullNotification.setTerminationDate(notification.getTerminationDate());
         fullNotification.setEmploymentCommencement(employmentCommencement.get());
 
-        listener.handleTerminationMatch(fullNotification);
+        listener.handleMatchForCommencementNotification(fullNotification);
 
         CapitalTransferInformation info = employmentCommencement.get().getCapitalTransferInfo();
         if (info == null) {
