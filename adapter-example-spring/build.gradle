@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
-    compile(project(":data-model"))
+    compile(project(":node-api"))
 
     compile("com.h2database:h2")
     compile("javax.inject:javax.inject")

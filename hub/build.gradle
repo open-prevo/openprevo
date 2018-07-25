@@ -22,7 +22,7 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile(project(":encrypted-data-model"))
+    compile(project(":hub-api"))
 
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
