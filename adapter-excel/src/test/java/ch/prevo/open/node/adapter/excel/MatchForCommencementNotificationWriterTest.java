@@ -19,11 +19,9 @@
 package ch.prevo.open.node.adapter.excel;
 
 import ch.prevo.open.data.api.CapitalTransferInformation;
-import ch.prevo.open.data.api.FullMatchForCommencementNotification;
-import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.FullTerminationNotification;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
 import ch.prevo.open.encrypted.model.Address;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
