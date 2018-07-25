@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,21 +15,23 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package org.example.prevo.open.adapter.dao;
 
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
-import org.example.prevo.open.adapter.dto.EmploymentTerminationDTO;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.example.prevo.open.adapter.dto.EmploymentInfoDTO;
+import org.example.prevo.open.adapter.dto.EmploymentTerminationDTO;
 import org.example.prevo.open.adapter.repository.EmploymentTerminationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 
 @Service
 public class EmploymentTerminationDAO implements EmploymentTerminationProvider {

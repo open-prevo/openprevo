@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,13 +15,13 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NotificationRepository extends JpaRepository<NotificationDTO, Long> {
 

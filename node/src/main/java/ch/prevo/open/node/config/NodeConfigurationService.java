@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,21 +15,12 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.config;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +33,21 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import static ch.prevo.open.encrypted.services.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+
 
 @Service
 public class NodeConfigurationService {

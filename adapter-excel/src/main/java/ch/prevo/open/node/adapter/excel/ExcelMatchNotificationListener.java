@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,33 +15,27 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.adapter.excel;
 
-import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.node.data.provider.MatchNotificationListener;
-import ch.prevo.open.node.data.provider.error.NotificationException;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
+import ch.prevo.open.node.data.provider.MatchNotificationListener;
+import ch.prevo.open.node.data.provider.error.NotificationException;
 
 public class ExcelMatchNotificationListener implements MatchNotificationListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExcelMatchNotificationListener.class);
 
-    private static final String FILE_PROPERTY = "node.adapter.excel.out.file";
-    private static final String FALLBACK_FILE = "retirement-fund-out-data";
-    private static final String FILE_NAME_FORMAT = "%1$s_%2$tY-%2$tm-%2$td_%2$tH-%2$tM-%2$tS.%2$tL.xlsx";
 
     @Override
-    public void handleTerminationMatch(FullTerminationNotification notification) throws NotificationException {
-        final String filename = getFilename();
-
-        try (final TerminationNotificationWriter writer = new TerminationNotificationWriter(filename)) {
+    public void handleMatchForCommencementNotification(FullMatchForCommencementNotification notification) throws NotificationException {
+        try (final MatchForCommencementNotificationWriter writer = new MatchForCommencementNotificationWriter()) {
             writer.append(notification);
         } catch (IOException e) {
             LOG.error("Exception while trying to write notification (" + notification + ") to Excel-file", e);
@@ -50,10 +44,8 @@ public class ExcelMatchNotificationListener implements MatchNotificationListener
     }
 
     @Override
-    public void handleCommencementMatch(FullCommencementNotification notification) throws NotificationException {
-        final String filename = getFilename();
-
-        try (final CommencementNotificationWriter writer = new CommencementNotificationWriter(filename)) {
+    public void handleMatchForTerminationNotification(FullMatchForTerminationNotification notification) throws NotificationException {
+        try (final MatchForTerminationNotificationWriter writer = new MatchForTerminationNotificationWriter()) {
             writer.append(notification);
         } catch (IOException e) {
             LOG.error("Exception while trying to write notification (" + notification + ") to Excel-file", e);
@@ -61,7 +53,4 @@ public class ExcelMatchNotificationListener implements MatchNotificationListener
         }
     }
 
-    private static String getFilename() {
-        return String.format(FILE_NAME_FORMAT, System.getProperty(FILE_PROPERTY, FALLBACK_FILE), LocalDateTime.now());
-    }
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,13 +15,14 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.encrypted.services.Cryptography;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import ch.prevo.open.encrypted.services.Cryptography;
 
 public class CryptographyTest {
 

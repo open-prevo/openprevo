@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  *
  * This program and the accompanying materials are made available under the
@@ -15,15 +15,15 @@
  *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.services;
 
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.FullCommencementNotification;
-import ch.prevo.open.data.api.FullTerminationNotification;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
@@ -78,7 +78,7 @@ public class MatchNotificationService {
             return;
         }
 
-        final FullCommencementNotification fullNotification = new FullCommencementNotification();
+        final FullMatchForTerminationNotification fullNotification = new FullMatchForTerminationNotification();
         fullNotification.setNewRetirementFundUid(notification.getNewRetirementFundUid());
         fullNotification.setCommencementDate(notification.getCommencementDate());
         fullNotification.setEmploymentTermination(employmentTermination.get());
@@ -86,7 +86,7 @@ public class MatchNotificationService {
         CapitalTransferInformation capitalTransferInformation = decryptAndVerifyCapitalTransferInformation(notification);
         fullNotification.setTransferInformation(capitalTransferInformation);
 
-        listener.handleCommencementMatch(fullNotification);
+        listener.handleMatchForTerminationNotification(fullNotification);
     }
 
     private CapitalTransferInformation decryptAndVerifyCapitalTransferInformation(MatchForTermination notification) throws NotificationException {
@@ -110,12 +110,12 @@ public class MatchNotificationService {
             return Optional.empty();
         }
 
-        final FullTerminationNotification fullNotification = new FullTerminationNotification();
+        final FullMatchForCommencementNotification fullNotification = new FullMatchForCommencementNotification();
         fullNotification.setPreviousRetirementFundUid(notification.getPreviousRetirementFundUid());
         fullNotification.setTerminationDate(notification.getTerminationDate());
         fullNotification.setEmploymentCommencement(employmentCommencement.get());
 
-        listener.handleTerminationMatch(fullNotification);
+        listener.handleMatchForCommencementNotification(fullNotification);
 
         CapitalTransferInformation info = employmentCommencement.get().getCapitalTransferInfo();
         if (info == null) {

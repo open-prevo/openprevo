@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,14 +15,14 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.nodes;
-
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 /**
  * All node instances currently known by the hub, currently only a mock implementation.

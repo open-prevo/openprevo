@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,16 +15,17 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package org.example.prevo.open.adapter;
 
-import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import ch.prevo.open.node.data.provider.MatchNotificationListener;
 import ch.prevo.open.node.data.provider.ProviderFactory;
 import ch.prevo.open.node.data.provider.dummy.DefaultMatchNotificationListener;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class DBProviderFactory implements ProviderFactory {
 

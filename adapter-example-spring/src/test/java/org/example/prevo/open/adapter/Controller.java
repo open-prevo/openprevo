@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,19 +15,21 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package org.example.prevo.open.adapter;
 
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.data.api.EmploymentCommencement;
-import org.example.prevo.open.adapter.dao.EmploymentTerminationDAO;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.example.prevo.open.adapter.dao.EmploymentCommencementDAO;
+import org.example.prevo.open.adapter.dao.EmploymentTerminationDAO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.util.List;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentTermination;
 
 @RestController
 public class Controller {

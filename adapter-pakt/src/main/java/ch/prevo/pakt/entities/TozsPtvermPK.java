@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,11 +15,12 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.pakt.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Embeddable;
 
 /**
  * The primary key class for the TOZS_PTVERM database table.

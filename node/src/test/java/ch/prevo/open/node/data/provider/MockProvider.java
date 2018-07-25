@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,16 +15,20 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.data.provider;
-
-import ch.prevo.open.data.api.*;
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
+import ch.prevo.open.data.api.Address;
 
 public class MockProvider implements EmploymentTerminationProvider, EmploymentCommencementProvider, MatchNotificationListener {
 
@@ -56,12 +60,12 @@ public class MockProvider implements EmploymentTerminationProvider, EmploymentCo
     }
 
     @Override
-    public void handleTerminationMatch(FullTerminationNotification notification) {
+    public void handleMatchForCommencementNotification(FullMatchForCommencementNotification notification) {
 
     }
 
     @Override
-    public void handleCommencementMatch(FullCommencementNotification notification) {
+    public void handleMatchForTerminationNotification(FullMatchForTerminationNotification notification) {
 
     }
 }

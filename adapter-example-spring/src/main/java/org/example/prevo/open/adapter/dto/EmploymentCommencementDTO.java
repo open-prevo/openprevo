@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,14 +15,14 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package org.example.prevo.open.adapter.dto;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 public class EmploymentCommencementDTO extends AbstractEmploymentEventDTO {

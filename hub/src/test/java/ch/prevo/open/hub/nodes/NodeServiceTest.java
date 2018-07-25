@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,29 +15,14 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.nodes;
-
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.hub.match.Match;
-import ch.prevo.open.hub.match.MatcherService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.inject.Inject;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Set;
 
 import static java.time.LocalDate.of;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +31,25 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Set;
+
+import javax.inject.Inject;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.InsurantInformation;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.hub.match.Match;
+import ch.prevo.open.hub.match.MatcherService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeService.class, MatcherService.class})

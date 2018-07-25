@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  *
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@
  *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 
 import org.apache.tools.ant.filters.*
 
@@ -23,12 +23,23 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
 task buildDemoZip(type: Zip) {
-    from "${buildDir}/demo"
-    include('**/*')
-    exclude('**/demo-nodes-docker.yml')
+    from ("${buildDir}/demo") {
+        include('**/*')
+        exclude('**/demo-nodes-docker.yml')
+    }
+    from ("src") {
+        include "*.bat"
+    }
+    from (".") {
+        include "readme.md"
+    }
     archiveName 'demo.zip'
     destinationDir file("${buildDir}/")
 }
+
+//
+// Hub
+//
 
 task prepareHubDockerConfig(type: Copy) {
     from("demo-nodes.yml")
@@ -51,12 +62,15 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
     from("demo-nodes.yml") {
         into "config"
     }
+    from("src/hub")
     doLast {
         def javaCmd = "java " +
+                "-Dloader.path=config " +
                 "-Dserver.port=8859 " +
                 "-Dopen.prevo.hub.config.file=file:config/demo-nodes.yml " +
                 "-Dspring.profiles.active=demo " +
                 "-jar lib/${project(":hub").bootJar.archiveName}"
+
         def startBatFile = new File("${buildDir}/demo/Hub/start.bat")
         startBatFile.text = "start \"OpenPrevo - demo hub\" " + javaCmd
         startBatFile.executable = true
@@ -75,10 +89,13 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
 buildDemoZip.dependsOn(prepareHub)
 prepareHub.dependsOn { project(":hub").bootJar }
 
+//
+// Node
+//
+
 // Define Node Configuration Here
 // For each configuration gradle will automatically create a prepare${NodeName} task
 // which copies all files needed into a sub-directory named the same as the node
-
 def nodeConfiguration = [
         [name: "NodeBaloiseExcel", adapter: "adapter-excel", port: "8851"],
         [name: "NodeBaloisePakt", adapter: "adapter-pakt", port: "8851"],
@@ -116,19 +133,20 @@ nodeConfiguration.each { node ->
         }
     }
 
-    buildDemoZip.dependsOn({[
-            project(":${node.adapter}").shadowJar,
-            project(":node").bootJar,
-            "copyLibs${node.name}",
-            "copyConfig${node.name}",
-            "copyDemoData${node.name}",
-            "createStartScripts${node.name}"
-    ]})
+    buildDemoZip.dependsOn({
+        [
+                project(":${node.adapter}").shadowJar,
+                project(":node").bootJar,
+                "copyLibs${node.name}",
+                "copyConfig${node.name}",
+                "copyDemoData${node.name}",
+                "createStartScripts${node.name}"
+        ]
+    })
 }
 
 
 def getJavaCommandLineForNode(nodeConfiguration) {
-
     def cmd = "java " +
             "-Dloader.path=lib/${project(':' + nodeConfiguration.adapter).shadowJar.archiveName},config " +
             "-Dserver.port=${nodeConfiguration.port} " +
@@ -142,6 +160,10 @@ def getJavaCommandLineForNode(nodeConfiguration) {
 }
 
 assemble.dependsOn(buildDemoZip)
+
+//
+// Integration test with docker
+//
 
 docker {
     dependsOn buildDemoZip
@@ -164,13 +186,13 @@ task demoIntegrationTest {
         sleep(20000)
 
         //assert that all nodes are notified with the expected amount of matches
-        assert 10 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
-        assert 18 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
-        assert 8 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
+        assert 1 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
             it.name.startsWith("retirement-fund-out-data")
         }.size()
     }

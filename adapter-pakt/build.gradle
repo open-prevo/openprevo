@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compile(project(":data-model"))
+    compile(project(":node-api"))
 
     compile('javax.inject:javax.inject')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
