@@ -25,6 +25,7 @@ package ch.prevo.open.node.data.provider.error;
  * This exception should only be thrown it the adapter wants to be notified again for the same match later.
  */
 public class NotificationException extends Exception {
+    private static final long serialVersionUID = 2968936416684363225L;
 
     public NotificationException(Exception e) {
         super(e);

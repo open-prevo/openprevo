@@ -57,7 +57,6 @@ public class NodeConfigurationService {
 
     @Value("${open.prevo.node.config.file}")
     private String configFile;
-    private NodeConfigurationRawData config;
 
     private final Map<String, PublicKey> otherRetirementFundsKeys = new HashMap<>();
     private final Map<String, PrivateKey> ownRetirementFundKeys = new HashMap<>();
@@ -108,7 +107,6 @@ public class NodeConfigurationService {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new IllegalStateException("Configuration error, cannot read private key for pension fund " + uid, e);
         }
-
     }
 
     private static class NodeConfigurationRawData {
@@ -118,7 +116,6 @@ public class NodeConfigurationService {
 
     private static class PublicPrivateKeyStrings {
         public String base64PrivateKey;
-        public String base64PublicKey;
     }
 
     private static class PublicKeyString {

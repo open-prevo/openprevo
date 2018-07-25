@@ -28,7 +28,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import ch.prevo.open.encrypted.model.Address;
 
-@SuppressWarnings("unused")
 public class CapitalTransferInformation {
 
     @NotNull

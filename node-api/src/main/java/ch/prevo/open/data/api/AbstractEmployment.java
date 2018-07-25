@@ -24,7 +24,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-@SuppressWarnings("unused")
 abstract class AbstractEmployment {
 
     @NotNull
