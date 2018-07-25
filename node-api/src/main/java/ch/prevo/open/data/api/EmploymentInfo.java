@@ -30,7 +30,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import ch.prevo.open.data.api.validation.OASI;
 
-@SuppressWarnings("unused")
 public class EmploymentInfo {
 
     @NotNull
