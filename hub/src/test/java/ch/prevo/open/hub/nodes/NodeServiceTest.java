@@ -42,6 +42,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -195,8 +197,7 @@ public class NodeServiceTest {
         nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, commencementInsurantInfo.getDate(), terminationInsurantInfo.getDate())));
 
         // then
-        // TODO: fix and activate; we should not notify without the Transfer info
-        // verify(nodeCaller, times(0)).postTerminationNotification(any(), any());
+        verify(nodeCaller, never()).postTerminationNotification(any(), any());
     }
 
     @Test

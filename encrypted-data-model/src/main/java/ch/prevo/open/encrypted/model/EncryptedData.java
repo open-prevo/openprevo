@@ -18,14 +18,21 @@
  ******************************************************************************/
 package ch.prevo.open.encrypted.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 
 public class EncryptedData implements Serializable {
 
     private String encryptedDataBase64;
     private String encryptedSymmetricKeyBase64;
     private String ivBase64;
+    private String signatureBase64;
 
     public EncryptedData() {
     }
@@ -34,6 +41,13 @@ public class EncryptedData implements Serializable {
         this.encryptedDataBase64 = encryptedDataBase64;
         this.encryptedSymmetricKeyBase64 = encryptedSymmetricKeyBase64;
         this.ivBase64 = ivBase64;
+    }
+
+    public EncryptedData(EncryptedData encryptedData, String signatureBase64) {
+        this.encryptedDataBase64 = encryptedData.encryptedDataBase64;
+        this.encryptedSymmetricKeyBase64 = encryptedData.encryptedSymmetricKeyBase64;
+        this.ivBase64 = encryptedData.ivBase64;
+        this.signatureBase64 = signatureBase64;
     }
 
     public String getEncryptedDataBase64() {
@@ -48,25 +62,43 @@ public class EncryptedData implements Serializable {
         return ivBase64;
     }
 
+    public Optional<String> getSignatureBase64() {
+        return Optional.ofNullable(signatureBase64);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
+
         EncryptedData that = (EncryptedData) o;
-        return Objects.equals(encryptedDataBase64, that.encryptedDataBase64) &&
-                Objects.equals(encryptedSymmetricKeyBase64, that.encryptedSymmetricKeyBase64);
+
+        return new EqualsBuilder()
+                .append(encryptedDataBase64, that.encryptedDataBase64)
+                .append(encryptedSymmetricKeyBase64, that.encryptedSymmetricKeyBase64)
+                .append(ivBase64, that.ivBase64)
+                .append(signatureBase64, that.signatureBase64)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(encryptedDataBase64, encryptedSymmetricKeyBase64);
+        return new HashCodeBuilder(17, 37)
+                .append(encryptedDataBase64)
+                .append(encryptedSymmetricKeyBase64)
+                .append(ivBase64)
+                .append(signatureBase64)
+                .toHashCode();
     }
 
     @Override
     public String toString() {
-        return "EncryptedData{" +
-                "encryptedDataBase64='" + encryptedDataBase64 + '\'' +
-                ", encryptedSymmetricKeyBase64='" + encryptedSymmetricKeyBase64 + '\'' +
-                '}';
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("encryptedDataBase64", encryptedDataBase64)
+                .append("encryptedSymmetricKeyBase64", encryptedSymmetricKeyBase64)
+                .append("ivBase64", ivBase64)
+                .append("signatureBase64", signatureBase64)
+                .toString();
     }
 }

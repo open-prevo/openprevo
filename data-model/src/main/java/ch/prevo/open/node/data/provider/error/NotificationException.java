@@ -26,6 +26,10 @@ package ch.prevo.open.node.data.provider.error;
  */
 public class NotificationException extends Exception {
 
+    public NotificationException(String message) {
+        super(message);
+    }
+
     public NotificationException(Exception e) {
         super(e);
     }

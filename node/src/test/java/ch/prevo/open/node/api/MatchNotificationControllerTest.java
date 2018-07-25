@@ -21,6 +21,7 @@ package ch.prevo.open.node.api;
 import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.services.CapitalTransferInfoEncrypter;
 import ch.prevo.open.encrypted.services.Cryptography;
 import ch.prevo.open.node.NodeApplication;
@@ -29,6 +30,7 @@ import ch.prevo.open.node.data.provider.MockProvider;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.node.services.MatchNotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -45,11 +47,12 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.Collections;
 
 import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,19 +65,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class MatchNotificationControllerTest extends RestBaseTest {
 
-    private static final String OWN_UID = "CHE-109.740.084";
-    private static final String OTHER_UID = "CHE-109.537.488";
+    private static final String NEW_UID = "CHE-109.740.084";
+    private static final String PREVIOUS_UID = "CHE-109.537.488";
 
     @Inject
     private NodeConfigurationService nodeConfigurationService;
 
+    private CapitalTransferInfoEncrypter capitalTransferInfoEncrypter = new CapitalTransferInfoEncrypter();
+
     @TestConfiguration
     static class Config {
-        @Inject
-        private NodeConfigurationService nodeConfigurationService;
 
         @Bean
-        public MatchNotificationService matchNotificationService() throws Exception {
+        public MatchNotificationService matchNotificationService(NodeConfigurationService nodeConfigurationService) throws Exception {
             final ServiceListFactoryBean factory = Mockito.mock(ServiceListFactoryBean.class);
             given(factory.getObject()).willReturn(Collections.singletonList(new MockProviderFactory()));
             return new MatchNotificationService(factory, nodeConfigurationService);
@@ -83,11 +86,14 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         @Bean
         public NodeConfigurationService nodeConfigurationService() throws Exception {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ASYMMETRIC_TRANSFORMATION_ALGORITHM);
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            KeyPair previousFundKeyPair = keyPairGenerator.generateKeyPair();
+            KeyPair newFundKeyPair = keyPairGenerator.generateKeyPair();
 
             NodeConfigurationService nodeConfigService = mock(NodeConfigurationService.class);
-            when(nodeConfigService.getPublicKey(OTHER_UID)).thenReturn(keyPair.getPublic());
-            when(nodeConfigService.getPrivateKey(OWN_UID)).thenReturn(keyPair.getPrivate());
+            when(nodeConfigService.getPublicKey(PREVIOUS_UID)).thenReturn(previousFundKeyPair.getPublic());
+            when(nodeConfigService.getPublicKey(NEW_UID)).thenReturn(newFundKeyPair.getPublic());
+            when(nodeConfigService.getPrivateKey(PREVIOUS_UID)).thenReturn(previousFundKeyPair.getPrivate());
+            when(nodeConfigService.getPrivateKey(NEW_UID)).thenReturn(newFundKeyPair.getPrivate());
             return nodeConfigService;
         }
     }
@@ -97,8 +103,8 @@ public class MatchNotificationControllerTest extends RestBaseTest {
         // given
         MatchForCommencement commencementMatchNotification = new MatchForCommencement();
         commencementMatchNotification.setEncryptedOasiNumber(Cryptography.digestOasiNumber("756.1234.5678.97"));
-        commencementMatchNotification.setNewRetirementFundUid(OWN_UID);
-        commencementMatchNotification.setPreviousRetirementFundUid(OTHER_UID);
+        commencementMatchNotification.setNewRetirementFundUid(NEW_UID);
+        commencementMatchNotification.setPreviousRetirementFundUid(PREVIOUS_UID);
         commencementMatchNotification.setCommencementDate(LocalDate.of(2018, 7, 1));
         commencementMatchNotification.setTerminationDate(LocalDate.of(2018, 6, 30));
 
@@ -113,12 +119,41 @@ public class MatchNotificationControllerTest extends RestBaseTest {
                 .andExpect(content().contentType(contentType))
                 .andReturn();
 
-        assertEquals(MockProvider.CAPITAL_TRANSFER_INFO_1, decrypt(mvcResult.getResponse().getContentAsString()));
+        Pair<CapitalTransferInformation, Boolean> decryptedAndVerifiedResult = decryptAndVerify(mvcResult.getResponse().getContentAsString());
+        assertThat(decryptedAndVerifiedResult.getLeft()).isEqualTo(MockProvider.CAPITAL_TRANSFER_INFO_1);
+        assertThat(decryptedAndVerifiedResult.getRight()).isTrue();
     }
 
-    private CapitalTransferInformation decrypt(String encryptedDataJson) throws IOException {
+    @Test
+    public void sendTerminationNotificationToNewRetirementFund() throws Exception {
+        // given
+        MatchForTermination matchForTermination = new MatchForTermination();
+        matchForTermination.setEncryptedOasiNumber(Cryptography.digestOasiNumber("756.1234.5678.97"));
+        matchForTermination.setNewRetirementFundUid(PREVIOUS_UID);
+        matchForTermination.setPreviousRetirementFundUid(NEW_UID);
+        matchForTermination.setCommencementDate(LocalDate.of(2018, 7, 1));
+        matchForTermination.setTerminationDate(LocalDate.of(2018, 6, 30));
+        matchForTermination.setTransferInformation(encryptAndSign(MockProvider.CAPITAL_TRANSFER_INFO_1));
+        // when
+
+        mockMvc.perform(post("/termination-match-notification")
+                .content(this.convertToJson(matchForTermination))
+                .contentType(contentType))
+        // then
+                .andExpect(status().isOk());
+    }
+
+
+    private Pair<CapitalTransferInformation, Boolean> decryptAndVerify(String encryptedDataJson) throws IOException {
         EncryptedData encryptedData = new ObjectMapper().readValue(encryptedDataJson, EncryptedData.class);
-        PrivateKey privateKey = nodeConfigurationService.getPrivateKey(OWN_UID);
-        return new CapitalTransferInfoEncrypter().decrypt(encryptedData, privateKey);
+        PrivateKey privateKey = nodeConfigurationService.getPrivateKey(PREVIOUS_UID);
+        PublicKey publicKey = nodeConfigurationService.getPublicKey(NEW_UID);
+        return capitalTransferInfoEncrypter.decryptAndVerify(encryptedData, privateKey, publicKey);
+    }
+
+    private EncryptedData encryptAndSign(CapitalTransferInformation capitalTransferInformation) {
+        PrivateKey privateKey = nodeConfigurationService.getPrivateKey(NEW_UID);
+        PublicKey publicKey = nodeConfigurationService.getPublicKey(PREVIOUS_UID);
+        return capitalTransferInfoEncrypter.encryptAndSign(capitalTransferInformation, publicKey, privateKey);
     }
 }

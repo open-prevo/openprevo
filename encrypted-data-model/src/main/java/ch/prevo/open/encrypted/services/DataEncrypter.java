@@ -1,24 +1,26 @@
 /*******************************************************************************
  * Copyright (c) 2018 - Prevo-System AG and others.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * This Source Code may also be made available under the following Secondary
  * Licenses when the conditions for such availability set forth in the Eclipse
  * Public License, v. 2.0 are satisfied: GNU General Public License, version 3
  * with the GNU Classpath Exception which is
  * available at https://www.gnu.org/software/classpath/license.html.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0
- * 
+ *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  ******************************************************************************/
 package ch.prevo.open.encrypted.services;
 
 import ch.prevo.open.encrypted.model.EncryptedData;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -26,7 +28,14 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.Base64;
 
 /**
@@ -42,6 +51,7 @@ public abstract class DataEncrypter<T> {
     private static final String ASYMMETRIC_TRANSFORMATION = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
     private static final int SYMMETRIC_KEY_SIZE = 256;
     private static final int SYMMETRIC_BLOCK_SIZE_BYTES = 16;
+    private static final String SIGNING_ALGORITHM = "SHA256withRSA";
 
 
     public EncryptedData encrypt(T data, PublicKey publicKey) {
@@ -59,11 +69,54 @@ public abstract class DataEncrypter<T> {
 
     public T decrypt(EncryptedData data, PrivateKey privateKey) {
         try {
-            byte[] symmetricKey = decryptSymmentricKey(data, privateKey);
+            byte[] symmetricKey = decryptSymmetricKey(data, privateKey);
             byte[] decryptedData = decryptData(data, symmetricKey);
             return fromByteArray(decryptedData);
         } catch (GeneralSecurityException | IOException e) {
             throw new IllegalStateException("Could not decrypt data", e);
+        }
+    }
+
+    public EncryptedData encryptAndSign(T data, PublicKey publicKey, PrivateKey privateKey) {
+        EncryptedData encryptedData = encrypt(data, publicKey);
+        String signature = sign(data, privateKey);
+        return new EncryptedData(encryptedData, signature);
+    }
+
+    public Pair<T, Boolean> decryptAndVerify(EncryptedData data, PrivateKey privateKey, PublicKey publicKey) {
+        return data.getSignatureBase64().map(signature -> {
+            try {
+                T decryptedData = decrypt(data, privateKey);
+                boolean verified = verify(toByteArray(decryptedData), signature, publicKey);
+                return new ImmutablePair<>(decryptedData, verified);
+            } catch (IOException e) {
+                throw new IllegalStateException("Could not decrypt and verify data", e);
+            }
+        }).orElseThrow(() -> new IllegalStateException("No signature provided"));
+    }
+
+    private String sign(T data, PrivateKey privateKey) {
+        try {
+            Signature privateSignature = Signature.getInstance(SIGNING_ALGORITHM);
+            privateSignature.initSign(privateKey);
+            privateSignature.update(toByteArray(data));
+            return toBase64(privateSignature.sign());
+        } catch (NoSuchAlgorithmException | IOException | SignatureException | InvalidKeyException e) {
+            throw new IllegalStateException("Could not sign data", e);
+        }
+    }
+
+    private boolean verify(byte[] data, String signature, PublicKey publicKey) {
+        try {
+            Signature publicSignature = Signature.getInstance(SIGNING_ALGORITHM);
+            publicSignature.initVerify(publicKey);
+            publicSignature.update(data);
+
+            byte[] signatureBytes = fromBase64(signature);
+
+            return publicSignature.verify(signatureBytes);
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+            throw new IllegalStateException("Could not verify data", e);
         }
     }
 
@@ -110,7 +163,7 @@ public abstract class DataEncrypter<T> {
         return symmetricCipher.doFinal(fromBase64(data.getEncryptedDataBase64()));
     }
 
-    private byte[] decryptSymmentricKey(EncryptedData data, PrivateKey privateKey) throws GeneralSecurityException {
+    private byte[] decryptSymmetricKey(EncryptedData data, PrivateKey privateKey) throws GeneralSecurityException {
         Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION);
         asymmetricCipher.init(Cipher.DECRYPT_MODE, privateKey);
         return asymmetricCipher.doFinal(fromBase64(data.getEncryptedSymmetricKeyBase64()));
