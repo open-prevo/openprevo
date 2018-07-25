@@ -19,8 +19,10 @@
 package ch.prevo.open.encrypted.services;
 
 import ch.prevo.open.encrypted.model.EncryptedData;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import ch.prevo.open.encrypted.model.SignedEncryptionContainer;
+import ch.prevo.open.encrypted.model.SymmetricKeyBundle;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -28,6 +30,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -40,10 +43,11 @@ import java.util.Base64;
 
 /**
  * Uses AES/RSA to encrypt data using a public key, and decryption using a private key.
+ * In addition the encrypted data is signed with SHA256withRSA before it is encrypted to provide a signature that will be
+ * validated during decryption of the data.
  *
- * @param <T> type of the data to encrypt
  */
-public abstract class DataEncrypter<T> {
+public class DataEncryptionService {
 
     private static final String SYMMETRIC_TRANSFORMATION_ALGORITHM = "AES";
     private static final String SYMMETRIC_TRANSFORMATION = "AES/CBC/PKCS5Padding";
@@ -52,77 +56,79 @@ public abstract class DataEncrypter<T> {
     private static final int SYMMETRIC_KEY_SIZE = 256;
     private static final int SYMMETRIC_BLOCK_SIZE_BYTES = 16;
     private static final String SIGNING_ALGORITHM = "SHA256withRSA";
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public EncryptedData encrypt(T data, PublicKey publicKey) {
+    public <T> EncryptedData encryptAndSign(T data, PublicKey publicKey, PrivateKey privateKey) {
         try {
             SecretKey symmetricKey = createSymmetricKey();
             IvParameterSpec iv = createIV();
-            String encryptedDataBase64 = toBase64(encryptSymmetrically(data, symmetricKey, iv));
-            String encryptedSymmetricKeyBase64 = toBase64(encryptAsymmetrically(symmetricKey, publicKey));
-            String ivBase64 = toBase64(iv.getIV());
-            return new EncryptedData(encryptedDataBase64, encryptedSymmetricKeyBase64, ivBase64);
+
+            String signature = sign(toByteArray(data), privateKey);
+            SignedEncryptionContainer<T> signedEncryptionContainer = new SignedEncryptionContainer<>(data, signature);
+            String encryptedDataBase64 = toBase64(encryptSymmetrically(signedEncryptionContainer, symmetricKey, iv));
+
+            SymmetricKeyBundle symmetricKeyBundle = new SymmetricKeyBundle(toBase64(symmetricKey.getEncoded()), toBase64(iv.getIV()));
+            String encryptedSymmetricKeyBase64 = toBase64(encryptAsymmetrically(symmetricKeyBundle, publicKey));
+            return new EncryptedData(encryptedDataBase64, encryptedSymmetricKeyBase64);
         } catch (GeneralSecurityException | IOException e) {
             throw new IllegalStateException("Could not encrypt data", e);
         }
     }
 
-    public T decrypt(EncryptedData data, PrivateKey privateKey) {
+    public <T> T decryptAndVerify(EncryptedData data, Class<T> clazz, PrivateKey privateKey, PublicKey signKey) throws InvalidSignatureException {
         try {
-            byte[] symmetricKey = decryptSymmetricKey(data, privateKey);
-            byte[] decryptedData = decryptData(data, symmetricKey);
-            return fromByteArray(decryptedData);
+            SymmetricKeyBundle symmetricKeyBundle = decryptSymmetricKeyBundle(data, privateKey);
+            byte[] decryptedData = decryptData(data, symmetricKeyBundle);
+
+            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(SignedEncryptionContainer.class, clazz);
+            SignedEncryptionContainer<T> signedEncryptionContainer = fromByteArray(decryptedData, javaType);
+
+            boolean verify = verify(signedEncryptionContainer, signKey);
+            if (!verify) {
+                throw new InvalidSignatureException("Invalid signature provided");
+            }
+            return signedEncryptionContainer.getData();
         } catch (GeneralSecurityException | IOException e) {
             throw new IllegalStateException("Could not decrypt data", e);
         }
     }
 
-    public EncryptedData encryptAndSign(T data, PublicKey publicKey, PrivateKey privateKey) {
-        EncryptedData encryptedData = encrypt(data, publicKey);
-        String signature = sign(data, privateKey);
-        return new EncryptedData(encryptedData, signature);
-    }
-
-    public Pair<T, Boolean> decryptAndVerify(EncryptedData data, PrivateKey privateKey, PublicKey publicKey) {
-        return data.getSignatureBase64().map(signature -> {
-            try {
-                T decryptedData = decrypt(data, privateKey);
-                boolean verified = verify(toByteArray(decryptedData), signature, publicKey);
-                return new ImmutablePair<>(decryptedData, verified);
-            } catch (IOException e) {
-                throw new IllegalStateException("Could not decrypt and verify data", e);
-            }
-        }).orElseThrow(() -> new IllegalStateException("No signature provided"));
-    }
-
-    private String sign(T data, PrivateKey privateKey) {
+    private String sign(byte[] data, PrivateKey privateKey) {
         try {
             Signature privateSignature = Signature.getInstance(SIGNING_ALGORITHM);
             privateSignature.initSign(privateKey);
-            privateSignature.update(toByteArray(data));
+            privateSignature.update(data);
             return toBase64(privateSignature.sign());
-        } catch (NoSuchAlgorithmException | IOException | SignatureException | InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             throw new IllegalStateException("Could not sign data", e);
         }
     }
 
-    private boolean verify(byte[] data, String signature, PublicKey publicKey) {
+    private boolean verify(SignedEncryptionContainer<?> signedEncryptionContainer, PublicKey publicKey) {
         try {
             Signature publicSignature = Signature.getInstance(SIGNING_ALGORITHM);
             publicSignature.initVerify(publicKey);
-            publicSignature.update(data);
-
-            byte[] signatureBytes = fromBase64(signature);
-
+            publicSignature.update(toByteArray(signedEncryptionContainer.getData()));
+            byte[] signatureBytes = fromBase64(signedEncryptionContainer.getSignatureBase64());
             return publicSignature.verify(signatureBytes);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | SignatureException | IOException | InvalidKeyException e) {
             throw new IllegalStateException("Could not verify data", e);
         }
     }
 
-    protected abstract byte[] toByteArray(T data) throws IOException;
+    protected <T> byte[] toByteArray(T data) throws IOException {
+        String json = objectMapper.writeValueAsString(data);
+        return json.getBytes(StandardCharsets.UTF_8);
+    }
 
-    protected abstract T fromByteArray(byte[] data) throws IOException;
+    protected <T> T fromByteArray(byte[] data, Class<T> clazz) throws IOException {
+        return objectMapper.readValue(data, clazz);
+    }
+
+    protected <T> T fromByteArray(byte[] data, JavaType type) throws IOException {
+        return objectMapper.readValue(data, type);
+    }
 
     private String toBase64(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
@@ -132,16 +138,16 @@ public abstract class DataEncrypter<T> {
         return Base64.getDecoder().decode(data);
     }
 
-    private byte[] encryptAsymmetrically(SecretKey symmetricKeyToEncrypt, PublicKey publicEncodingKey) throws GeneralSecurityException {
+    private byte[] encryptAsymmetrically(SymmetricKeyBundle keyBundle, PublicKey publicEncodingKey) throws GeneralSecurityException, IOException {
         Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION);
         asymmetricCipher.init(Cipher.ENCRYPT_MODE, publicEncodingKey);
-        return asymmetricCipher.doFinal(symmetricKeyToEncrypt.getEncoded());
+        return asymmetricCipher.doFinal(toByteArray(keyBundle));
     }
 
-    private byte[] encryptSymmetrically(T info, SecretKey symmetricKey, IvParameterSpec iv) throws GeneralSecurityException, IOException {
+    private byte[] encryptSymmetrically(SignedEncryptionContainer signedEncryptionContainer, SecretKey symmetricKey, IvParameterSpec iv) throws GeneralSecurityException, IOException {
         Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION);
         symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey, iv);
-        return symmetricCipher.doFinal(toByteArray(info));
+        return symmetricCipher.doFinal(toByteArray(signedEncryptionContainer));
     }
 
     private IvParameterSpec createIV() {
@@ -155,18 +161,18 @@ public abstract class DataEncrypter<T> {
         return keyGenerator.generateKey();
     }
 
-    private byte[] decryptData(EncryptedData data, byte[] symmetricKey) throws GeneralSecurityException {
-        SecretKeySpec symmetricKeySpec = new SecretKeySpec(symmetricKey, SYMMETRIC_TRANSFORMATION_ALGORITHM);
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(fromBase64(data.getIvBase64()));
+    private byte[] decryptData(EncryptedData data, SymmetricKeyBundle symmetricKey) throws GeneralSecurityException {
+        SecretKeySpec symmetricKeySpec = new SecretKeySpec(fromBase64(symmetricKey.getKey()), SYMMETRIC_TRANSFORMATION_ALGORITHM);
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(fromBase64(symmetricKey.getIv()));
         Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_TRANSFORMATION);
         symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKeySpec, ivParameterSpec);
         return symmetricCipher.doFinal(fromBase64(data.getEncryptedDataBase64()));
     }
 
-    private byte[] decryptSymmetricKey(EncryptedData data, PrivateKey privateKey) throws GeneralSecurityException {
+    private SymmetricKeyBundle decryptSymmetricKeyBundle(EncryptedData data, PrivateKey privateKey) throws GeneralSecurityException, IOException {
         Cipher asymmetricCipher = Cipher.getInstance(ASYMMETRIC_TRANSFORMATION);
         asymmetricCipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return asymmetricCipher.doFinal(fromBase64(data.getEncryptedSymmetricKeyBase64()));
+        byte[] decryptedKeyBundle = asymmetricCipher.doFinal(fromBase64(data.getEncryptedSymmetricKeyBundleBase64()));
+        return fromByteArray(decryptedKeyBundle, SymmetricKeyBundle.class);
     }
-
 }

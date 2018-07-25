@@ -60,8 +60,7 @@ public class NodeCallerTest {
     private static final String UID3 = "CHE-109.537.488";
 
     private static final String ENCRYPTED_DATA = "This is the encrypted data";
-    private static final String ENCRYPTED_KEY = "This is the encrypted key";
-    private static final String IV = "IV";
+    private static final String ENCRYPTED_KEY_PAIR = "This is the encrypted key";
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
@@ -74,7 +73,7 @@ public class NodeCallerTest {
             "]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
-            = "{\"encryptedDataBase64\" : \"" + ENCRYPTED_DATA + "\", \"encryptedSymmetricKeyBase64\" : \"" + ENCRYPTED_KEY + "\"}";
+            = "{\"encryptedDataBase64\" : \"" + ENCRYPTED_DATA + "\", \"encryptedSymmetricKeyBundleBase64\" : \"" + ENCRYPTED_KEY_PAIR + "\"}";
 
 
     private static final String URL1 = "https://host.domain1/path";
@@ -151,7 +150,7 @@ public class NodeCallerTest {
         // then
         server.verify();
         assertThat(capitalTransferInformation.getEncryptedDataBase64()).isEqualTo(ENCRYPTED_DATA);
-        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBase64()).isEqualTo(ENCRYPTED_KEY);
+        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBundleBase64()).isEqualTo(ENCRYPTED_KEY_PAIR);
     }
 
     @Test
@@ -230,7 +229,7 @@ public class NodeCallerTest {
     @Test
     public void notifyTerminationMatch() {
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -247,7 +246,7 @@ public class NodeCallerTest {
         // given
         final MatchForTermination matchForTermination = createMatchForTermination();
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
                 .andRespond(withSuccess());
         when(notificationDAO.isMatchForTerminationAlreadyNotified(matchForTermination)).thenReturn(false).thenReturn(true);
 
@@ -262,12 +261,12 @@ public class NodeCallerTest {
 
     @Test
     public void notifySeveralTerminationMatchesForSingleCommencement() {
-        EncryptedData transferInformation2 = new EncryptedData("Data2", "Key2", "Iv2)");
+        EncryptedData transferInformation2 = new EncryptedData("Data2", "Key2");
         server.expect(requestTo(URL1))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
                 .andRespond(withSuccess());
         server.expect(requestTo(URL3))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(transferInformation2.getEncryptedSymmetricKeyBase64())))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(transferInformation2.getEncryptedSymmetricKeyBundleBase64())))
                 .andRespond(withSuccess());
 
         MatchForTermination matchForTermination_node1 = createMatchForTermination();
@@ -288,7 +287,7 @@ public class NodeCallerTest {
     public void verifyNotifyTerminationMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
         server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBase64", is(ENCRYPTED_KEY)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -326,7 +325,7 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY, IV);
+        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY_PAIR);
         MatchForTermination MatchForTermination = new MatchForTermination();
         MatchForTermination.setEncryptedOasiNumber(OASI1);
         MatchForTermination.setNewRetirementFundUid(UID2);

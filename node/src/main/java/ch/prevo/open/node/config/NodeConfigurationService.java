@@ -42,7 +42,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static ch.prevo.open.encrypted.services.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 @Service
 public class NodeConfigurationService {

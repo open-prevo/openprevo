@@ -24,46 +24,26 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Optional;
 
 public class EncryptedData implements Serializable {
 
     private String encryptedDataBase64;
-    private String encryptedSymmetricKeyBase64;
-    private String ivBase64;
-    private String signatureBase64;
+    private String encryptedSymmetricKeyBundleBase64;
 
     public EncryptedData() {
     }
 
-    public EncryptedData(String encryptedDataBase64, String encryptedSymmetricKeyBase64, String ivBase64) {
+    public EncryptedData(String encryptedDataBase64, String encryptedSymmetricKeyBundleBase64) {
         this.encryptedDataBase64 = encryptedDataBase64;
-        this.encryptedSymmetricKeyBase64 = encryptedSymmetricKeyBase64;
-        this.ivBase64 = ivBase64;
-    }
-
-    public EncryptedData(EncryptedData encryptedData, String signatureBase64) {
-        this.encryptedDataBase64 = encryptedData.encryptedDataBase64;
-        this.encryptedSymmetricKeyBase64 = encryptedData.encryptedSymmetricKeyBase64;
-        this.ivBase64 = encryptedData.ivBase64;
-        this.signatureBase64 = signatureBase64;
+        this.encryptedSymmetricKeyBundleBase64 = encryptedSymmetricKeyBundleBase64;
     }
 
     public String getEncryptedDataBase64() {
         return encryptedDataBase64;
     }
 
-    public String getEncryptedSymmetricKeyBase64() {
-        return encryptedSymmetricKeyBase64;
-    }
-
-    public String getIvBase64() {
-        return ivBase64;
-    }
-
-    public Optional<String> getSignatureBase64() {
-        return Optional.ofNullable(signatureBase64);
+    public String getEncryptedSymmetricKeyBundleBase64() {
+        return encryptedSymmetricKeyBundleBase64;
     }
 
     @Override
@@ -76,9 +56,7 @@ public class EncryptedData implements Serializable {
 
         return new EqualsBuilder()
                 .append(encryptedDataBase64, that.encryptedDataBase64)
-                .append(encryptedSymmetricKeyBase64, that.encryptedSymmetricKeyBase64)
-                .append(ivBase64, that.ivBase64)
-                .append(signatureBase64, that.signatureBase64)
+                .append(encryptedSymmetricKeyBundleBase64, that.encryptedSymmetricKeyBundleBase64)
                 .isEquals();
     }
 
@@ -86,9 +64,7 @@ public class EncryptedData implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(encryptedDataBase64)
-                .append(encryptedSymmetricKeyBase64)
-                .append(ivBase64)
-                .append(signatureBase64)
+                .append(encryptedSymmetricKeyBundleBase64)
                 .toHashCode();
     }
 
@@ -96,9 +72,7 @@ public class EncryptedData implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("encryptedDataBase64", encryptedDataBase64)
-                .append("encryptedSymmetricKeyBase64", encryptedSymmetricKeyBase64)
-                .append("ivBase64", ivBase64)
-                .append("signatureBase64", signatureBase64)
+                .append("encryptedSymmetricKeyBundleBase64", encryptedSymmetricKeyBundleBase64)
                 .toString();
     }
 }

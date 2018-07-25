@@ -22,15 +22,14 @@ import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.services.CapitalTransferInfoEncrypter;
 import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.encrypted.services.DataEncryptionService;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.config.NodeConfigurationService;
 import ch.prevo.open.node.data.provider.MockProvider;
 import ch.prevo.open.node.data.provider.MockProviderFactory;
 import ch.prevo.open.node.services.MatchNotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -51,7 +50,7 @@ import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static ch.prevo.open.encrypted.services.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -71,7 +70,7 @@ public class MatchNotificationControllerTest extends RestBaseTest {
     @Inject
     private NodeConfigurationService nodeConfigurationService;
 
-    private CapitalTransferInfoEncrypter capitalTransferInfoEncrypter = new CapitalTransferInfoEncrypter();
+    private DataEncryptionService dataEncryptionService = new DataEncryptionService();
 
     @TestConfiguration
     static class Config {
@@ -119,9 +118,8 @@ public class MatchNotificationControllerTest extends RestBaseTest {
                 .andExpect(content().contentType(contentType))
                 .andReturn();
 
-        Pair<CapitalTransferInformation, Boolean> decryptedAndVerifiedResult = decryptAndVerify(mvcResult.getResponse().getContentAsString());
-        assertThat(decryptedAndVerifiedResult.getLeft()).isEqualTo(MockProvider.CAPITAL_TRANSFER_INFO_1);
-        assertThat(decryptedAndVerifiedResult.getRight()).isTrue();
+        CapitalTransferInformation decryptedAndVerifiedResult = decryptAndVerify(mvcResult.getResponse().getContentAsString());
+        assertThat(decryptedAndVerifiedResult).isEqualTo(MockProvider.CAPITAL_TRANSFER_INFO_1);
     }
 
     @Test
@@ -144,16 +142,16 @@ public class MatchNotificationControllerTest extends RestBaseTest {
     }
 
 
-    private Pair<CapitalTransferInformation, Boolean> decryptAndVerify(String encryptedDataJson) throws IOException {
+    private CapitalTransferInformation decryptAndVerify(String encryptedDataJson) throws IOException {
         EncryptedData encryptedData = new ObjectMapper().readValue(encryptedDataJson, EncryptedData.class);
         PrivateKey privateKey = nodeConfigurationService.getPrivateKey(PREVIOUS_UID);
         PublicKey publicKey = nodeConfigurationService.getPublicKey(NEW_UID);
-        return capitalTransferInfoEncrypter.decryptAndVerify(encryptedData, privateKey, publicKey);
+        return dataEncryptionService.decryptAndVerify(encryptedData, CapitalTransferInformation.class, privateKey, publicKey);
     }
 
     private EncryptedData encryptAndSign(CapitalTransferInformation capitalTransferInformation) {
         PrivateKey privateKey = nodeConfigurationService.getPrivateKey(NEW_UID);
         PublicKey publicKey = nodeConfigurationService.getPublicKey(PREVIOUS_UID);
-        return capitalTransferInfoEncrypter.encryptAndSign(capitalTransferInformation, publicKey, privateKey);
+        return dataEncryptionService.encryptAndSign(capitalTransferInformation, publicKey, privateKey);
     }
 }

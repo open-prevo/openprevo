@@ -73,7 +73,7 @@ public class NotificationDAOTest {
     }
 
     private MatchForTermination getMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData("Key_" + Math.random(), "Data_" + Math.random(), "IV...");
+        EncryptedData transferInformation = new EncryptedData("Data_" + Math.random(), "KeyBundle_" + Math.random());
         return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,
                 commencementDate, terminationDate,
                 transferInformation);
