@@ -5,11 +5,18 @@ services:
     hostname: baloise
     ports:
     - "8881:8080"
+    volumes:
+      - ./demo/src/data:/opt/app/config
+    environment:
+      SPRING_APPLICATION_JSON:  '{ "open.prevo.node.config.file": "file:/opt/app/config/NodeBaloiseExcel-config.yml" }'
   node_helvetia:
     image: "openprevo/node-dummy:staging"
     hostname: helvetia
     ports:
     - "8882:8080"
+    volumes:
+      - ./demo/src/data:/opt/app/config
     environment:
+      SPRING_APPLICATION_JSON:  '{ "open.prevo.node.config.file": "file:/opt/app/config/NodeHelvetiaExcel-config.yml" }'
       EMPLOYMENT_COMMENCEMENT_JSON: "classpath:pakt-sample-employment-commencement.json"
       EMPLOYMENT_TERMINATION_JSON: "classpath:pakt-sample-employment-termination.json"
