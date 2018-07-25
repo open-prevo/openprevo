@@ -1,21 +1,23 @@
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.data.api.EmploymentCommencement;
-import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.node.NodeApplication;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
+import java.time.LocalDate;
+
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.inject.Inject;
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.node.NodeApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeApplication.class})
