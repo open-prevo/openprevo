@@ -129,10 +129,10 @@ public class AbstractNotificationWriter implements Closeable {
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
+        createHeading(row, "UID der eigenen VE", headingStyle);
         createHeading(row, "Eigene Referenz", headingStyle);
         createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der ehemaligen RF", headingStyle);
+        createHeading(row, "UID der ehemaligen VE", headingStyle);
     }
 
     private void setupTerminationSheet(CellStyle headingStyle) {
@@ -141,17 +141,17 @@ public class AbstractNotificationWriter implements Closeable {
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
+        createHeading(row, "UID der eigenen VE", headingStyle);
         createHeading(row, "Eigene Referenz", headingStyle);
         createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der neuen RF", headingStyle);
-        createHeading(row, "Name der neuen RF", headingStyle);
+        createHeading(row, "UID der neuen VE", headingStyle);
+        createHeading(row, "Name der neuen VE", headingStyle);
         createHeading(row, "Zusatzname", headingStyle);
         createHeading(row, "Strasse / Postfach", headingStyle);
         createHeading(row, "PLZ", headingStyle);
         createHeading(row, "Ort", headingStyle);
         createHeading(row, "IBAN", headingStyle);
-        createHeading(row, "Referenznr. der neuen RF", headingStyle);
+        createHeading(row, "Referenznr. der neuen VE", headingStyle);
     }
 
     private void createHeading(Row row, String label, CellStyle headingStyle) {
