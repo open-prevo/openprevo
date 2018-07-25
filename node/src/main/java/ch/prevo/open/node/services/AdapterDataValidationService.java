@@ -23,6 +23,10 @@ public class AdapterDataValidationService {
         this.validator = validator;
     }
 
+    public Set<ConstraintViolation<EmploymentCommencement>> getEmploymentCommencementViolations(EmploymentCommencement employmentCommencement) {
+        return validator.validate(employmentCommencement);
+    }
+
     public boolean isValidEmploymentCommencement(EmploymentCommencement employmentCommencement) {
         Set<ConstraintViolation<EmploymentCommencement>> validate = validator.validate(employmentCommencement);
 
@@ -31,6 +35,10 @@ public class AdapterDataValidationService {
         }
 
         return validate.isEmpty();
+    }
+
+    public Set<ConstraintViolation<EmploymentTermination>> getEmploymentTerminationViolations(EmploymentTermination employmentCommencement) {
+        return validator.validate(employmentCommencement);
     }
 
     public boolean isValidEmploymentTermination(EmploymentTermination employmentTermination) {

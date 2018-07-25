@@ -20,10 +20,15 @@ package ch.prevo.open.node.data.provider;
 
 import ch.prevo.open.data.api.EmploymentCommencement;
 
+import javax.validation.ConstraintViolation;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface EmploymentCommencementProvider {
 
     List<EmploymentCommencement> getEmploymentCommencements();
+
+    default void notifyCommencementErrors(Map<EmploymentCommencement, Set<ConstraintViolation<EmploymentCommencement>>> violations) {}
 
 }
