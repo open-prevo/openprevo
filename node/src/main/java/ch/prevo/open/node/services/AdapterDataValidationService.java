@@ -27,28 +27,8 @@ public class AdapterDataValidationService {
         return validator.validate(employmentCommencement);
     }
 
-    public boolean isValidEmploymentCommencement(EmploymentCommencement employmentCommencement) {
-        Set<ConstraintViolation<EmploymentCommencement>> validate = validator.validate(employmentCommencement);
-
-        if (!validate.isEmpty()) {
-            LOGGER.info("Invalid commencement found in provided data, error: \n{}", validate);
-        }
-
-        return validate.isEmpty();
-    }
-
     public Set<ConstraintViolation<EmploymentTermination>> getEmploymentTerminationViolations(EmploymentTermination employmentCommencement) {
         return validator.validate(employmentCommencement);
-    }
-
-    public boolean isValidEmploymentTermination(EmploymentTermination employmentTermination) {
-        Set<ConstraintViolation<EmploymentTermination>> validate = validator.validate(employmentTermination);
-
-        if (!validate.isEmpty()) {
-            LOGGER.info("Invalid termination found in provided data, error: \n{}", validate);
-        }
-
-        return validate.isEmpty();
     }
 
 }
