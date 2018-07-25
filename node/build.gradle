@@ -51,29 +51,23 @@ docker {
     buildArgs(['NODE_JAR': "${bootJar.archiveName}", 'ADAPTER_JAR': "${project(":adapter-dummy").shadowJar.archiveName}"])
 }
 
-task runExampleAdapterWithSpring(dependsOn: [bootJar, project(":adapter-example-spring").shadowJar], type: JavaExec) {
-    main = '-jar'
-    args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-example-spring').shadowJar.outputs.files.getFiles().first()}"
-}
-
-task runDummyNode(dependsOn: [bootJar, project(":adapter-dummy").shadowJar], type: JavaExec) {
-    main = '-jar'
-    args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-dummy').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8881"
-}
-
-task runExcelNode(dependsOn: [bootJar, project(":adapter-excel").shadowJar], type: JavaExec) {
+task runBaloiseExcelNode(dependsOn: [bootJar, project(":adapter-excel").shadowJar], type: JavaExec) {
     main = '-jar'
     systemProperties = System.properties
     args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-excel').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8882"
+    jvmArgs "-Dloader.path=${project(':adapter-excel').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8851", "-Dopen.prevo.node.config.file=file:${project(":demo").projectDir}/src/data/NodeBaloiseExcel-config.yml", "-Dnode.adapter.excel.in.file=${project(":demo").projectDir}/src/data/NodeBaloiseExcel-Input.xlsx", "-Dnode.adapter.excel.out.file=NodeBaloiseExcel-Output"
 }
 
-
-task runPaktNode(dependsOn: [bootJar, project(":adapter-pakt").shadowJar], type: JavaExec) {
-    systemProperties = System.properties
+task runHelvetiaExcelNode(dependsOn: [bootJar, project(":adapter-excel").shadowJar], type: JavaExec) {
     main = '-jar'
+    systemProperties = System.properties
     args "${bootJar.outputs.files.getFiles().first()}"
-    jvmArgs "-Dloader.path=${project(':adapter-pakt').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8883"
-} 
+    jvmArgs "-Dloader.path=${project(':adapter-excel').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8852", "-Dopen.prevo.node.config.file=file:${project(":demo").projectDir}/src/data/NodeHelvetiaExcel-config.yml", "-Dnode.adapter.excel.in.file=${project(":demo").projectDir}/src/data/NodeHelvetiaExcel-Input.xlsx", "-Dnode.adapter.excel.out.file=NodeHelvetiaExcel-Output"
+}
+
+task runZurichExcelNode(dependsOn: [bootJar, project(":adapter-excel").shadowJar], type: JavaExec) {
+    main = '-jar'
+    systemProperties = System.properties
+    args "${bootJar.outputs.files.getFiles().first()}"
+    jvmArgs "-Dloader.path=${project(':adapter-excel').shadowJar.outputs.files.getFiles().first()}", "-Dserver.port=8853", "-Dopen.prevo.node.config.file=file:${project(":demo").projectDir}/src/data/NodeZurichExcel-config.yml", "-Dnode.adapter.excel.in.file=${project(":demo").projectDir}/src/data/NodeZurichExcel-Input.xlsx", "-Dnode.adapter.excel.out.file=NodeZurichExcel-Output"
+}

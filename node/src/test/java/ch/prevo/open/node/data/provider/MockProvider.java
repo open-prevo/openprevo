@@ -56,12 +56,12 @@ public class MockProvider implements EmploymentTerminationProvider, EmploymentCo
     }
 
     @Override
-    public void handleTerminationMatch(FullTerminationNotification notification) {
+    public void handleMatchForCommencementNotification(FullMatchForCommencementNotification notification) {
 
     }
 
     @Override
-    public void handleCommencementMatch(FullCommencementNotification notification) {
+    public void handleMatchForTerminationNotification(FullMatchForTerminationNotification notification) {
 
     }
 }
