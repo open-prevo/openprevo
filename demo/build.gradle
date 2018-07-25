@@ -23,9 +23,14 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
 task buildDemoZip(type: Zip) {
-    from "${buildDir}/demo"
-    include('**/*')
-    exclude('**/demo-nodes-docker.yml')
+    from ("${buildDir}/demo") {
+        include('**/*')
+        exclude('**/demo-nodes-docker.yml')
+    }
+    from (".") {
+        include "readme.md"
+        include "startExcelDemo.bat"
+    }
     archiveName 'demo.zip'
     destinationDir file("${buildDir}/")
 }
@@ -126,14 +131,16 @@ nodeConfiguration.each { node ->
         }
     }
 
-    buildDemoZip.dependsOn({[
-            project(":${node.adapter}").shadowJar,
-            project(":node").bootJar,
-            "copyLibs${node.name}",
-            "copyConfig${node.name}",
-            "copyDemoData${node.name}",
-            "createStartScripts${node.name}"
-    ]})
+    buildDemoZip.dependsOn({
+        [
+                project(":${node.adapter}").shadowJar,
+                project(":node").bootJar,
+                "copyLibs${node.name}",
+                "copyConfig${node.name}",
+                "copyDemoData${node.name}",
+                "createStartScripts${node.name}"
+        ]
+    })
 }
 
 
@@ -151,7 +158,6 @@ def getJavaCommandLineForNode(nodeConfiguration) {
 }
 
 assemble.dependsOn(buildDemoZip)
-
 
 //
 // Integration test with docker
