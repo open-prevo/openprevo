@@ -76,8 +76,8 @@ public class HubIntegrationTest {
     private static final Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(LOGGER);
 
     @ClassRule
-    public static DockerComposeContainer environment =
-            new DockerComposeContainer(Paths.get("../docker-compose-nodes.yml").toAbsolutePath().normalize().toFile())
+    public static DockerComposeContainer<?> environment =
+            new DockerComposeContainer<>(Paths.get("../docker-compose-nodes.yml").toAbsolutePath().normalize().toFile())
                     .withExposedService("node_baloise", NODE_PORT, Wait.forHttp("/commencement-of-employment").forStatusCode(200))
                     .withExposedService("node_helvetia", NODE_PORT, Wait.forHttp("/commencement-of-employment").forStatusCode(200))
                     .withLogConsumer("node_helvetia", logConsumer)
