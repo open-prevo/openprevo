@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@SuppressWarnings("unused")
 public class NodeConfiguration {
 
     private static final String EMPLOYMENT_COMMENCEMENTS_ENDPOINT = "/commencement-of-employment";

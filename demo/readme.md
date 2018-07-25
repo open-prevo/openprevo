@@ -3,7 +3,7 @@ OpenPrevo consists of a central hub and two or more retirement fund nodes.
 This demo is fully self contained and includes a hub.
 As retirement fund you would normally not run a hub but only a node and connect to a hub provided by the OpenPrevo platform.
 
-The nodes implement a very small API (TBD link to API as soon as https://github.com/open-prevo/openprevo/issues/125 is fixed) and can be easily adapted to any back end system you run.
+The nodes implement a [small API](https://github.com/open-prevo/openprevo/tree/master/node-api) and can be easily adapted to any back end system you run.
 
 In this example the back end is a simple set of XLS files.
 

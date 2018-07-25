@@ -27,6 +27,7 @@ import java.io.Serializable;
 
 public class EncryptedData implements Serializable {
 
+    private static final long serialVersionUID = 7722287937301328033L;
     private String encryptedDataBase64;
     private String encryptedSymmetricKeyBundleBase64;
 
