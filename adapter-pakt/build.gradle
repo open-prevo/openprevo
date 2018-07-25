@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compile(project(":data-model"))
+    compile(project(":node-api"))
 
     compile('javax.inject:javax.inject')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")

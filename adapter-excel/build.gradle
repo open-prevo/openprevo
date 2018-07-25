@@ -25,7 +25,7 @@ jar.enabled = false
 build.dependsOn(shadowJar)
 
 dependencies {
-    compile(project(":data-model"))
+    compile(project(":node-api"))
 
     compile('org.slf4j:slf4j-api')
     compile("org.apache.poi:poi")
