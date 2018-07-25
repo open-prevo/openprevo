@@ -27,9 +27,11 @@ task buildDemoZip(type: Zip) {
         include('**/*')
         exclude('**/demo-nodes-docker.yml')
     }
+    from ("src") {
+        include "startExcelDemo.bat"
+    }
     from (".") {
         include "readme.md"
-        include "startExcelDemo.bat"
     }
     archiveName 'demo.zip'
     destinationDir file("${buildDir}/")
