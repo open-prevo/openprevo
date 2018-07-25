@@ -20,12 +20,17 @@ package ch.prevo.pakt;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 public enum PaktApplicationContext {
     INSTANCE;
-    
-    final ApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);
-    
+
+    final AbstractApplicationContext context = new AnnotationConfigApplicationContext(PaktAdapterConfig.class);
+
+    private PaktApplicationContext() {
+        context.registerShutdownHook();
+    }
+
     public ApplicationContext getContext() {
         return context;
     }

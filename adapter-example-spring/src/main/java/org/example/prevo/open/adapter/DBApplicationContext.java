@@ -20,12 +20,17 @@ package org.example.prevo.open.adapter;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 public enum DBApplicationContext {
     INSTANCE;
     
-    final ApplicationContext context = new AnnotationConfigApplicationContext("org.example.prevo.open.adapter");
-    
+    final AbstractApplicationContext context = new AnnotationConfigApplicationContext("org.example.prevo.open.adapter");
+
+    private DBApplicationContext() {
+        context.registerShutdownHook();
+    }
+
     public ApplicationContext getContext() {
         return context;
     }
