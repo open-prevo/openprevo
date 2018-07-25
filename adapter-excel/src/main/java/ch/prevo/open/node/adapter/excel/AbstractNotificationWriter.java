@@ -32,6 +32,7 @@ public class AbstractNotificationWriter implements Closeable {
 
     protected static final String COMMENCEMENTS_LABEL = "Eintritte";
     protected static final String TERMINATION_LABEL = "Austritte";
+    private static final int HEADER_ROW_INDEX = 0;
 
     protected final Workbook workbook;
     protected final CellStyle dateStyle;
@@ -46,7 +47,7 @@ public class AbstractNotificationWriter implements Closeable {
     protected AbstractNotificationWriter() throws IOException {
         final Pair<Workbook, String> pair = getWorkbook();
         this.workbook = pair.getLeft();
-        this.filename =  pair.getRight();
+        this.filename = pair.getRight();
 
         if (workbook.getNumberOfSheets() == 0) {
             setupNewWorkbook();
@@ -113,18 +114,18 @@ public class AbstractNotificationWriter implements Closeable {
     }
 
     private void setupNewWorkbook() {
-            final Font font = workbook.createFont();
-            font.setBold(true);
-            final CellStyle headingStyle = workbook.createCellStyle();
-            headingStyle.setFont(font);
+        final Font font = workbook.createFont();
+        font.setBold(true);
+        final CellStyle headingStyle = workbook.createCellStyle();
+        headingStyle.setFont(font);
 
-            setupCommencementSheet(headingStyle);
-            setupTerminationSheet(headingStyle);
+        setupCommencementSheet(headingStyle);
+        setupTerminationSheet(headingStyle);
     }
 
     private void setupCommencementSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(COMMENCEMENTS_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Eintritt", headingStyle);
@@ -136,7 +137,7 @@ public class AbstractNotificationWriter implements Closeable {
 
     private void setupTerminationSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(TERMINATION_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Austritt", headingStyle);
@@ -162,10 +163,19 @@ public class AbstractNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
+        adjustColumnWidths(COMMENCEMENTS_LABEL);
+        adjustColumnWidths(TERMINATION_LABEL);
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
         workbook.close();
+    }
+
+    private void adjustColumnWidths(String sheetName) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        for (int colNum = 0; colNum < sheet.getRow(HEADER_ROW_INDEX).getLastCellNum(); colNum++) {
+            sheet.autoSizeColumn(colNum);
+        }
     }
 
     protected static Date convert(LocalDate date) {
