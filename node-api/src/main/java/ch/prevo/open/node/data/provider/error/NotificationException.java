@@ -34,4 +34,8 @@ public class NotificationException extends Exception {
     public NotificationException(Exception e) {
         super(e);
     }
+    
+    public NotificationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

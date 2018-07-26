@@ -95,7 +95,7 @@ public class MatchNotificationService {
         try {
             return dataEncryptionService.decryptAndVerify(notification.getTransferInformation(), CapitalTransferInformation.class, ownPrivateKey, keyToVerifySignature);
         } catch (InvalidSignatureException e) {
-            throw new NotificationException("Could not verify signature");
+            throw new NotificationException("Could not verify signature", e);
         }
     }
 
