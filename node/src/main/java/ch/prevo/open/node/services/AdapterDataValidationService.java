@@ -1,17 +1,15 @@
 package ch.prevo.open.node.services;
 
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentTermination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ch.prevo.open.data.api.EmploymentCommencement;
-import ch.prevo.open.data.api.EmploymentTermination;
+import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.Set;
 
 @Service
 public class AdapterDataValidationService {

@@ -18,11 +18,11 @@
  *===========================================================================*/
 package ch.prevo.open.node.adapter.excel;
 
+import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
 import org.apache.poi.EmptyFileException;
@@ -86,10 +86,12 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         final String filename = getErrorFilename();
         final Workbook workbook = getErrorWorkbook(filename);
 
-        try (final ErrorWriter writer = new ErrorWriter(workbook, filename)) {
-            writer.markTerminationErrors(violations);
-        } catch (IOException e) {
-            LOGGER.error("An exception occurred while trying to read the employment terminations", e);
+        if (workbook != null) {
+            try (final ErrorWriter writer = new ErrorWriter(workbook, filename)) {
+                writer.markTerminationErrors(violations);
+            } catch (IOException e) {
+                LOGGER.error("An exception occurred while trying to read the employment terminations", e);
+            }
         }
     }
 
@@ -110,12 +112,13 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
     public void notifyCommencementErrors(Map<EmploymentCommencement, Set<ConstraintViolation<EmploymentCommencement>>> violations) {
         final String filename = getErrorFilename();
         final Workbook workbook = getErrorWorkbook(filename);
-        if (workbook == null) return;
 
-        try (final ErrorWriter writer = new ErrorWriter(workbook, filename)) {
-            writer.markCommencementErrors(violations);
-        } catch (IOException e) {
-            LOGGER.error("An exception occurred while trying to read the employment terminations", e);
+        if (workbook != null) {
+            try (final ErrorWriter writer = new ErrorWriter(workbook, filename)) {
+                writer.markCommencementErrors(violations);
+            } catch (IOException e) {
+                LOGGER.error("An exception occurred while trying to read the employment terminations", e);
+            }
         }
     }
 

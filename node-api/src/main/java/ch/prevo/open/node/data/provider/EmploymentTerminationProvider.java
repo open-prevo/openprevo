@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ch.prevo.open.data.api.EmploymentTermination;
-
 public interface EmploymentTerminationProvider {
 
     List<EmploymentTermination> getEmploymentTerminations();
