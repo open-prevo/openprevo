@@ -16,7 +16,7 @@
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  *===========================================================================*/
-package ch.prevo.open.encrypted.model;
+package ch.prevo.open.data.api;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

@@ -16,7 +16,7 @@ import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.data.api.Address;
 import ch.prevo.open.node.NodeApplication;
 
 @RunWith(SpringRunner.class)

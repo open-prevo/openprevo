@@ -24,6 +24,7 @@ import java.time.LocalDate;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -75,7 +76,7 @@ public class NotificationDAOTest {
     }
 
     private MatchForTermination getMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData("Key_" + Math.random(), "Data_" + Math.random(), "IV...");
+        EncryptedData transferInformation = new EncryptedData(RandomUtils.nextBytes(10), RandomUtils.nextBytes(10));
         return new MatchForTermination(OASI, previousRetirementFundUID, newRetirementFundUID,
                 commencementDate, terminationDate,
                 transferInformation);
