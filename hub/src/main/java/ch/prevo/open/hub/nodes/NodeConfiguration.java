@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,16 +15,15 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.nodes;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class NodeConfiguration {
 
     private static final String EMPLOYMENT_COMMENCEMENTS_ENDPOINT = "/commencement-of-employment";

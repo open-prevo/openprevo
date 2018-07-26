@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,12 +15,14 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.hub.match;
 
-import ch.prevo.open.encrypted.model.InsurantInformation;
-import org.junit.Before;
-import org.junit.Test;
+import static java.time.LocalDate.of;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -28,11 +30,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.time.LocalDate.of;
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
+import ch.prevo.open.encrypted.model.InsurantInformation;
 
 public class MatcherServiceTest {
 

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,21 +15,11 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.config;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
+import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +32,20 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ch.prevo.open.encrypted.services.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 
 @Service
 public class NodeConfigurationService {
@@ -54,7 +57,6 @@ public class NodeConfigurationService {
 
     @Value("${open.prevo.node.config.file}")
     private String configFile;
-    private NodeConfigurationRawData config;
 
     private final Map<String, PublicKey> otherRetirementFundsKeys = new HashMap<>();
     private final Map<String, PrivateKey> ownRetirementFundKeys = new HashMap<>();
@@ -71,7 +73,6 @@ public class NodeConfigurationService {
             NodeConfigurationRawData rawConfig = mapper.readValue(resource.getInputStream(), new TypeReference<NodeConfigurationRawData>() {
             });
             rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> otherRetirementFundsKeys.put(uid, convertPublicKey(uid, publicKeyString)));
-            //Note: we ignore own public keys for now, they're not in use
             rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
             LOGGER.info("Node configuration with encryption keys ok");
         } catch (IOException e) {
@@ -105,7 +106,6 @@ public class NodeConfigurationService {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new IllegalStateException("Configuration error, cannot read private key for pension fund " + uid, e);
         }
-
     }
 
     private static class NodeConfigurationRawData {
@@ -115,7 +115,6 @@ public class NodeConfigurationService {
 
     private static class PublicPrivateKeyStrings {
         public String base64PrivateKey;
-        public String base64PublicKey;
     }
 
     private static class PublicKeyString {

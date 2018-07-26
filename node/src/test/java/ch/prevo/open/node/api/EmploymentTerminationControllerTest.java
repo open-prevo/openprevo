@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,14 +15,19 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.api;
 
-import ch.prevo.open.node.NodeApplication;
-import ch.prevo.open.node.data.provider.MockProviderFactory;
-import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.node.services.AdapterDataValidationService;
-import ch.prevo.open.node.services.EmploymentTerminationService;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Collections;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -33,16 +38,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;
-import java.util.Collections;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.NodeApplication;
+import ch.prevo.open.node.data.provider.MockProviderFactory;
+import ch.prevo.open.node.services.AdapterDataValidationService;
+import ch.prevo.open.node.services.EmploymentTerminationService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { NodeApplication.class, EmploymentTerminationControllerTest.Config.class })

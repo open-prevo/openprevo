@@ -1,10 +1,10 @@
 rootProject.name = 'OpenPrevo'
 
 include 'doc'
-include 'data-model'
+include 'node-api'
 include 'node'
 include 'hub'
-include 'encrypted-data-model'
+include 'hub-api'
 include 'adapter-excel'
 include 'adapter-dummy'
 include 'adapter-example-spring'

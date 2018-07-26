@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,12 +15,13 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.api;
 
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;

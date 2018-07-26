@@ -4,7 +4,7 @@
 
 ## Language
 
-### technical: Code and documentation is supposed to be primarily in english. Please refere to our [glossary for common terms](https://open-prevo.github.io/openprevo/#section-glossary).
+### technical: Code and documentation are primarily written in english. Please refer to our [glossary for common terms](https://open-prevo.github.io/openprevo/#section-glossary).
 
 ### functional requirements: Issues and tasks will be primarily written in German. Feedback / reports in English are ok as well.
 

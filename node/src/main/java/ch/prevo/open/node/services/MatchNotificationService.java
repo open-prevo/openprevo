@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
  * 
  * This program and the accompanying materials are made available under the
@@ -15,30 +15,36 @@
  * 
  * Contributors:
  *     Prevo-System AG - initial API and implementation
- ******************************************************************************/
+ *===========================================================================*/
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.data.api.*;
-import ch.prevo.open.encrypted.model.CapitalTransferInformation;
-import ch.prevo.open.encrypted.model.EncryptedData;
-import ch.prevo.open.encrypted.model.MatchForCommencement;
-import ch.prevo.open.encrypted.model.MatchForTermination;
-import ch.prevo.open.encrypted.services.CapitalTransferInfoEncrypter;
-import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.node.config.AdapterServiceConfiguration;
-import ch.prevo.open.node.config.NodeConfigurationService;
-import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
-import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
-import ch.prevo.open.node.data.provider.MatchNotificationListener;
-import ch.prevo.open.node.data.provider.ProviderFactory;
-import ch.prevo.open.node.data.provider.error.NotificationException;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.serviceloader.ServiceListFactoryBean;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import java.util.Optional;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
+import ch.prevo.open.encrypted.model.EncryptedData;
+import ch.prevo.open.encrypted.model.MatchForCommencement;
+import ch.prevo.open.encrypted.model.MatchForTermination;
+import ch.prevo.open.encrypted.services.Cryptography;
+import ch.prevo.open.node.config.AdapterServiceConfiguration;
+import ch.prevo.open.node.config.NodeConfigurationService;
+import ch.prevo.open.node.crypto.CapitalTransferInfoEncrypter;
+import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
+import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import ch.prevo.open.node.data.provider.MatchNotificationListener;
+import ch.prevo.open.node.data.provider.ProviderFactory;
+import ch.prevo.open.node.data.provider.error.NotificationException;
 
 @Service
 public class MatchNotificationService {
