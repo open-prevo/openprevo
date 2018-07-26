@@ -23,7 +23,7 @@ import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.MatchForCommencement;
 import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.encrypted.services.Cryptography;
-import ch.prevo.open.encrypted.services.DataEncryptionService;
+import ch.prevo.open.node.crypto.DataEncryptionService;
 import ch.prevo.open.node.NodeApplication;
 import ch.prevo.open.node.config.NodeConfigurationService;
 import ch.prevo.open.node.data.provider.MockProvider;
@@ -50,7 +50,7 @@ import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static ch.prevo.open.encrypted.services.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static ch.prevo.open.node.crypto.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;

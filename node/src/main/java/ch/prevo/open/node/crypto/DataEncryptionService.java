@@ -16,7 +16,7 @@
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  ******************************************************************************/
-package ch.prevo.open.encrypted.services;
+package ch.prevo.open.node.crypto;
 
 import ch.prevo.open.encrypted.model.EncryptedData;
 import ch.prevo.open.encrypted.model.SignedEncryptionContainer;

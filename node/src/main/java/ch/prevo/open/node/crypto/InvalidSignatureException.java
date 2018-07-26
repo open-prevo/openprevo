@@ -1,4 +1,4 @@
-package ch.prevo.open.encrypted.services;
+package ch.prevo.open.node.crypto;
 
 /**
  * Used if an invalid signature for decryption is provided.

@@ -24,7 +24,6 @@ dependencies {
     compile("org.slf4j:slf4j-api")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("javax.validation:validation-api")
-    compile(project(":node-api"))
 
     testCompile("junit:junit")
     testCompile("org.assertj:assertj-core")

@@ -46,7 +46,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import static ch.prevo.open.encrypted.services.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import static ch.prevo.open.node.crypto.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 
 @Service
