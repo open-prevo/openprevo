@@ -32,6 +32,7 @@ public class AbstractNotificationWriter implements Closeable {
 
     protected static final String COMMENCEMENTS_LABEL = "Eintritte";
     protected static final String TERMINATION_LABEL = "Austritte";
+    private static final int HEADER_ROW_INDEX = 0;
 
     protected final Workbook workbook;
     protected final CellStyle dateStyle;
@@ -46,7 +47,7 @@ public class AbstractNotificationWriter implements Closeable {
     protected AbstractNotificationWriter() throws IOException {
         final Pair<Workbook, String> pair = getWorkbook();
         this.workbook = pair.getLeft();
-        this.filename =  pair.getRight();
+        this.filename = pair.getRight();
 
         if (workbook.getNumberOfSheets() == 0) {
             setupNewWorkbook();
@@ -113,44 +114,44 @@ public class AbstractNotificationWriter implements Closeable {
     }
 
     private void setupNewWorkbook() {
-            final Font font = workbook.createFont();
-            font.setBold(true);
-            final CellStyle headingStyle = workbook.createCellStyle();
-            headingStyle.setFont(font);
+        final Font font = workbook.createFont();
+        font.setBold(true);
+        final CellStyle headingStyle = workbook.createCellStyle();
+        headingStyle.setFont(font);
 
-            setupCommencementSheet(headingStyle);
-            setupTerminationSheet(headingStyle);
+        setupCommencementSheet(headingStyle);
+        setupTerminationSheet(headingStyle);
     }
 
     private void setupCommencementSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(COMMENCEMENTS_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
+        createHeading(row, "UID der eigenen VE", headingStyle);
         createHeading(row, "Eigene Referenz", headingStyle);
         createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der ehemaligen RF", headingStyle);
+        createHeading(row, "UID der ehemaligen VE", headingStyle);
     }
 
     private void setupTerminationSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(TERMINATION_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, "AHV-Nummer", headingStyle);
         createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
+        createHeading(row, "UID der eigenen VE", headingStyle);
         createHeading(row, "Eigene Referenz", headingStyle);
         createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der neuen RF", headingStyle);
-        createHeading(row, "Name der neuen RF", headingStyle);
+        createHeading(row, "UID der neuen VE", headingStyle);
+        createHeading(row, "Name der neuen VE", headingStyle);
         createHeading(row, "Zusatzname", headingStyle);
         createHeading(row, "Strasse / Postfach", headingStyle);
         createHeading(row, "PLZ", headingStyle);
         createHeading(row, "Ort", headingStyle);
         createHeading(row, "IBAN", headingStyle);
-        createHeading(row, "Referenznr. der neuen RF", headingStyle);
+        createHeading(row, "Referenznr. der neuen VE", headingStyle);
     }
 
     private void createHeading(Row row, String label, CellStyle headingStyle) {
@@ -162,10 +163,23 @@ public class AbstractNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
+        adjustColumnWidthsInSheet(COMMENCEMENTS_LABEL);
+        adjustColumnWidthsInSheet(TERMINATION_LABEL);
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
         workbook.close();
+    }
+
+    private void adjustColumnWidthsInSheet(String sheetName) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        Row headerRow = sheet.getRow(HEADER_ROW_INDEX);
+        if (headerRow == null) {
+            return;
+        }
+        for (int colNum = 0; colNum < headerRow.getLastCellNum(); colNum++) {
+            sheet.autoSizeColumn(colNum);
+        }
     }
 
     protected static Date convert(LocalDate date) {

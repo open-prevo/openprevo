@@ -80,10 +80,10 @@ public class MatchForCommencementNotificationWriterTest {
         assertRow(filename, "Eintritte", 0,
                 "AHV-Nummer",
                 "Eintritt",
-                "UID der eigenen RF",
+                "UID der eigenen VE",
                 "Eigene Referenz",
                 "Austritt",
-                "UID der ehemaligen RF"
+                "UID der ehemaligen VE"
         );
 
         assertRow(filename, "Eintritte", 1,
