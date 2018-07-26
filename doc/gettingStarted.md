@@ -20,3 +20,7 @@ https://github.com/open-prevo/openprevo/issues
 # get in touch via <img src="https://cdn.worldvectorlogo.com/logos/gitter.svg" width="30" height="30" /> gitter
 
 https://gitter.im/open-prevo/Lobby
+
+## Implement you own node
+
+follow and improve [the instructions](implementMyOwnNode.md)
