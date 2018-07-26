@@ -29,6 +29,7 @@ import java.util.Set;
 
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.ADDITIONAL_NAME_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.CITY_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.COMMENCEMENTS_LABEL;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.DATE_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.IBAN_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.NAME_COLUMN_INDEX;
@@ -37,6 +38,7 @@ import static ch.prevo.open.node.adapter.excel.ExcelConstants.POSTAL_CODE_COLUMN
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.REFERENCE_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UID_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.STREET_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.TERMINATION_LABEL;
 
 public class ErrorWriter implements Closeable {
 
@@ -173,9 +175,22 @@ public class ErrorWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
+        adjustColumnWidthsInSheet(workbook.getSheet(TERMINATION_LABEL));
+        adjustColumnWidthsInSheet(workbook.getSheet(COMMENCEMENTS_LABEL));
+
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
         workbook.close();
+    }
+
+    private void adjustColumnWidthsInSheet(Sheet sheet) {
+        int n = 0;
+        for (final Iterator<Row> it = sheet.rowIterator(); it.hasNext(); ) {
+            n = Math.max(n, it.next().getLastCellNum());
+        }
+        for (int i = 0; i < n; i++) {
+            sheet.autoSizeColumn(i);
+        }
     }
 }
