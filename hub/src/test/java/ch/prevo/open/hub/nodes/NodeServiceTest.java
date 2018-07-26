@@ -38,6 +38,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -149,7 +150,7 @@ public class NodeServiceTest {
     public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
 
-        EncryptedData transferInformation = new EncryptedData("", "");
+        EncryptedData transferInformation = new EncryptedData(RandomUtils.nextBytes(1), RandomUtils.nextBytes(10));
         when(nodeCaller.postCommencementNotification(eq(node2_old.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 

@@ -28,23 +28,23 @@ import java.io.Serializable;
 public class EncryptedData implements Serializable {
 
     private static final long serialVersionUID = 7722287937301328033L;
-    private String encryptedDataBase64;
-    private String encryptedSymmetricKeyBundleBase64;
+    private byte[] encryptedData;
+    private byte[] encryptedSymmetricKeyBundle;
 
     public EncryptedData() {
     }
 
-    public EncryptedData(String encryptedDataBase64, String encryptedSymmetricKeyBundleBase64) {
-        this.encryptedDataBase64 = encryptedDataBase64;
-        this.encryptedSymmetricKeyBundleBase64 = encryptedSymmetricKeyBundleBase64;
+    public EncryptedData(byte[] encryptedData, byte[] encryptedSymmetricKeyBundle) {
+        this.encryptedData = encryptedData;
+        this.encryptedSymmetricKeyBundle = encryptedSymmetricKeyBundle;
     }
 
-    public String getEncryptedDataBase64() {
-        return encryptedDataBase64;
+    public byte[] getEncryptedData() {
+        return encryptedData;
     }
 
-    public String getEncryptedSymmetricKeyBundleBase64() {
-        return encryptedSymmetricKeyBundleBase64;
+    public byte[] getEncryptedSymmetricKeyBundle() {
+        return encryptedSymmetricKeyBundle;
     }
 
     @Override
@@ -56,24 +56,24 @@ public class EncryptedData implements Serializable {
         EncryptedData that = (EncryptedData) o;
 
         return new EqualsBuilder()
-                .append(encryptedDataBase64, that.encryptedDataBase64)
-                .append(encryptedSymmetricKeyBundleBase64, that.encryptedSymmetricKeyBundleBase64)
+                .append(encryptedData, that.encryptedData)
+                .append(encryptedSymmetricKeyBundle, that.encryptedSymmetricKeyBundle)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(encryptedDataBase64)
-                .append(encryptedSymmetricKeyBundleBase64)
+                .append(encryptedData)
+                .append(encryptedSymmetricKeyBundle)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("encryptedDataBase64", encryptedDataBase64)
-                .append("encryptedSymmetricKeyBundleBase64", encryptedSymmetricKeyBundleBase64)
+                .append("encryptedData", encryptedData)
+                .append("encryptedSymmetricKeyBundle", encryptedSymmetricKeyBundle)
                 .toString();
     }
 }

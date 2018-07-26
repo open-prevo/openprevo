@@ -6,20 +6,20 @@ package ch.prevo.open.encrypted.model;
 public class SignedEncryptionContainer<T> {
 
     private T data;
-    private String signatureBase64;
+    private byte[] signature;
 
     SignedEncryptionContainer() {}
 
-    public SignedEncryptionContainer(T data, String signatureBase64) {
+    public SignedEncryptionContainer(T data, byte[] signature) {
         this.data = data;
-        this.signatureBase64 = signatureBase64;
+        this.signature = signature;
     }
 
     public T getData() {
         return data;
     }
 
-    public String getSignatureBase64() {
-        return signatureBase64;
+    public byte[] getSignature() {
+        return signature;
     }
 }

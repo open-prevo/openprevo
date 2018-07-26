@@ -1,18 +1,18 @@
 /*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * This Source Code may also be made available under the following Secondary
  * Licenses when the conditions for such availability set forth in the Eclipse
  * Public License, v. 2.0 are satisfied: GNU General Public License, version 3
  * with the GNU Classpath Exception which is
  * available at https://www.gnu.org/software/classpath/license.html.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0
- * 
+ *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  *===========================================================================*/
@@ -30,10 +30,13 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -51,7 +54,7 @@ import ch.prevo.open.encrypted.model.MatchForTermination;
 import ch.prevo.open.hub.repository.NotificationDAO;
 
 @RunWith(SpringRunner.class)
-@RestClientTest({ NodeCaller.class })
+@RestClientTest({NodeCaller.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NodeCallerTest {
 
@@ -62,7 +65,12 @@ public class NodeCallerTest {
     private static final String UID3 = "CHE-109.537.488";
 
     private static final String ENCRYPTED_DATA = "This is the encrypted data";
-    private static final String ENCRYPTED_KEY_PAIR = "This is the encrypted key";
+    private static final byte[] ENCRYPTED_DATA_BYTES = ENCRYPTED_DATA.getBytes(StandardCharsets.UTF_8);
+    private static final String ENCRYPTED_DATA_ENCODED = Base64.getEncoder().encodeToString(ENCRYPTED_DATA_BYTES);
+
+    private static final String ENCRYPTED_KEY_PAIR = "This is the encrypted data";
+    private static final byte[] ENCRYPTED_KEY_PAIR_BYTES = ENCRYPTED_KEY_PAIR.getBytes(StandardCharsets.UTF_8);
+    private static final String ENCRYPTED_KEY_PAIR_ENCODED = Base64.getEncoder().encodeToString(ENCRYPTED_KEY_PAIR_BYTES);
 
     private static final String INSURANT_INFORMATION_JSON_ARRAY
             = "[{\"encryptedOasiNumber\" : \"" + OASI1 + "\", \"retirementFundUid\" : \"" + UID1
@@ -75,7 +83,7 @@ public class NodeCallerTest {
             "]";
 
     private static final String CAPITAL_TRANSFER_INFORMATION
-            = "{\"encryptedDataBase64\" : \"" + ENCRYPTED_DATA + "\", \"encryptedSymmetricKeyBundleBase64\" : \"" + ENCRYPTED_KEY_PAIR + "\"}";
+            = "{\"encryptedData\" : \"" + ENCRYPTED_DATA_ENCODED + "\", \"encryptedSymmetricKeyBundle\" : \"" + ENCRYPTED_KEY_PAIR_ENCODED + "\"}";
 
 
     private static final String URL1 = "https://host.domain1/path";
@@ -151,8 +159,8 @@ public class NodeCallerTest {
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isEqualTo(ENCRYPTED_DATA);
-        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBundleBase64()).isEqualTo(ENCRYPTED_KEY_PAIR);
+        assertThat(capitalTransferInformation.getEncryptedData()).isEqualTo(ENCRYPTED_DATA_BYTES);
+        assertThat(capitalTransferInformation.getEncryptedSymmetricKeyBundle()).isEqualTo(ENCRYPTED_KEY_PAIR_BYTES);
     }
 
     @Test
@@ -201,8 +209,8 @@ public class NodeCallerTest {
 
         // then
         server.verify();
-        assertThat(capitalTransferInformation.getEncryptedDataBase64()).isNotBlank();
-        assertThat(secondCallTransferInfo.getEncryptedDataBase64()).isNotBlank();
+        assertThat(capitalTransferInformation.getEncryptedData()).isNotEmpty();
+        assertThat(secondCallTransferInfo.getEncryptedData()).isNotEmpty();
         assertThat(secondCallTransferInfo).isEqualTo(capitalTransferInformation);
     }
 
@@ -231,7 +239,7 @@ public class NodeCallerTest {
     @Test
     public void notifyTerminationMatch() {
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundle", is(ENCRYPTED_KEY_PAIR_ENCODED)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -248,7 +256,7 @@ public class NodeCallerTest {
         // given
         final MatchForTermination matchForTermination = createMatchForTermination();
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundle", is(ENCRYPTED_KEY_PAIR_ENCODED)))
                 .andRespond(withSuccess());
         when(notificationDAO.isMatchForTerminationAlreadyNotified(matchForTermination)).thenReturn(false).thenReturn(true);
 
@@ -263,12 +271,13 @@ public class NodeCallerTest {
 
     @Test
     public void notifySeveralTerminationMatchesForSingleCommencement() {
-        EncryptedData transferInformation2 = new EncryptedData("Data2", "Key2");
+        byte[] encryptedSymmetricKeyBundle = RandomUtils.nextBytes(10);
+        EncryptedData transferInformation2 = new EncryptedData(RandomUtils.nextBytes(10), encryptedSymmetricKeyBundle);
         server.expect(requestTo(URL1))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundle", is(ENCRYPTED_KEY_PAIR_ENCODED)))
                 .andRespond(withSuccess());
         server.expect(requestTo(URL3))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(transferInformation2.getEncryptedSymmetricKeyBundleBase64())))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundle", is(Base64.getEncoder().encodeToString(encryptedSymmetricKeyBundle))))
                 .andRespond(withSuccess());
 
         MatchForTermination matchForTermination_node1 = createMatchForTermination();
@@ -289,7 +298,7 @@ public class NodeCallerTest {
     public void verifyNotifyTerminationMatchIsSentInSecondApproachIfFirstWasNotSuccessful() {
         server.expect(requestTo(URL2)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         server.expect(requestTo(URL2))
-                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundleBase64", is(ENCRYPTED_KEY_PAIR)))
+                .andExpect(jsonPath("$.transferInformation.encryptedSymmetricKeyBundle", is(ENCRYPTED_KEY_PAIR_ENCODED)))
                 .andRespond(withSuccess());
 
         MatchForTermination MatchForTermination = createMatchForTermination();
@@ -327,7 +336,7 @@ public class NodeCallerTest {
     }
 
     private MatchForTermination createMatchForTermination() {
-        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA, ENCRYPTED_KEY_PAIR);
+        EncryptedData transferInformation = new EncryptedData(ENCRYPTED_DATA_BYTES, ENCRYPTED_KEY_PAIR_BYTES);
         MatchForTermination MatchForTermination = new MatchForTermination();
         MatchForTermination.setEncryptedOasiNumber(OASI1);
         MatchForTermination.setNewRetirementFundUid(UID2);

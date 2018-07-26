@@ -5,21 +5,21 @@ package ch.prevo.open.encrypted.model;
  */
 public class SymmetricKeyBundle {
 
-    private String key;
-    private String iv;
+    private byte[] key;
+    private byte[] iv;
 
     SymmetricKeyBundle() {}
 
-    public SymmetricKeyBundle(String key, String iv) {
+    public SymmetricKeyBundle(byte[] key, byte[] iv) {
         this.key = key;
         this.iv = iv;
     }
 
-    public String getKey() {
+    public byte[] getKey() {
         return key;
     }
 
-    public String getIv() {
+    public byte[] getIv() {
         return iv;
     }
 }
