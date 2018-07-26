@@ -26,7 +26,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import ch.prevo.open.encrypted.model.Address;
 
 public class CapitalTransferInformation {
 

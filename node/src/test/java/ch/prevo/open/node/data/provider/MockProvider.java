@@ -28,7 +28,7 @@ import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.FullMatchForCommencementNotification;
 import ch.prevo.open.data.api.FullMatchForTerminationNotification;
-import ch.prevo.open.encrypted.model.Address;
+import ch.prevo.open.data.api.Address;
 
 public class MockProvider implements EmploymentTerminationProvider, EmploymentCommencementProvider, MatchNotificationListener {
 

@@ -27,7 +27,15 @@ package ch.prevo.open.node.data.provider.error;
 public class NotificationException extends Exception {
     private static final long serialVersionUID = 2968936416684363225L;
 
+    public NotificationException(String message) {
+        super(message);
+    }
+
     public NotificationException(Exception e) {
         super(e);
+    }
+    
+    public NotificationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

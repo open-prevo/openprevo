@@ -1,17 +1,5 @@
 package ch.prevo.open.node.adapter.excel;
 
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileLock;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.Optional;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -24,9 +12,23 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.Closeable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.Optional;
+
 public class AbstractNotificationWriter implements Closeable {
 
     private static final int MAX_FILES_PER_DAY = 20;
+
+    private static final int HEADER_ROW_INDEX = 0;
 
     protected final Workbook workbook;
     protected final CellStyle dateStyle;
@@ -41,7 +43,7 @@ public class AbstractNotificationWriter implements Closeable {
     protected AbstractNotificationWriter() throws IOException {
         final Pair<Workbook, String> pair = getWorkbook();
         this.workbook = pair.getLeft();
-        this.filename =  pair.getRight();
+        this.filename = pair.getRight();
 
         if (workbook.getNumberOfSheets() == 0) {
             setupNewWorkbook();
@@ -108,18 +110,18 @@ public class AbstractNotificationWriter implements Closeable {
     }
 
     private void setupNewWorkbook() {
-            final Font font = workbook.createFont();
-            font.setBold(true);
-            final CellStyle headingStyle = workbook.createCellStyle();
-            headingStyle.setFont(font);
+        final Font font = workbook.createFont();
+        font.setBold(true);
+        final CellStyle headingStyle = workbook.createCellStyle();
+        headingStyle.setFont(font);
 
-            setupTerminationSheet(headingStyle);
-            setupCommencementSheet(headingStyle);
+        setupTerminationSheet(headingStyle);
+        setupCommencementSheet(headingStyle);
     }
 
     private void setupTerminationSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(ExcelConstants.TERMINATION_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
         createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
@@ -138,7 +140,7 @@ public class AbstractNotificationWriter implements Closeable {
 
     private void setupCommencementSheet(CellStyle headingStyle) {
         final Sheet sheet = workbook.createSheet(ExcelConstants.COMMENCEMENTS_LABEL);
-        final Row row = sheet.createRow(0);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
         createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
         createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
@@ -157,10 +159,22 @@ public class AbstractNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
+        adjustColumnWidthsInSheet(ExcelConstants.COMMENCEMENTS_LABEL);
+        adjustColumnWidthsInSheet(ExcelConstants.TERMINATION_LABEL);
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
         workbook.close();
     }
 
+    private void adjustColumnWidthsInSheet(String sheetName) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        Row headerRow = sheet.getRow(HEADER_ROW_INDEX);
+        if (headerRow == null) {
+            return;
+        }
+        for (int colNum = 0; colNum < headerRow.getLastCellNum(); colNum++) {
+            sheet.autoSizeColumn(colNum);
+        }
+    }
 }

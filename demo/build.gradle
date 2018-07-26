@@ -23,14 +23,14 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
 task buildDemoZip(type: Zip) {
-    from ("${buildDir}/demo") {
+    from("${buildDir}/demo") {
         include('**/*')
         exclude('**/demo-nodes-docker.yml')
     }
-    from ("src") {
+    from("src") {
         include "*.bat"
     }
-    from (".") {
+    from(".") {
         include "readme.md"
     }
     archiveName 'demo.zip'
@@ -105,10 +105,15 @@ def nodeConfiguration = [
 
 nodeConfiguration.each { node ->
     task "copyLibs${node.name}"(type: Copy) {
+        dependsOn {[
+            project(":${node.adapter}").shadowJar,
+            project(":node").bootJar
+        ]}
         from(project(":${node.adapter}").shadowJar)
         from("${project(':node').buildDir}/libs")
         into "${buildDir}/demo/${node.name}/lib"
     }
+
     task "copyConfig${node.name}"(type: Copy) {
         from("src/data/${node.name}-config.yml")
         into "${buildDir}/demo/${node.name}/config"
@@ -135,8 +140,6 @@ nodeConfiguration.each { node ->
 
     buildDemoZip.dependsOn({
         [
-                project(":${node.adapter}").shadowJar,
-                project(":node").bootJar,
                 "copyLibs${node.name}",
                 "copyConfig${node.name}",
                 "copyDemoData${node.name}",
@@ -179,11 +182,11 @@ dockerCompose {
 
 composeUp.dependsOn { tasks.docker }
 
-task demoIntegrationTest {
+task integrationTest {
     dependsOn composeUp
     doLast {
         // wait till the matching runs through
-        sleep(20000)
+        sleep(30000)
 
         //assert that all nodes are notified with the expected amount of matches
         assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
@@ -198,13 +201,4 @@ task demoIntegrationTest {
     }
 }
 
-demoIntegrationTest.finalizedBy composeDown
-
-task ciDemoIntegrationTesting(type: GradleBuild) {
-    tasks = ['demoIntegrationTest']
-    onlyIf {
-        System.getenv("TRAVIS") == "true"
-    }
-}
-
-check.finalizedBy ciDemoIntegrationTesting
+integrationTest.finalizedBy composeDown

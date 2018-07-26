@@ -1,24 +1,25 @@
 /*============================================================================*
  * Copyright (c) 2018 - Prevo-System AG and others.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * This Source Code may also be made available under the following Secondary
  * Licenses when the conditions for such availability set forth in the Eclipse
  * Public License, v. 2.0 are satisfied: GNU General Public License, version 3
  * with the GNU Classpath Exception which is
  * available at https://www.gnu.org/software/classpath/license.html.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0 WITH Classpath-exception-2.0
- * 
+ *
  * Contributors:
  *     Prevo-System AG - initial API and implementation
  *===========================================================================*/
 package ch.prevo.open.node.config;
 
-import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import org.springframework.stereotype.Service;
+
 
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -40,11 +41,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import static ch.prevo.open.node.crypto.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 
 @Service
@@ -58,8 +60,8 @@ public class NodeConfigurationService {
     @Value("${open.prevo.node.config.file}")
     private String configFile;
 
-    private final Map<String, PublicKey> otherRetirementFundsKeys = new HashMap<>();
-    private final Map<String, PrivateKey> ownRetirementFundKeys = new HashMap<>();
+    private final Map<String, PublicKey> allRetirementFundsPublicKeys = new HashMap<>();
+    private final Map<String, PrivateKey> ownRetirementFundsPrivateKeys = new HashMap<>();
 
     @Inject
     public NodeConfigurationService(ResourceLoader loader) {
@@ -72,8 +74,9 @@ public class NodeConfigurationService {
             final Resource resource = loader.getResource(configFile);
             NodeConfigurationRawData rawConfig = mapper.readValue(resource.getInputStream(), new TypeReference<NodeConfigurationRawData>() {
             });
-            rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> otherRetirementFundsKeys.put(uid, convertPublicKey(uid, publicKeyString)));
-            rawConfig.ownRetirementFunds.forEach((uid, privateKeyStrings) -> ownRetirementFundKeys.put(uid, convertPrivateKey(uid, privateKeyStrings)));
+            rawConfig.otherRetirementFunds.forEach((uid, publicKeyString) -> allRetirementFundsPublicKeys.put(uid, convertPublicKey(uid, publicKeyString)));
+            rawConfig.ownRetirementFunds.forEach((uid, publicPrivateKeyStrings) -> allRetirementFundsPublicKeys.put(uid, convertPublicKey(uid, publicPrivateKeyStrings)));
+            rawConfig.ownRetirementFunds.forEach((uid, publicPrivateKeyStrings) -> ownRetirementFundsPrivateKeys.put(uid, convertPrivateKey(uid, publicPrivateKeyStrings)));
             LOGGER.info("Node configuration with encryption keys ok");
         } catch (IOException e) {
             LOGGER.warn("Unable to read bootstrap-data from " + configFile, e);
@@ -81,11 +84,11 @@ public class NodeConfigurationService {
     }
 
     public PrivateKey getPrivateKey(String uid) {
-        return ownRetirementFundKeys.get(uid);
+        return ownRetirementFundsPrivateKeys.get(uid);
     }
 
     public PublicKey getPublicKey(String uid) {
-        return otherRetirementFundsKeys.get(uid);
+        return allRetirementFundsPublicKeys.get(uid);
     }
 
     private PublicKey convertPublicKey(String uid, PublicKeyString publicKey) {
@@ -106,6 +109,7 @@ public class NodeConfigurationService {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new IllegalStateException("Configuration error, cannot read private key for pension fund " + uid, e);
         }
+
     }
 
     private static class NodeConfigurationRawData {
@@ -113,7 +117,7 @@ public class NodeConfigurationService {
         public Map<String, PublicKeyString> otherRetirementFunds = new HashMap<>();
     }
 
-    private static class PublicPrivateKeyStrings {
+    private static class PublicPrivateKeyStrings extends PublicKeyString {
         public String base64PrivateKey;
     }
 
