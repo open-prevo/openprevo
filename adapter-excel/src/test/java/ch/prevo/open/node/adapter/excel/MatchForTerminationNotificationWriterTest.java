@@ -79,17 +79,17 @@ public class MatchForTerminationNotificationWriterTest {
         assertRow(filename, "Austritte", 0,
                 "AHV-Nummer",
                 "Austritt",
-                "UID der eigenen RF",
+                "UID der eigenen VE",
                 "Eigene Referenz",
                 "Eintritt",
-                "UID der neuen RF",
-                "Name der neuen RF",
+                "UID der neuen VE",
+                "Name der neuen VE",
                 "Zusatzname",
                 "Strasse / Postfach",
                 "PLZ",
                 "Ort",
                 "IBAN",
-                "Referenznr. der neuen RF"
+                "Referenznr. der neuen VE"
         );
 
         assertRow(filename, "Austritte", 1,

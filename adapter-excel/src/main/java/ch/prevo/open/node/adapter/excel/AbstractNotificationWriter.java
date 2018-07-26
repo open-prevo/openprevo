@@ -22,16 +22,11 @@ import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
 public class AbstractNotificationWriter implements Closeable {
 
     private static final int MAX_FILES_PER_DAY = 20;
-
-    protected static final String COMMENCEMENTS_LABEL = "Eintritte";
-    protected static final String TERMINATION_LABEL = "Austritte";
 
     protected final Workbook workbook;
     protected final CellStyle dateStyle;
@@ -118,39 +113,39 @@ public class AbstractNotificationWriter implements Closeable {
             final CellStyle headingStyle = workbook.createCellStyle();
             headingStyle.setFont(font);
 
-            setupCommencementSheet(headingStyle);
             setupTerminationSheet(headingStyle);
-    }
-
-    private void setupCommencementSheet(CellStyle headingStyle) {
-        final Sheet sheet = workbook.createSheet(COMMENCEMENTS_LABEL);
-        final Row row = sheet.createRow(0);
-
-        createHeading(row, "AHV-Nummer", headingStyle);
-        createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
-        createHeading(row, "Eigene Referenz", headingStyle);
-        createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der ehemaligen RF", headingStyle);
+            setupCommencementSheet(headingStyle);
     }
 
     private void setupTerminationSheet(CellStyle headingStyle) {
-        final Sheet sheet = workbook.createSheet(TERMINATION_LABEL);
+        final Sheet sheet = workbook.createSheet(ExcelConstants.TERMINATION_LABEL);
         final Row row = sheet.createRow(0);
 
-        createHeading(row, "AHV-Nummer", headingStyle);
-        createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der eigenen RF", headingStyle);
-        createHeading(row, "Eigene Referenz", headingStyle);
-        createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der neuen RF", headingStyle);
-        createHeading(row, "Name der neuen RF", headingStyle);
-        createHeading(row, "Zusatzname", headingStyle);
-        createHeading(row, "Strasse / Postfach", headingStyle);
-        createHeading(row, "PLZ", headingStyle);
-        createHeading(row, "Ort", headingStyle);
-        createHeading(row, "IBAN", headingStyle);
-        createHeading(row, "Referenznr. der neuen RF", headingStyle);
+        createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.ADDITIONAL_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.STREET_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.POSTAL_CODE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.CITY_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.IBAN_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_REFERENCE_LABEL, headingStyle);
+    }
+
+    private void setupCommencementSheet(CellStyle headingStyle) {
+        final Sheet sheet = workbook.createSheet(ExcelConstants.COMMENCEMENTS_LABEL);
+        final Row row = sheet.createRow(0);
+
+        createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OLD_RETIREMENT_FUND_UID_LABEL, headingStyle);
     }
 
     private void createHeading(Row row, String label, CellStyle headingStyle) {
@@ -166,10 +161,6 @@ public class AbstractNotificationWriter implements Closeable {
             workbook.write(fileOut);
         }
         workbook.close();
-    }
-
-    protected static Date convert(LocalDate date) {
-        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }
