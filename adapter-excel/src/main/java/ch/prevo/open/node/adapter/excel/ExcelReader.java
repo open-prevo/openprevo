@@ -25,6 +25,7 @@ import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.node.data.provider.EmploymentCommencementProvider;
 import ch.prevo.open.node.data.provider.EmploymentTerminationProvider;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.EmptyFileException;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -38,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -129,6 +131,7 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
                 return WorkbookFactory.create(inputStream);
             } catch (IOException | EncryptedDocumentException | EmptyFileException | InvalidFormatException e) {
                 LOGGER.warn("Unable to read existing error file {}, creating a new one", filename);
+                FileUtils.deleteQuietly(new File(filename));
                 try {
                     Files.delete(path);
                 } catch (IOException e1) {
