@@ -45,7 +45,7 @@ bootJar {
 }
 
 docker {
-    dependsOn build, project(":adapter-dummy").build
+    dependsOn bootJar, project(":adapter-dummy").shadowJar
     name "openprevo/node-dummy:staging"
     files bootJar.archivePath, project(":adapter-dummy").shadowJar.archivePath
     buildArgs(['NODE_JAR': "${bootJar.archiveName}", 'ADAPTER_JAR': "${project(":adapter-dummy").shadowJar.archiveName}"])

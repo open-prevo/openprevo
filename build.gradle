@@ -108,3 +108,16 @@ release {
 assemble.dependsOn ':doc:publishDocumentation'
 
 defaultTasks 'assemble'
+
+/**
+ * Hook for integration tests on Travis.
+ * Integration tests will be executed only on Travis by default.
+ */
+task ciIntegrationTest(type: GradleBuild) {
+    tasks = ['integrationTest']
+    onlyIf {
+        System.getenv("TRAVIS") == "true"
+    }
+}
+
+check.finalizedBy ciIntegrationTest
