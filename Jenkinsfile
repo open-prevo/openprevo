@@ -3,8 +3,8 @@ pipeline {
         label 'common'
     }
 
-    tools {
-        jdk 'JDK_1_8'
+    parameters {
+        string(defaultValue: "", description: 'Additional gradle arguments', name: 'GRADLE_ARGS')
     }
 
     options {
@@ -28,11 +28,11 @@ pipeline {
                 checkout scm
             }
         }
-      
+
         stage("Gradle Build (compile and test)") {
             steps {
                 script {
-                    sh "./gradlew build"
+                    sh "./gradlew build ${params.GRADLE_ARGS}"
                 }
             }
         }
