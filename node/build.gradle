@@ -33,6 +33,8 @@ dependencies {
     compile("javax.inject:javax.inject")
     compile("commons-io:commons-io")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    compile("io.springfox:springfox-swagger2")
+    compile("io.springfox:springfox-swagger2-ui")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
