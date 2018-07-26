@@ -163,17 +163,21 @@ public class AbstractNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
-        adjustColumnWidths(COMMENCEMENTS_LABEL);
-        adjustColumnWidths(TERMINATION_LABEL);
+        adjustColumnWidthsInSheet(COMMENCEMENTS_LABEL);
+        adjustColumnWidthsInSheet(TERMINATION_LABEL);
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
         workbook.close();
     }
 
-    private void adjustColumnWidths(String sheetName) {
+    private void adjustColumnWidthsInSheet(String sheetName) {
         Sheet sheet = workbook.getSheet(sheetName);
-        for (int colNum = 0; colNum < sheet.getRow(HEADER_ROW_INDEX).getLastCellNum(); colNum++) {
+        Row headerRow = sheet.getRow(HEADER_ROW_INDEX);
+        if (headerRow == null) {
+            return;
+        }
+        for (int colNum = 0; colNum < headerRow.getLastCellNum(); colNum++) {
             sheet.autoSizeColumn(colNum);
         }
     }
