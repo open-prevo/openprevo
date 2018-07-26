@@ -85,7 +85,8 @@ subprojects { project ->
             dependency("xerces:xerces:2.4.0")
             dependency("commons-io:commons-io:2.6")
             dependency("io.springfox:springfox-swagger2:${springfoxSwaggerVersion}")
-    		dependency("io.springfox:springfox-swagger2-ui:${springfoxSwaggerVersion}")
+    		dependency("io.springfox:springfox-swagger-ui:${springfoxSwaggerVersion}")
+    		dependency("io.springfox:springfox-bean-validators:${springfoxSwaggerVersion}")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")
