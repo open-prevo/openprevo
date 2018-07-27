@@ -39,7 +39,6 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.util.Base64;
 
 /**
  * Uses AES/RSA to encrypt data using a public key, and decryption using a private key.

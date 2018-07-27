@@ -40,14 +40,14 @@ import java.util.Set;
 
 import static ch.prevo.open.node.adapter.excel.ExcelAssertions.assertRowComments;
 
-public class ExcelReaderErrorNotificationTest {
+public class ExcelProviderErrorNotificationTest {
 
     private static final String MUST_NOT_BE_NULL = "must not be null";
     private static final String PLZ_ERROR = "must match \"[0-9]{4}\"";
     private static final String RETIREMENT_FUND_ERROR = "must match \"CHE-([0-9]{3}\\.){2}[0-9]{3}\"";
     private static final String INVALID_OASI_NUMBER = "Invalid OASI number";
 
-    private ExcelReader excelReader;
+    private ExcelProvider excelProvider;
     private Validator validator;
     private static final String BASE_FILE_NAME = "src/test/resources/retirement-fund-error-test-data";
     private Locale defaultLocale;
@@ -57,8 +57,8 @@ public class ExcelReaderErrorNotificationTest {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
-        System.setProperty(ExcelReader.FILE_PROPERTY, BASE_FILE_NAME + ".xlsx");
-        excelReader = new ExcelReader();
+        System.setProperty(ExcelProvider.FILE_PROPERTY, BASE_FILE_NAME + ".xlsx");
+        excelProvider = new ExcelProvider();
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
@@ -74,7 +74,7 @@ public class ExcelReaderErrorNotificationTest {
         Map<EmploymentCommencement, Set<ConstraintViolation<EmploymentCommencement>>> validationErrorMap = validate(employmentCommencement);
 
         // when
-        excelReader.notifyCommencementErrors(validationErrorMap);
+        excelProvider.notifyCommencementErrors(validationErrorMap);
 
         // then
         String filename = BASE_FILE_NAME + "-error.xlsx";
@@ -91,7 +91,7 @@ public class ExcelReaderErrorNotificationTest {
         Map<EmploymentTermination, Set<ConstraintViolation<EmploymentTermination>>> validationErrorMap = validate(employmentTermination);
 
         // when
-        excelReader.notifyTerminationErrors(validationErrorMap);
+        excelProvider.notifyTerminationErrors(validationErrorMap);
 
         // then
         String filename = BASE_FILE_NAME + "-error.xlsx";

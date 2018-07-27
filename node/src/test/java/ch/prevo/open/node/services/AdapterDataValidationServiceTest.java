@@ -1,25 +1,29 @@
 package ch.prevo.open.node.services;
 
-import ch.prevo.open.data.api.Address;
-import ch.prevo.open.data.api.CapitalTransferInformation;
-import ch.prevo.open.data.api.EmploymentCommencement;
-import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.node.NodeApplication;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import java.time.LocalDate;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.tuple;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import ch.prevo.open.data.api.Address;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.node.NodeApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeApplication.class})
@@ -34,11 +38,20 @@ public class AdapterDataValidationServiceTest {
     private Address validAddress;
     private CapitalTransferInformation validCapitalTransferInformation;
 
+	private Locale defaultLocale;
+
     @Before
     public final void setUp() {
+    	defaultLocale = Locale.getDefault();
+    	Locale.setDefault(Locale.ENGLISH);
         validEmploymentInfo = new EmploymentInfo("CHE-109.537.519", "", "756.1234.5678.97", "", LocalDate.now());
         validAddress = new Address("Baslerstrasse 1", "4000", "Basel");
         validCapitalTransferInformation = new CapitalTransferInformation("BKB", "Bank", validAddress, "CH52 0483 5012 3456 7100 0");
+    }
+    
+    @After
+    public final void tearDown() {
+    	Locale.setDefault(defaultLocale);
     }
 
     @Test

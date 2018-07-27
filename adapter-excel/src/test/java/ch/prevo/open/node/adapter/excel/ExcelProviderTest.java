@@ -31,14 +31,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExcelReaderTest {
+import static org.junit.Assert.assertEquals;
 
-    private ExcelReader excelReader;
+public class ExcelProviderTest {
+
+    private ExcelProvider excelProvider;
 
     @Before
     public void init() {
-        System.setProperty(ExcelReader.FILE_PROPERTY, "src/test/resources/retirement-fund-test-data_de.xlsx");
-        excelReader = new ExcelReader();
+        System.setProperty(ExcelProvider.FILE_PROPERTY, "src/test/resources/retirement-fund-test-data_de.xlsx");
+        excelProvider = new ExcelProvider();
     }
 
     @Test
@@ -47,7 +49,7 @@ public class ExcelReaderTest {
         EmploymentInfo employmentInfo = new EmploymentInfo("CHE-223.471.073", "our-ref-2", "7568152139908", null, LocalDate.of(2018, 8, 16));
 
         // when
-        List<EmploymentTermination> employmentTerminations = excelReader.getEmploymentTerminations();
+        List<EmploymentTermination> employmentTerminations = excelProvider.getEmploymentTerminations();
 
         // then
         assertThat(employmentTerminations).hasSize(2);
@@ -60,7 +62,7 @@ public class ExcelReaderTest {
         EmploymentInfo employmentInfo = new EmploymentInfo("CHE-109.740.084", "our-ref-55", "7566374437536", null, LocalDate.of(2018, 1, 1));
 
         // when
-        List<EmploymentCommencement> employmentCommencements = excelReader.getEmploymentCommencements();
+        List<EmploymentCommencement> employmentCommencements = excelProvider.getEmploymentCommencements();
 
         // then
         assertThat(employmentCommencements).hasSize(2);
@@ -77,7 +79,7 @@ public class ExcelReaderTest {
         EmploymentCommencement employmentCommencement = new EmploymentCommencement(employmentInfo, transferInformation);
 
         // when
-        List<EmploymentCommencement> employmentCommencements = excelReader.getEmploymentCommencements();
+        List<EmploymentCommencement> employmentCommencements = excelProvider.getEmploymentCommencements();
 
         // then
         assertThat(employmentCommencements).hasSize(2);
