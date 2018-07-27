@@ -1,9 +1,8 @@
-package ch.prevo.open.node;
+package ch.prevo.open.node.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import ch.prevo.open.node.api.EmploymentTerminationController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
