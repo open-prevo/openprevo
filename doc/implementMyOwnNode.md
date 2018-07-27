@@ -26,5 +26,5 @@ opening [swagger-ui](http://localhost:8851/swagger-ui.html)
 
 ## Contribute to OpenPrevo
 
-If you'd like, [get in touch](https://gitter.im/open-prevo/Lobby) to contribute changes or new codeback to the OpenPrevo
+If you'd like, [get in touch](https://gitter.im/open-prevo/Lobby) to contribute changes or new code back to the OpenPrevo
 project.
