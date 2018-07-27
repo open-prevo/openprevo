@@ -28,7 +28,7 @@ import javax.validation.ConstraintValidatorContext;
  *
  * @see <a href="https://www.admin.ch/opc/de/classified-compilation/20071554/index.html#app1ahref1">https://www.admin.ch</a>
  */
-class OASINumberValidator implements ConstraintValidator<OASI, String> {
+public class OASINumberValidator implements ConstraintValidator<OASI, String> {
 
     @Override
     public void initialize(OASI constraintAnnotation) {

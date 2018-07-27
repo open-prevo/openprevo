@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,4 +56,19 @@ public class ExcelAssertions {
         }
     }
 
+    public static void assertRowComments(String filename, String sheet, int rowIndex, String... expectedCommentsValues) throws IOException, InvalidFormatException {
+        try (final Workbook workbook = WorkbookFactory.create(new File(filename), null, true)) {
+            final Row row = workbook.getSheet(sheet).getRow(rowIndex);
+            List<String> commentsInRow = collectAllCommentsInRow(row);
+            assertThat(commentsInRow).containsExactlyInAnyOrder(expectedCommentsValues);
+        }
+    }
+
+    private static List<String> collectAllCommentsInRow(Row row) {
+        return IntStream.range(0, row.getLastCellNum())
+                .mapToObj(row::getCell)
+                .filter(cell -> cell.getCellComment() != null && cell.getCellComment().getString().length() > 0)
+                .map(cell -> cell.getCellComment().getString().getString())
+                .collect(Collectors.toList());
+    }
 }
