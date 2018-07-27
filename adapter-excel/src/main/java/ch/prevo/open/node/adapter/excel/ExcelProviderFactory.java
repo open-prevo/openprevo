@@ -25,17 +25,17 @@ import ch.prevo.open.node.data.provider.ProviderFactory;
 
 public class ExcelProviderFactory implements ProviderFactory {
 
-    private final ExcelReader excelReader = new ExcelReader();
+    private final ExcelProvider excelProvider = new ExcelProvider();
     private final ExcelMatchNotificationListener listener = new ExcelMatchNotificationListener();
 
     @Override
     public EmploymentCommencementProvider getEmploymentCommencementProvider() {
-        return excelReader;
+        return excelProvider;
     }
 
     @Override
     public EmploymentTerminationProvider getEmploymentTerminationProvider() {
-        return excelReader;
+        return excelProvider;
     }
 
     @Override
