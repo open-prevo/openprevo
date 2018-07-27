@@ -36,6 +36,7 @@ public class AdapterServiceConfiguration {
     @Bean
     public ServiceListFactoryBean factory() {
         final ServiceListFactoryBean serviceListFactoryBean = new ServiceListFactoryBean();
+        serviceListFactoryBean.setSingleton(true);
         serviceListFactoryBean.setServiceType(ProviderFactory.class);
         return serviceListFactoryBean;
     }
@@ -55,8 +56,5 @@ public class AdapterServiceConfiguration {
             LOG.error("Setup of adapter-service failed", e);
         }
         return null;
-
     }
-
-
 }
