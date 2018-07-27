@@ -60,7 +60,6 @@ public class ExcelAssertions {
         try (final Workbook workbook = WorkbookFactory.create(new File(filename), null, true)) {
             final Row row = workbook.getSheet(sheet).getRow(rowIndex);
             List<String> commentsInRow = collectAllCommentsInRow(row);
-            assertThat(commentsInRow).hasSize(expectedCommentsValues.length);
             assertThat(commentsInRow).containsExactlyInAnyOrder(expectedCommentsValues);
         }
     }
