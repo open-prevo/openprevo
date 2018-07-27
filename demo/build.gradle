@@ -202,13 +202,13 @@ task integrationTest {
     dependsOn composeUp
     doLast {
         // wait till the matching runs through
-        sleep(30000)
+        sleep(40000)
 
         //assert that all nodes are notified with the expected amount of matches
         FileFilter outXlsx = {f -> f.name.startsWith("retirement-fund-out-data")}
         [
-	        NodeBaloiseExcel	: [5, 7],
-	        NodeHelvetiaExcel	: [11, 9],
+	        NodeBaloiseExcel	: [7, 5],
+	        NodeHelvetiaExcel	: [9, 11],
 	        NodeZurichExcel		: [5, 5]
         ].each { folder,counts ->
         		assertSheetRowCounts(new File("${buildDir}/demo/$folder").listFiles(outXlsx).find(), *counts)
