@@ -17,8 +17,6 @@
  *     Prevo-System AG - initial API and implementation
  *===========================================================================*/
 
-import org.apache.tools.ant.filters.*
-
 apply plugin: 'com.palantir.docker'
 apply plugin: 'docker-compose'
 
@@ -29,6 +27,7 @@ task buildDemoZip(type: Zip) {
     }
     from("src") {
         include "*.bat"
+        include "*.sh"
     }
     from(".") {
         include "readme.md"
@@ -52,6 +51,13 @@ task prepareHubDockerConfig(type: Copy) {
 
     rename("demo-nodes.yml", "demo-nodes-docker.yml")
     into "${buildDir}/demo/Hub"
+}
+
+def wrapJavaCommandForBash(javaCmd){
+"""#!/usr/bin/env bash
+    pushd \"\$(dirname \"\$0\")\"
+    ${javaCmd}
+    popd"""
 }
 
 task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
@@ -78,7 +84,7 @@ task prepareHub(dependsOn: prepareHubDockerConfig, type: Copy) {
         cleanBatFile.text = 'del openprevo.mv.db'
         cleanBatFile.executable = true
         def startShFile = new File("${buildDir}/demo/Hub/start.sh")
-        startShFile.text = "#!/usr/bin/env bash\n${javaCmd}"
+        startShFile.text = wrapJavaCommandForBash(javaCmd)
         startShFile.executable = true
         def cleanDbShFile = new File("${buildDir}/demo/Hub/clean-db.sh")
         cleanDbShFile.text = '#!/usr/bin/env bash\nrm openprevo.mv.db'
@@ -133,7 +139,7 @@ nodeConfiguration.each { node ->
             batFile.text = "start \"OpenPrevo - demo node ${node.name}\" " + javaCmd
             batFile.executable = true
             def shFile = new File("${buildDir}/demo/${node.name}/start.sh")
-            shFile.text = "#!/usr/bin/env bash\n${javaCmd}"
+            shFile.text = wrapJavaCommandForBash(javaCmd)
             shFile.executable = true
         }
     }
