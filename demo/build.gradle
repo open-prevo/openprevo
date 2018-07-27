@@ -188,22 +188,34 @@ dockerCompose {
 
 composeUp.dependsOn { tasks.docker }
 
+def assertSheetRowCounts(File xlsxFile, def rowCounts) {
+	def xlsx = new java.util.zip.ZipFile(xlsxFile)
+	[rowCounts.terminations, rowCounts.commencements].eachWithIndex { rowCount, index ->
+		def sheetNr = index+1
+		def sheet = new XmlSlurper().parse(xlsx.getInputStream(xlsx.getEntry("xl/worksheets/sheet${sheetNr}.xml")))
+		def actual = sheet.sheetData.row.size()
+		assert rowCount == actual : "${xlsxFile}.sheet${sheetNr}.rowCount expected to be $rowCount but was $actual"
+	}
+}
+
 task integrationTest {
     dependsOn composeUp
     doLast {
         // wait till the matching runs through
-        sleep(30000)
+        sleep(40000)
 
         //assert that all nodes are notified with the expected amount of matches
-        assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
-        assert 1 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
-        assert 1 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
+        def expectedMatchesPerNode = [
+	        NodeBaloiseExcel	: [terminations: 7, commencements: 5],
+	        NodeHelvetiaExcel	: [terminations: 9, commencements: 11],
+	        NodeZurichExcel		: [terminations: 5, commencements: 5]
+        ]
+
+        expectedMatchesPerNode.each { folder , counts ->
+            FileFilter matchingOutputFile = { f -> f.name.startsWith("retirement-fund-out-data") }
+            File outputFile = new File("${buildDir}/demo/$folder").listFiles(matchingOutputFile).find()
+            assertSheetRowCounts(outputFile, counts)
+        }
     }
 }
 
