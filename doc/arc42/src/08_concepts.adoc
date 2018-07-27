@@ -60,14 +60,16 @@ When a Node and the Hub communicate with each other, both have to ensure that th
 
 As this can be done with standard technologies (e.g. Spring Security) and does not add much value when demonstrating the functionality of OpenPrevo, we decided that authentication is out-of-scope for the MVP.
 
+==== Symmetric Encryption
+
+Currently we have implemented an end-to-end encryption for the exchange of the capital transfer information. Therefore
+the data is symmetrically encrypted via *AES 256* by using a randomly generated Key and IV (inital vector) for every time it is being encrypted.
+
+The key and the IV are then encrypted via an asymmetric encryption method, so that only the recipient is able to decrypt the key and the data itself. This is described in the next chapter.
 
 ==== Asymmetric Encryption
 
-We need end-to-end encryption: as an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data.
-
 To encrypt the data asymmetrically, we're using the **RSA** algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair. The public key will be provided via a public key registry. The private key must not leave a RFs environment.
-
-NOTE: Depending on the amount of data we need to encrypt, we might have to use symmetrical encryption for the data and exchange the symmetric key via RSA. This will be decided depending on the attributes to use for the matching.
 
 ==== Public Key Registry
 
@@ -81,9 +83,14 @@ To implement reliable authentication, signatures, and encryption via public- and
 
 It needs to be decided, if the public key registry will be maintained by the same team that maintains the hub, if it will be outsourced to an independent third party or if no central authority can be established and a "web of trust" has to be implemented. This is not a technical question and probably has to be discussed with potential customers first. Therefore it is probably out-of-scope of the MVP.
 
+==== Signing
+
+To make sure that the data (in our case the capital transfer information) originates really from the correct RF and not another party encrypted some information with ones public key, we sign the message before we sent it to the other RF. The message is signed with the private key of the RF, so only the RF itself is capable of doing this. For signing we're using the *SHA256withRSA* algorithm.
+
 ==== Hashing
 
-According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a _hash_ of their data.
+According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a _hash_ of their data. For hashing we use
+*SHA-512* algorithm.
 
 ==== Transport-Layer Security
 
