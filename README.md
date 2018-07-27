@@ -15,4 +15,6 @@ An **open** [**prévo**yance professionnelle](https://www.bsv.admin.ch/bsv/en/ho
 
 ## [Glossary](https://open-prevo.github.io/openprevo/#section-glossary)
 
+## [Implement your own node](doc/implementMyOwnNode.md)
+
 ## [About](doc/about.md)

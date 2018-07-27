@@ -26,6 +26,8 @@ buildscript {
         gradleDockerComposeVersion = '0.8.0'
         shadowPluginVersion = '2.0.4'
         gradleReleasePluginVersion = '2.6.0'
+        springfoxSwaggerVersion = '2.9.2'
+        
     }
     repositories {
         jcenter()
@@ -82,6 +84,9 @@ subprojects { project ->
             dependency("org.hibernate:hibernate-validator:6.0.10.Final")
             dependency("xerces:xerces:2.4.0")
             dependency("commons-io:commons-io:2.6")
+            dependency("io.springfox:springfox-swagger2:${springfoxSwaggerVersion}")
+    		dependency("io.springfox:springfox-swagger-ui:${springfoxSwaggerVersion}")
+    		dependency("io.springfox:springfox-bean-validators:${springfoxSwaggerVersion}")
 
             dependencySet(group: "org.apache.poi", version: "3.17") {
                 entry("poi")

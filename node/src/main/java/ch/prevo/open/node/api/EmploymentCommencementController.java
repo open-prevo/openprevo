@@ -28,13 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.prevo.open.encrypted.model.InsurantInformation;
 import ch.prevo.open.node.services.EmploymentCommencementService;
 
 @RestController
-class EmploymentCommencementController {
+public class EmploymentCommencementController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmploymentCommencementController.class);
 
@@ -45,7 +46,7 @@ class EmploymentCommencementController {
         this.employmentCommencementService = employmentCommencementService;
     }
 
-    @RequestMapping("/commencement-of-employment")
+    @RequestMapping(value= "/commencement-of-employment", method = RequestMethod.GET)
     public ResponseEntity<SortedSet<InsurantInformation>> getAllEmploymentCommencementData() {
         try {
             Set<InsurantInformation> employmentCommencementData = this.employmentCommencementService.getAllEmploymentCommencementData();
