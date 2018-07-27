@@ -19,8 +19,9 @@ In this example the back end is a simple set of XLS files.
 
 ### Making changes 
 - the nodes read their input files every time the hub polls them, so go ahead, change them ( i.e.) the dates and eventually see new notifications
-- you can also see the changes in the API. I.e. change `NodeBaloiseExcel/NodeBaloiseExcel-Input.xlsx` and call `http://localhost:8851/commencement-of-employment` 
+- you can also see the changes in the API. I.e. change `NodeBaloiseExcel/NodeBaloiseExcel-Input.xlsx` and call [http://localhost:8851/commencement-of-employment](http://localhost:8851/commencement-of-employment)
 (the baloise node runs on port 8851)
+- To explore the node HTTP API have a look at [http://localhost:8851/swagger-ui.html](http://localhost:8851/swagger-ui.html)
 - and you can change how often the hub polls the nodes (`Hub/config/application-demo.properties`)
 
 ### Configuring the Pakt node
