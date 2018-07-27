@@ -1,5 +1,10 @@
 package ch.prevo.open.node.adapter.excel;
 
+import ch.prevo.open.data.api.Address;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.FullMatchForCommencementNotification;
+import ch.prevo.open.data.api.FullMatchForTerminationNotification;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -24,7 +29,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class AbstractNotificationWriter implements Closeable {
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.DATE_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.OASI_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.REFERENCE_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UID_COLUMN_INDEX;
+
+public class NotificationWriter implements Closeable {
 
     private static final int MAX_FILES_PER_DAY = 20;
 
@@ -40,7 +50,7 @@ public class AbstractNotificationWriter implements Closeable {
     private static final String FILE_NAME_FORMAT_PLAN_B = "%1$s_%2$tY-%2$tm-%2$td_%3$d.xlsx";
 
 
-    protected AbstractNotificationWriter() throws IOException {
+    protected NotificationWriter() throws IOException {
         final Pair<Workbook, String> pair = getWorkbook();
         this.workbook = pair.getLeft();
         this.filename = pair.getRight();
@@ -156,6 +166,52 @@ public class AbstractNotificationWriter implements Closeable {
         cell.setCellStyle(headingStyle);
     }
 
+    public void appendMatchForCommencement(FullMatchForCommencementNotification notification) {
+        final Sheet sheet = workbook.getSheet(ExcelConstants.COMMENCEMENTS_LABEL);
+        final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+
+        final EmploymentInfo employmentInfo = notification.getEmploymentCommencement().getEmploymentInfo();
+        row.createCell(OASI_COLUMN_INDEX).setCellValue(employmentInfo.getOasiNumber());
+        final Cell commencementDate = row.createCell(DATE_COLUMN_INDEX);
+        commencementDate.setCellValue(ExcelConstants.convert(employmentInfo.getDate()));
+        commencementDate.setCellStyle(dateStyle);
+        row.createCell(RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(employmentInfo.getRetirementFundUid());
+        row.createCell(REFERENCE_COLUMN_INDEX).setCellValue(employmentInfo.getInternalReferenz());
+
+        final Cell terminationDate = row.createCell(ExcelConstants.MatchForCommencementOutput.TERMINATION_DATE_COLUMN_INDEX);
+        terminationDate.setCellValue(ExcelConstants.convert(notification.getTerminationDate()));
+        terminationDate.setCellStyle(dateStyle);
+        row.createCell(ExcelConstants.MatchForCommencementOutput.PREVIOUS_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getPreviousRetirementFundUid());
+    }
+
+    public Workbook appendMatchForTermination(FullMatchForTerminationNotification notification) {
+        final Sheet sheet = workbook.getSheet(ExcelConstants.TERMINATION_LABEL);
+        final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+
+        final EmploymentInfo employmentInfo = notification.getEmploymentTermination().getEmploymentInfo();
+        final CapitalTransferInformation transferInformation = notification.getTransferInformation();
+        final Address address = transferInformation.getAddress();
+        row.createCell(OASI_COLUMN_INDEX).setCellValue(employmentInfo.getOasiNumber());
+        final Cell terminationDate = row.createCell(DATE_COLUMN_INDEX);
+        terminationDate.setCellValue(ExcelConstants.convert(employmentInfo.getDate()));
+        terminationDate.setCellStyle(dateStyle);
+        row.createCell(RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(employmentInfo.getRetirementFundUid());
+        row.createCell(REFERENCE_COLUMN_INDEX).setCellValue(employmentInfo.getInternalReferenz());
+
+        final Cell commencementDate = row.createCell(ExcelConstants.MatchForTerminationOutput.COMMENCEMENT_DATA_COLUMN_INDEX);
+        commencementDate.setCellValue(ExcelConstants.convert(notification.getCommencementDate()));
+        commencementDate.setCellStyle(dateStyle);
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getNewRetirementFundUid());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NAME_COLUMN_INDEX).setCellValue(transferInformation.getName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDITIONAL_NAME_COLUMN_INDEX).setCellValue(transferInformation.getAdditionalName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.STREET_COLUMN_NAME).setCellValue(address.getStreet());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.POSTAL_CODE_COLUMN_INDEX).setCellValue(address.getPostalCode());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDRESS_COLUMN_INDEX).setCellValue(address.getCity());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.IBAN_COLUMN_INDEX).setCellValue(transferInformation.getIban());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.REFERENCE_ID_COLUMN_INDEX).setCellValue(transferInformation.getReferenceId());
+
+        return workbook;
+    }
 
     @Override
     public void close() throws IOException {

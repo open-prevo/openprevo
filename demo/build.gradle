@@ -186,7 +186,7 @@ task integrationTest {
     dependsOn composeUp
     doLast {
         // wait till the matching runs through
-        sleep(30000)
+        sleep(60000)
 
         //assert that all nodes are notified with the expected amount of matches
         assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
