@@ -2555,28 +2555,23 @@ on this list.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_asymmetric_encryption"><a class="anchor" href="#_asymmetric_encryption"></a>4.1.2. Asymmetric Encryption</h4>
+<h4 id="_symmetric_encryption"><a class="anchor" href="#_symmetric_encryption"></a>4.1.2. Symmetric Encryption</h4>
 <div class="paragraph">
-<p>We need end-to-end encryption: as an example it needs to be possible to send encrypted data from one RF (A) to an other (B) and only B should be able to read (decrypt) the data.</p>
+<p>Currently we have implemented an end-to-end encryption for the exchange of the capital transfer information. Therefore
+the data is symmetrically encrypted via <strong>AES 256</strong> by using a randomly generated Key and IV (inital vector) for every time it is being encrypted.</p>
 </div>
 <div class="paragraph">
-<p>To encrypt the data asymmetrically, we&#8217;re using the <strong>RSA</strong> algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair. The public key will be provided via a public key registry. The private key must not leave a RFs environment.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Depending on the amount of data we need to encrypt, we might have to use symmetrical encryption for the data and exchange the symmetric key via RSA. This will be decided depending on the attributes to use for the matching.
-</td>
-</tr>
-</table>
+<p>The key and the IV are then encrypted via an asymmetric encryption method, so that only the recipient is able to decrypt the key and the data itself. This is described in the next chapter.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_public_key_registry"><a class="anchor" href="#_public_key_registry"></a>4.1.3. Public Key Registry</h4>
+<h4 id="_asymmetric_encryption"><a class="anchor" href="#_asymmetric_encryption"></a>4.1.3. Asymmetric Encryption</h4>
+<div class="paragraph">
+<p>To encrypt the data asymmetrically, we&#8217;re using the <strong>RSA</strong> algorithm. Each participant of the OpenPrevo system needs to have a private and public-key pair. The public key will be provided via a public key registry. The private key must not leave a RFs environment.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_public_key_registry"><a class="anchor" href="#_public_key_registry"></a>4.1.4. Public Key Registry</h4>
 <div class="paragraph">
 <p>To implement reliable authentication, signatures, and encryption via public- and private keys, one has to ensure that the public keys in use are really coming from the communication partner. In principal there are three approaches how public keys can be distributed:</p>
 </div>
@@ -2598,13 +2593,20 @@ Depending on the amount of data we need to encrypt, we might have to use symmetr
 </div>
 </div>
 <div class="sect3">
-<h4 id="_hashing"><a class="anchor" href="#_hashing"></a>4.1.4. Hashing</h4>
+<h4 id="_signing"><a class="anchor" href="#_signing"></a>4.1.5. Signing</h4>
 <div class="paragraph">
-<p>According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a <em>hash</em> of their data.</p>
+<p>To make sure that the data (in our case the capital transfer information) originates really from the correct RF and not another party encrypted some information with ones public key, we sign the message before we sent it to the other RF. The message is signed with the private key of the RF, so only the RF itself is capable of doing this. For signing we&#8217;re using the <strong>SHA256withRSA</strong> algorithm.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_transport_layer_security"><a class="anchor" href="#_transport_layer_security"></a>4.1.5. Transport-Layer Security</h4>
+<h4 id="_hashing"><a class="anchor" href="#_hashing"></a>4.1.6. Hashing</h4>
+<div class="paragraph">
+<p>According to data protection guidelines in Switzerland we are not allowed to read any personal data of an insured person on our platform. Therefore, a RF is responsible for sending us only a <em>hash</em> of their data. For hashing we use
+<strong>SHA-512</strong> algorithm.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_transport_layer_security"><a class="anchor" href="#_transport_layer_security"></a>4.1.7. Transport-Layer Security</h4>
 <div class="paragraph">
 <p>In a production environment we recommend to use HTTPS exclusively. This can be achieved using standard technologies and is rather a question of deployment than one of development. Therefore we decided that this is not part of the MVP.</p>
 </div>
@@ -3025,7 +3027,7 @@ Werden Datensammlungen mit Datensätzen, welche die Versichertennummer enthalten
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-27 11:57:09 UTC
+Last updated 2018-07-27 13:22:14 UTC
 </div>
 </div>
 </body>
