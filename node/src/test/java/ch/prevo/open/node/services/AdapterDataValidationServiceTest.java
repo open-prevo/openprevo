@@ -1,23 +1,23 @@
 package ch.prevo.open.node.services;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-
-import java.time.LocalDate;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import ch.prevo.open.data.api.CapitalTransferInformation;
 import ch.prevo.open.data.api.EmploymentCommencement;
 import ch.prevo.open.data.api.EmploymentInfo;
 import ch.prevo.open.data.api.EmploymentTermination;
 import ch.prevo.open.data.api.Address;
 import ch.prevo.open.node.NodeApplication;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import java.time.LocalDate;
+import java.util.Set;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeApplication.class})
@@ -43,10 +43,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement validCommencement = new EmploymentCommencement(validEmploymentInfo, validCapitalTransferInformation);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(validCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(validCommencement);
 
         // then
-        assertThat(isValid).isTrue();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -55,10 +55,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentTermination validTermination = new EmploymentTermination(validEmploymentInfo);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(validTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(validTermination);
 
         // then
-        assertThat(isValid).isTrue();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -68,10 +68,10 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setRetirementFundUid("756.1234.5678.98");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -81,10 +81,10 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setDate(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -94,10 +94,10 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setOasiNumber("AHD.1234.1234.89");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -107,10 +107,10 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setOasiNumber("AHD.1234.1234.89");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -119,10 +119,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement inValidCommencement = new EmploymentCommencement(validEmploymentInfo, null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -132,10 +132,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setName(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -145,10 +145,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setIban(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -158,10 +158,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setAddress(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -171,10 +171,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setCity(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -184,10 +184,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setPostalCode(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -197,10 +197,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setPostalCode("CH-3000");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -210,10 +210,10 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setStreet(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -222,10 +222,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement emptyCommencement = new EmploymentCommencement();
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(emptyCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(emptyCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -234,9 +234,9 @@ public class AdapterDataValidationServiceTest {
         EmploymentTermination emptyTermination = new EmploymentTermination();
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(emptyTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(emptyTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
     }
 }

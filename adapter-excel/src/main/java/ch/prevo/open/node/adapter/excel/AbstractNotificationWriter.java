@@ -1,19 +1,5 @@
 package ch.prevo.open.node.adapter.excel;
 
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileLock;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Optional;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -26,12 +12,22 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.Closeable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.Optional;
+
 public class AbstractNotificationWriter implements Closeable {
 
     private static final int MAX_FILES_PER_DAY = 20;
 
-    protected static final String COMMENCEMENTS_LABEL = "Eintritte";
-    protected static final String TERMINATION_LABEL = "Austritte";
     private static final int HEADER_ROW_INDEX = 0;
 
     protected final Workbook workbook;
@@ -119,39 +115,39 @@ public class AbstractNotificationWriter implements Closeable {
         final CellStyle headingStyle = workbook.createCellStyle();
         headingStyle.setFont(font);
 
-        setupCommencementSheet(headingStyle);
         setupTerminationSheet(headingStyle);
-    }
-
-    private void setupCommencementSheet(CellStyle headingStyle) {
-        final Sheet sheet = workbook.createSheet(COMMENCEMENTS_LABEL);
-        final Row row = sheet.createRow(HEADER_ROW_INDEX);
-
-        createHeading(row, "AHV-Nummer", headingStyle);
-        createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der eigenen VE", headingStyle);
-        createHeading(row, "Eigene Referenz", headingStyle);
-        createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der ehemaligen VE", headingStyle);
+        setupCommencementSheet(headingStyle);
     }
 
     private void setupTerminationSheet(CellStyle headingStyle) {
-        final Sheet sheet = workbook.createSheet(TERMINATION_LABEL);
+        final Sheet sheet = workbook.createSheet(ExcelConstants.TERMINATION_LABEL);
         final Row row = sheet.createRow(HEADER_ROW_INDEX);
 
-        createHeading(row, "AHV-Nummer", headingStyle);
-        createHeading(row, "Austritt", headingStyle);
-        createHeading(row, "UID der eigenen VE", headingStyle);
-        createHeading(row, "Eigene Referenz", headingStyle);
-        createHeading(row, "Eintritt", headingStyle);
-        createHeading(row, "UID der neuen VE", headingStyle);
-        createHeading(row, "Name der neuen VE", headingStyle);
-        createHeading(row, "Zusatzname", headingStyle);
-        createHeading(row, "Strasse / Postfach", headingStyle);
-        createHeading(row, "PLZ", headingStyle);
-        createHeading(row, "Ort", headingStyle);
-        createHeading(row, "IBAN", headingStyle);
-        createHeading(row, "Referenznr. der neuen VE", headingStyle);
+        createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.ADDITIONAL_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.STREET_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.POSTAL_CODE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.CITY_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.IBAN_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_REFERENCE_LABEL, headingStyle);
+    }
+
+    private void setupCommencementSheet(CellStyle headingStyle) {
+        final Sheet sheet = workbook.createSheet(ExcelConstants.COMMENCEMENTS_LABEL);
+        final Row row = sheet.createRow(HEADER_ROW_INDEX);
+
+        createHeading(row, ExcelConstants.OASI_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForCommencementOutput.OLD_RETIREMENT_FUND_UID_LABEL, headingStyle);
     }
 
     private void createHeading(Row row, String label, CellStyle headingStyle) {
@@ -163,8 +159,8 @@ public class AbstractNotificationWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
-        adjustColumnWidthsInSheet(COMMENCEMENTS_LABEL);
-        adjustColumnWidthsInSheet(TERMINATION_LABEL);
+        adjustColumnWidthsInSheet(ExcelConstants.COMMENCEMENTS_LABEL);
+        adjustColumnWidthsInSheet(ExcelConstants.TERMINATION_LABEL);
         try (OutputStream fileOut = new FileOutputStream(filename)) {
             workbook.write(fileOut);
         }
@@ -181,9 +177,4 @@ public class AbstractNotificationWriter implements Closeable {
             sheet.autoSizeColumn(colNum);
         }
     }
-
-    protected static Date convert(LocalDate date) {
-        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
-
 }

@@ -18,12 +18,16 @@
  *===========================================================================*/
 package ch.prevo.open.node.data.provider;
 
-import java.util.List;
-
 import ch.prevo.open.data.api.EmploymentTermination;
+
+import javax.validation.ConstraintViolation;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface EmploymentTerminationProvider {
 
     List<EmploymentTermination> getEmploymentTerminations();
 
+    default void notifyTerminationErrors(Map<EmploymentTermination,Set<ConstraintViolation<EmploymentTermination>>> violations) {}
 }

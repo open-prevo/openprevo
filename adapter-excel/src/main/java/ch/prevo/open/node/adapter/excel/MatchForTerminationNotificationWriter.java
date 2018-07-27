@@ -11,12 +11,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
 
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.DATE_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.OASI_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.REFERENCE_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UID_COLUMN_INDEX;
+
 public class MatchForTerminationNotificationWriter extends AbstractNotificationWriter {
 
     private final Sheet sheet;
 
     public MatchForTerminationNotificationWriter() throws IOException {
-        sheet = workbook.getSheet(TERMINATION_LABEL);
+        sheet = workbook.getSheet(ExcelConstants.TERMINATION_LABEL);
     }
 
     public Workbook append(FullMatchForTerminationNotification notification) {
@@ -25,23 +30,24 @@ public class MatchForTerminationNotificationWriter extends AbstractNotificationW
         final EmploymentInfo employmentInfo = notification.getEmploymentTermination().getEmploymentInfo();
         final CapitalTransferInformation transferInformation = notification.getTransferInformation();
         final Address address = transferInformation.getAddress();
-        row.createCell(0).setCellValue(employmentInfo.getOasiNumber());
-        final Cell terminationDate = row.createCell(1);
-        terminationDate.setCellValue(convert(employmentInfo.getDate()));
+        row.createCell(OASI_COLUMN_INDEX).setCellValue(employmentInfo.getOasiNumber());
+        final Cell terminationDate = row.createCell(DATE_COLUMN_INDEX);
+        terminationDate.setCellValue(ExcelConstants.convert(employmentInfo.getDate()));
         terminationDate.setCellStyle(dateStyle);
-        row.createCell(2).setCellValue(employmentInfo.getRetirementFundUid());
-        row.createCell(3).setCellValue(employmentInfo.getInternalReferenz());
-        final Cell commencementDate = row.createCell(4);
-        commencementDate.setCellValue(convert(notification.getCommencementDate()));
+        row.createCell(RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(employmentInfo.getRetirementFundUid());
+        row.createCell(REFERENCE_COLUMN_INDEX).setCellValue(employmentInfo.getInternalReferenz());
+
+        final Cell commencementDate = row.createCell(ExcelConstants.MatchForTerminationOutput.COMMENCEMENT_DATA_COLUMN_INDEX);
+        commencementDate.setCellValue(ExcelConstants.convert(notification.getCommencementDate()));
         commencementDate.setCellStyle(dateStyle);
-        row.createCell(5).setCellValue(notification.getNewRetirementFundUid());
-        row.createCell(6).setCellValue(transferInformation.getName());
-        row.createCell(7).setCellValue(transferInformation.getAdditionalName());
-        row.createCell(8).setCellValue(address.getStreet());
-        row.createCell(9).setCellValue(address.getPostalCode());
-        row.createCell(10).setCellValue(address.getCity());
-        row.createCell(11).setCellValue(transferInformation.getIban());
-        row.createCell(12).setCellValue(transferInformation.getReferenceId());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getNewRetirementFundUid());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NAME_COLUMN_INDEX).setCellValue(transferInformation.getName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDITIONAL_NAME_COLUMN_INDEX).setCellValue(transferInformation.getAdditionalName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.STREET_COLUMN_NAME).setCellValue(address.getStreet());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.POSTAL_CODE_COLUMN_INDEX).setCellValue(address.getPostalCode());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDRESS_COLUMN_INDEX).setCellValue(address.getCity());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.IBAN_COLUMN_INDEX).setCellValue(transferInformation.getIban());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.REFERENCE_ID_COLUMN_INDEX).setCellValue(transferInformation.getReferenceId());
 
         return workbook;
     }
