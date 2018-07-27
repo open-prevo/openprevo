@@ -18,6 +18,8 @@
  *===========================================================================*/
 package ch.prevo.open.data.api;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -43,6 +45,26 @@ public abstract class AbstractEmployment {
 
     public void setEmploymentInfo(EmploymentInfo employmentInfo) {
         this.employmentInfo = employmentInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractEmployment that = (AbstractEmployment) o;
+
+        return new EqualsBuilder()
+                .append(employmentInfo, that.employmentInfo)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(employmentInfo)
+                .toHashCode();
     }
 
     @Override

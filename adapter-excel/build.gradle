@@ -35,4 +35,6 @@ dependencies {
 
     testCompile("junit:junit")
     testCompile("org.assertj:assertj-core")
+    testCompile("org.hibernate:hibernate-validator")
+    testCompile("org.glassfish:javax.el")
 }

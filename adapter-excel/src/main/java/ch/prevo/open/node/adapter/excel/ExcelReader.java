@@ -132,11 +132,6 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
             } catch (IOException | EncryptedDocumentException | EmptyFileException | InvalidFormatException e) {
                 LOGGER.warn("Unable to read existing error file {}, creating a new one", filename);
                 FileUtils.deleteQuietly(new File(filename));
-                try {
-                    Files.delete(path);
-                } catch (IOException e1) {
-                    // ignore
-                }
             }
         }
 
