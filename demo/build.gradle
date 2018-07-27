@@ -188,6 +188,16 @@ dockerCompose {
 
 composeUp.dependsOn { tasks.docker }
 
+void assertSheetRowCounts(File xlsxFile, int ... rowCounts) {
+	def xlsx = new java.util.zip.ZipFile(xlsxFile)
+	rowCounts.eachWithIndex { rowCount, index ->
+		def sheetNr = index+1
+		def sheet = new XmlSlurper().parse(xlsx.getInputStream(xlsx.getEntry("xl/worksheets/sheet${sheetNr}.xml")))
+		def actual = sheet.sheetData.row.size()
+		assert rowCount == actual : "${xlsxFile}.sheet${sheetNr}.rowCount expected to be $rowCount but was $actual"
+	}
+}
+
 task integrationTest {
     dependsOn composeUp
     doLast {
@@ -195,15 +205,14 @@ task integrationTest {
         sleep(30000)
 
         //assert that all nodes are notified with the expected amount of matches
-        assert 1 == new File("${buildDir}/demo/NodeBaloiseExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
-        assert 1 == new File("${buildDir}/demo/NodeHelvetiaExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
-        assert 1 == new File("${buildDir}/demo/NodeZurichExcel").listFiles().findAll {
-            it.name.startsWith("retirement-fund-out-data")
-        }.size()
+        FileFilter outXlsx = {f -> f.name.startsWith("retirement-fund-out-data")}
+        [
+	        NodeBaloiseExcel	: [5, 7],
+	        NodeHelvetiaExcel	: [11, 9],
+	        NodeZurichExcel		: [5, 5]
+        ].each { folder,counts ->
+        		assertSheetRowCounts(new File("${buildDir}/demo/$folder").listFiles(outXlsx).find(), *counts)
+        }
     }
 }
 
