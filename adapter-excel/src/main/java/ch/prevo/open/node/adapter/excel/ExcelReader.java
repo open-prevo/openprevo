@@ -186,15 +186,15 @@ public class ExcelReader implements EmploymentCommencementProvider, EmploymentTe
         }
 
         Address address = new Address();
-        address.setStreet(getString(row, ExcelConstants.STREET_COLUMN_INDEX));
-        address.setPostalCode(getString(row, ExcelConstants.POSTAL_CODE_COLUMN_INDEX));
-        address.setCity(getString(row, ExcelConstants.CITY_COLUMN_INDEX));
+        address.setStreet(getString(row, ExcelConstants.CommencementInput.STREET_COLUMN_INDEX));
+        address.setPostalCode(getString(row, ExcelConstants.CommencementInput.POSTAL_CODE_COLUMN_INDEX));
+        address.setCity(getString(row, ExcelConstants.CommencementInput.CITY_COLUMN_INDEX));
 
         CapitalTransferInformation capititalTransferInfo = new CapitalTransferInformation();
         capititalTransferInfo.setAddress(address);
-        capititalTransferInfo.setName(getString(row, ExcelConstants.NAME_COLUMN_INDEX));
-        capititalTransferInfo.setAdditionalName(getString(row, ExcelConstants.ADDITIONAL_NAME_COLUMN_INDEX));
-        capititalTransferInfo.setIban(getString(row, ExcelConstants.IBAN_COLUMN_INDEX));
+        capititalTransferInfo.setName(getString(row, ExcelConstants.CommencementInput.NAME_COLUMN_INDEX));
+        capititalTransferInfo.setAdditionalName(getString(row, ExcelConstants.CommencementInput.ADDITIONAL_NAME_COLUMN_INDEX));
+        capititalTransferInfo.setIban(getString(row, ExcelConstants.CommencementInput.IBAN_COLUMN_INDEX));
 
         return Optional.of(new EmploymentCommencement(employmentInfo, capititalTransferInfo));
     }

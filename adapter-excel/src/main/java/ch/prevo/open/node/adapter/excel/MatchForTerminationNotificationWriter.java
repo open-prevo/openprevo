@@ -18,15 +18,6 @@ import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UI
 
 public class MatchForTerminationNotificationWriter extends AbstractNotificationWriter {
 
-    private static final int COMMENCEMENT_DATA_COLUMN_INDEX = 4;
-    private static final int NEW_RETIREMENT_FUND_UID_COLUMN_INDEX = 5;
-    private static final int NAME_COLUMN_INDEX = 6;
-    private static final int ADDITIONAL_NAME_COLUMN_INDEX = 7;
-    private static final int STREET_COLUMN_NAME = 8;
-    private static final int POSTAL_CODE_COLUMN_INDEX = 9;
-    private static final int ADDRESS_COLUMN_INDEX = 10;
-    private static final int IBAN_COLUMN_INDEX = 11;
-    private static final int REFERENCE_ID_COLUMN_INDEX = 12;
     private final Sheet sheet;
 
     public MatchForTerminationNotificationWriter() throws IOException {
@@ -46,17 +37,17 @@ public class MatchForTerminationNotificationWriter extends AbstractNotificationW
         row.createCell(RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(employmentInfo.getRetirementFundUid());
         row.createCell(REFERENCE_COLUMN_INDEX).setCellValue(employmentInfo.getInternalReferenz());
 
-        final Cell commencementDate = row.createCell(COMMENCEMENT_DATA_COLUMN_INDEX);
+        final Cell commencementDate = row.createCell(ExcelConstants.MatchForTerminationOutput.COMMENCEMENT_DATA_COLUMN_INDEX);
         commencementDate.setCellValue(ExcelConstants.convert(notification.getCommencementDate()));
         commencementDate.setCellStyle(dateStyle);
-        row.createCell(NEW_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getNewRetirementFundUid());
-        row.createCell(NAME_COLUMN_INDEX).setCellValue(transferInformation.getName());
-        row.createCell(ADDITIONAL_NAME_COLUMN_INDEX).setCellValue(transferInformation.getAdditionalName());
-        row.createCell(STREET_COLUMN_NAME).setCellValue(address.getStreet());
-        row.createCell(POSTAL_CODE_COLUMN_INDEX).setCellValue(address.getPostalCode());
-        row.createCell(ADDRESS_COLUMN_INDEX).setCellValue(address.getCity());
-        row.createCell(IBAN_COLUMN_INDEX).setCellValue(transferInformation.getIban());
-        row.createCell(REFERENCE_ID_COLUMN_INDEX).setCellValue(transferInformation.getReferenceId());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getNewRetirementFundUid());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.NAME_COLUMN_INDEX).setCellValue(transferInformation.getName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDITIONAL_NAME_COLUMN_INDEX).setCellValue(transferInformation.getAdditionalName());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.STREET_COLUMN_NAME).setCellValue(address.getStreet());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.POSTAL_CODE_COLUMN_INDEX).setCellValue(address.getPostalCode());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.ADDRESS_COLUMN_INDEX).setCellValue(address.getCity());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.IBAN_COLUMN_INDEX).setCellValue(transferInformation.getIban());
+        row.createCell(ExcelConstants.MatchForTerminationOutput.REFERENCE_ID_COLUMN_INDEX).setCellValue(transferInformation.getReferenceId());
 
         return workbook;
     }

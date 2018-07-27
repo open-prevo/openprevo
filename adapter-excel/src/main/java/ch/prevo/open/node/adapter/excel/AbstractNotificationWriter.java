@@ -128,14 +128,14 @@ public class AbstractNotificationWriter implements Closeable {
         createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
         createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
         createHeading(row, ExcelConstants.COMMENCEMENT_DATE_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_UID_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_NAME_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.ADDITIONAL_NAME_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.STREET_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.POSTAL_CODE_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.CITY_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.IBAN_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.NEW_RETIREMENT_FUND_REFERENCE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.ADDITIONAL_NAME_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.STREET_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.POSTAL_CODE_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.CITY_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.IBAN_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForTerminationOutput.NEW_RETIREMENT_FUND_REFERENCE_LABEL, headingStyle);
     }
 
     private void setupCommencementSheet(CellStyle headingStyle) {
@@ -147,7 +147,7 @@ public class AbstractNotificationWriter implements Closeable {
         createHeading(row, ExcelConstants.OWN_RETIREMENT_FUND_UID_LABEL, headingStyle);
         createHeading(row, ExcelConstants.OWN_REFERENCE_LABEL, headingStyle);
         createHeading(row, ExcelConstants.TERMINATION_DATE_LABEL, headingStyle);
-        createHeading(row, ExcelConstants.OLD_RETIREMENT_FUND_UID_LABEL, headingStyle);
+        createHeading(row, ExcelConstants.MatchForCommencementOutput.OLD_RETIREMENT_FUND_UID_LABEL, headingStyle);
     }
 
     private void createHeading(Row row, String label, CellStyle headingStyle) {

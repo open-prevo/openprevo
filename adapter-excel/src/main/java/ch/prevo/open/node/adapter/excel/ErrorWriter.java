@@ -27,17 +27,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.ADDITIONAL_NAME_COLUMN_INDEX;
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.CITY_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.ADDITIONAL_NAME_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.CITY_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.COMMENCEMENTS_LABEL;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.DATE_COLUMN_INDEX;
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.IBAN_COLUMN_INDEX;
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.NAME_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.IBAN_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.NAME_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.OASI_COLUMN_INDEX;
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.POSTAL_CODE_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.POSTAL_CODE_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.REFERENCE_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UID_COLUMN_INDEX;
-import static ch.prevo.open.node.adapter.excel.ExcelConstants.STREET_COLUMN_INDEX;
+import static ch.prevo.open.node.adapter.excel.ExcelConstants.CommencementInput.STREET_COLUMN_INDEX;
 import static ch.prevo.open.node.adapter.excel.ExcelConstants.TERMINATION_LABEL;
 
 public class ErrorWriter implements Closeable {

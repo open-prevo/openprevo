@@ -16,9 +16,6 @@ import static ch.prevo.open.node.adapter.excel.ExcelConstants.RETIREMENT_FUND_UI
 
 public class MatchForCommencementNotificationWriter extends AbstractNotificationWriter {
 
-    private static final int TERMINATION_DATE_COLUMN_INDEX = 4;
-    private static final int PREVIOUS_RETIREMENT_FUND_UID_COLUMN_INDEX = 5;
-
     private final Sheet sheet;
 
     public MatchForCommencementNotificationWriter() throws IOException {
@@ -36,10 +33,10 @@ public class MatchForCommencementNotificationWriter extends AbstractNotification
         row.createCell(RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(employmentInfo.getRetirementFundUid());
         row.createCell(REFERENCE_COLUMN_INDEX).setCellValue(employmentInfo.getInternalReferenz());
 
-        final Cell terminationDate = row.createCell(TERMINATION_DATE_COLUMN_INDEX);
+        final Cell terminationDate = row.createCell(ExcelConstants.MatchForCommencementOutput.TERMINATION_DATE_COLUMN_INDEX);
         terminationDate.setCellValue(ExcelConstants.convert(notification.getTerminationDate()));
         terminationDate.setCellStyle(dateStyle);
-        row.createCell(PREVIOUS_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getPreviousRetirementFundUid());
+        row.createCell(ExcelConstants.MatchForCommencementOutput.PREVIOUS_RETIREMENT_FUND_UID_COLUMN_INDEX).setCellValue(notification.getPreviousRetirementFundUid());
     }
 
 }
