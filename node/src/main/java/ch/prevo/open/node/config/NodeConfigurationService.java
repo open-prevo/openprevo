@@ -18,7 +18,8 @@
  *===========================================================================*/
 package ch.prevo.open.node.config;
 
-import static ch.prevo.open.node.crypto.DataEncrypter.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
+import org.springframework.stereotype.Service;
+
 
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -40,11 +41,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import static ch.prevo.open.node.crypto.DataEncryptionService.ASYMMETRIC_TRANSFORMATION_ALGORITHM;
 
 
 @Service

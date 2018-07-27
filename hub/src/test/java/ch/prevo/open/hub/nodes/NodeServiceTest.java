@@ -27,6 +27,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +38,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -147,7 +150,7 @@ public class NodeServiceTest {
     public void notifyMatch() {
         when(nodeRegistry.getCurrentNodes()).thenReturn(asList(node1_new, node2_old));
 
-        EncryptedData transferInformation = new EncryptedData("", "", "");
+        EncryptedData transferInformation = new EncryptedData(RandomUtils.nextBytes(1), RandomUtils.nextBytes(10));
         when(nodeCaller.postCommencementNotification(eq(node2_old.getCommencementMatchNotifyUrl()), any()))
                 .thenReturn(transferInformation);
 
@@ -199,8 +202,7 @@ public class NodeServiceTest {
         nodeService.notifyMatches(singletonList(new Match(OASI1, UID1, UID2, commencementInsurantInfo.getDate(), terminationInsurantInfo.getDate())));
 
         // then
-        // TODO: fix and activate; we should not notify without the Transfer info
-        // verify(nodeCaller, times(0)).postTerminationNotification(any(), any());
+        verify(nodeCaller, never()).postTerminationNotification(any(), any());
     }
 
     @Test

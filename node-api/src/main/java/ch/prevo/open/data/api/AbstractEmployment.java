@@ -18,13 +18,13 @@
  *===========================================================================*/
 package ch.prevo.open.data.api;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-abstract class AbstractEmployment {
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+public abstract class AbstractEmployment {
 
     @NotNull
     @Valid

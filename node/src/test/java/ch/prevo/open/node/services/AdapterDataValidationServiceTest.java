@@ -1,27 +1,31 @@
 package ch.prevo.open.node.services;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-
-import java.time.LocalDate;
-
-import javax.inject.Inject;
-
+import ch.prevo.open.data.api.Address;
+import ch.prevo.open.data.api.CapitalTransferInformation;
+import ch.prevo.open.data.api.EmploymentCommencement;
+import ch.prevo.open.data.api.EmploymentInfo;
+import ch.prevo.open.data.api.EmploymentTermination;
+import ch.prevo.open.node.NodeApplication;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ch.prevo.open.data.api.CapitalTransferInformation;
-import ch.prevo.open.data.api.EmploymentCommencement;
-import ch.prevo.open.data.api.EmploymentInfo;
-import ch.prevo.open.data.api.EmploymentTermination;
-import ch.prevo.open.encrypted.model.Address;
-import ch.prevo.open.node.NodeApplication;
+import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import java.time.LocalDate;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {NodeApplication.class})
 public class AdapterDataValidationServiceTest {
+
+    private static final String NOT_NULL_VALIDATION_MSG = "must not be null";
 
     @Inject
     private AdapterDataValidationService adapterDataValidationService;
@@ -43,10 +47,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement validCommencement = new EmploymentCommencement(validEmploymentInfo, validCapitalTransferInformation);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(validCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(validCommencement);
 
         // then
-        assertThat(isValid).isTrue();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -55,10 +59,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentTermination validTermination = new EmploymentTermination(validEmploymentInfo);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(validTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(validTermination);
 
         // then
-        assertThat(isValid).isTrue();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -68,10 +72,13 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setRetirementFundUid("756.1234.5678.98");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                            .containsExactly(tuple(
+                        PathImpl.createPathFromString("employmentInfo.retirementFundUid"),
+                                "must match \"CHE-([0-9]{3}\\.){2}[0-9]{3}\""));
     }
 
     @Test
@@ -81,10 +88,11 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setDate(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("employmentInfo.date"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -94,23 +102,25 @@ public class AdapterDataValidationServiceTest {
         inValidTermination.getEmploymentInfo().setOasiNumber("AHD.1234.1234.89");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("employmentInfo.oasiNumber"), "Invalid OASI number"));
     }
 
     @Test
     public void testValidationOfOASIChecksum() {
         // given
         EmploymentTermination inValidTermination = new EmploymentTermination(validEmploymentInfo);
-        inValidTermination.getEmploymentInfo().setOasiNumber("AHD.1234.1234.89");
+        inValidTermination.getEmploymentInfo().setOasiNumber("7568824253347");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(inValidTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(inValidTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("employmentInfo.oasiNumber"), "Invalid OASI number"));
     }
 
     @Test
@@ -119,10 +129,12 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement inValidCommencement = new EmploymentCommencement(validEmploymentInfo, null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -132,10 +144,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setName(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.name"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -145,10 +158,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setIban(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.iban"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -158,10 +172,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().setAddress(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.address"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -171,10 +186,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setCity(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.address.city"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -184,10 +200,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setPostalCode(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.address.postalCode"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -197,10 +214,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setPostalCode("CH-3000");
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.address.postalCode"), "must match \"[0-9]{4}\""));
     }
 
     @Test
@@ -210,10 +228,11 @@ public class AdapterDataValidationServiceTest {
         inValidCommencement.getCapitalTransferInfo().getAddress().setStreet(null);
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(inValidCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(inValidCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("capitalTransferInfo.address.street"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -222,10 +241,13 @@ public class AdapterDataValidationServiceTest {
         EmploymentCommencement emptyCommencement = new EmploymentCommencement();
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentCommencement(emptyCommencement);
+        final Set<ConstraintViolation<EmploymentCommencement>> violations = adapterDataValidationService.getEmploymentCommencementViolations(emptyCommencement);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactlyInAnyOrder(
+                        tuple(PathImpl.createPathFromString("employmentInfo"), NOT_NULL_VALIDATION_MSG),
+                        tuple(PathImpl.createPathFromString("capitalTransferInfo"), NOT_NULL_VALIDATION_MSG));
     }
 
     @Test
@@ -234,9 +256,10 @@ public class AdapterDataValidationServiceTest {
         EmploymentTermination emptyTermination = new EmploymentTermination();
 
         // when
-        boolean isValid = adapterDataValidationService.isValidEmploymentTermination(emptyTermination);
+        final Set<ConstraintViolation<EmploymentTermination>> violations = adapterDataValidationService.getEmploymentTerminationViolations(emptyTermination);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(violations).extracting("propertyPath", "message")
+                .containsExactly(tuple(PathImpl.createPathFromString("employmentInfo"), NOT_NULL_VALIDATION_MSG));
     }
 }

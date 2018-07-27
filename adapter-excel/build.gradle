@@ -31,6 +31,7 @@ dependencies {
     compile("org.apache.poi:poi")
     compile("org.apache.poi:poi-ooxml")
     compile("org.apache.poi:poi-ooxml-schemas")
+    compile("commons-io:commons-io")
 
     testCompile("junit:junit")
     testCompile("org.assertj:assertj-core")
