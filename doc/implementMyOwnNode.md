@@ -12,6 +12,7 @@ back end, you can implement your own adapter:
 - specifically: the adapter must be provided via SPI (implement `ch.prevo.open.node.data.provider.ProviderFactory`, 
 and provide a reference under `META-INF/services`)
 - your adapter will be used by the default `node` implementation at runtime
+- if you prefer not to use spring take a look at `adapter-excel` and `adapter-dummy`
 
 
 ## Implement a new node REST api
