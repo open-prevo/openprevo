@@ -1,4 +1,4 @@
-##How to create a release?
+## How to create a release?
 
 We're using the [gradle release plugin](https://github.com/researchgate/gradle-release) which helps us to automatically create a new release, commit the new versions and tag the release. 
  
